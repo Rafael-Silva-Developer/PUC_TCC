@@ -3,14 +3,16 @@ using System;
 using AlphaMarketPDV.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AlphaMarketPDV.Migrations
 {
     [DbContext(typeof(AlphaMarketPDVContext))]
-    partial class AlphaMarketPDVContextModelSnapshot : ModelSnapshot
+    [Migration("20210807180057_atualizacao_db")]
+    partial class atualizacao_db
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -500,7 +502,7 @@ namespace AlphaMarketPDV.Migrations
                     b.HasOne("AlphaMarketPDV.Models.Categoria", "Categoria")
                         .WithMany("Produtos")
                         .HasForeignKey("CategoriaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AlphaMarketPDV.Models.Estoque", "Estoque")
                         .WithMany("Produtos")
@@ -510,7 +512,7 @@ namespace AlphaMarketPDV.Migrations
                     b.HasOne("AlphaMarketPDV.Models.UnidadeMedida", "UnidadeMedida")
                         .WithMany("Produtos")
                         .HasForeignKey("UnidadeMedidaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AlphaMarketPDV.Models.SaidaEstoque", b =>

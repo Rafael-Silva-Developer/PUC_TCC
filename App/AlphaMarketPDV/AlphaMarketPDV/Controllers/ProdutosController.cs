@@ -1,155 +1,157 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using AlphaMarketPDV.Data;
-using AlphaMarketPDV.Models;
 using AlphaMarketPDV.Services;
+using AlphaMarketPDV.Models;
+using AlphaMarketPDV.Models.ViewModels;
+using AlphaMarketPDV.Services.Exceptions;
+using System;
 
 namespace AlphaMarketPDV.Controllers
 {
     public class ProdutosController : Controller
     {
-        private readonly AlphaMarketPDVContext _context;
+        private readonly ProdutoService _produtoService;
         private readonly CategoriaService _categoriaService;
+        private readonly UnidadeMedidaService _unidadeMedidaService;
 
-        public ProdutosController(AlphaMarketPDVContext context)
+        public ProdutosController(ProdutoService produtoService, CategoriaService categoriaService, UnidadeMedidaService unidadeMedidaService)
         {
-            _context = context;
+            this._produtoService = produtoService;
+            this._categoriaService = categoriaService;
+            this._unidadeMedidaService = unidadeMedidaService;
         }
 
-        // GET: Produtos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Produto.ToListAsync());
+            var list = await _produtoService.ListarTodosAsync();
+            return View(list);
         }
 
-        // GET: Produtos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Create()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var produto = await _context.Produto
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (produto == null)
-            {
-                return NotFound();
-            }
-
-            return View(produto);
+            var categorias = await _categoriaService.ListarTodosAsync();
+            var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
+            var viewModel = new ProdutoFormViewModel { Categorias = categorias, UnidadesMedida = unidadesMedida };
+            return View(viewModel);
         }
 
-        // GET: Produtos/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Produtos/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Codigo,DescricaoLonga,DescricaoCurta,QuantMinima,ValorVenda,FlgAtivo,Observacoes,Foto,DataHoraCadastro")] Produto produto)
+        public async Task<IActionResult> Create(Produto produto)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) 
             {
-                _context.Add(produto);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(produto);
-        }
-
-        // GET: Produtos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                var categorias = await _categoriaService.ListarTodosAsync();
+                var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
+                var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                return View(viewModel);
             }
 
-            var produto = await _context.Produto.FindAsync(id);
-            if (produto == null)
-            {
-                return NotFound();
-            }
-            return View(produto);
-        }
-
-        // POST: Produtos/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Codigo,DescricaoLonga,DescricaoCurta,QuantMinima,ValorVenda,FlgAtivo,Observacoes,Foto,DataHoraCadastro")] Produto produto)
-        {
-            if (id != produto.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(produto);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProdutoExists(produto.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(produto);
-        }
-
-        // GET: Produtos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var produto = await _context.Produto
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (produto == null)
-            {
-                return NotFound();
-            }
-
-            return View(produto);
-        }
-
-        // POST: Produtos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var produto = await _context.Produto.FindAsync(id);
-            _context.Produto.Remove(produto);
-            await _context.SaveChangesAsync();
+            await _produtoService.InserirAsync(produto);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProdutoExists(int id)
+        public async Task<IActionResult> Delete(int? id) 
         {
-            return _context.Produto.Any(e => e.Id == id);
+            if (id == null) 
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão do produto!" });
+            }
+
+            var obj = await _produtoService.ListarPorIdAsync(id.Value);
+            if (obj == null) 
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para exclusão do produto!" });
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id) 
+        {
+            try
+            {
+                await _produtoService.RemoverAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+        }
+
+        public async Task<IActionResult> Details(int? id) 
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização do produto!" });
+            }
+
+            var obj = await _produtoService.ListarPorIdAsync(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para visualização do produto!" });
+            }
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> Edit(int? id) 
+        {
+            if (id == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para edição do produto!" });
+            }
+
+            var obj = await _produtoService.ListarPorIdAsync(id.Value);
+            if (obj == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição do produto!" });
+            }
+
+            var categorias = await _categoriaService.ListarTodosAsync();
+            var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
+            var viewModel = new ProdutoFormViewModel { Produto = obj, Categorias = categorias, UnidadesMedida = unidadesMedida };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Produto produto) 
+        {
+            if (!ModelState.IsValid)
+            {
+                var categorias = await _categoriaService.ListarTodosAsync();
+                var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
+                var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                return View(viewModel);
+            }
+
+            if (id != produto.Id) 
+            {
+                return RedirectToAction(nameof(Error), new { message = "O Id informado na requisição não corresponde ao produto selecionado para edição!" });
+            }
+
+            try
+            {
+                await _produtoService.UpdateAsync(produto);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ApplicationException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+        }
+
+        public IActionResult Error(string message) 
+        {
+            var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+            return View(viewModel);
         }
     }
 }

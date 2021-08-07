@@ -11,36 +11,37 @@ using System.Diagnostics;
 
 namespace AlphaMarketPDV.Controllers
 {
-    public class CategoriasController : Controller
+    public class UnidadesMedidaController : Controller
     {
-        private readonly CategoriaService _categoriaService;
 
-        public CategoriasController(CategoriaService categoriaService) 
+        private readonly UnidadeMedidaService _unidadeMedidaService;
+
+        public UnidadesMedidaController(UnidadeMedidaService unidadeMedidaService)
         {
-            this._categoriaService = categoriaService;
+            this._unidadeMedidaService = unidadeMedidaService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var list = await _categoriaService.ListarTodosAsync();
+            var list = await _unidadeMedidaService.ListarTodosAsync();
             return View(list);
         }
 
-        public IActionResult Create() 
+        public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Categoria categoria) 
+        public async Task<IActionResult> Create(UnidadeMedida unidadeMedida)
         {
             if (!ModelState.IsValid)
             {
-                return View(categoria);
+                return View(unidadeMedida);
             }
 
-            await _categoriaService.InserirAsync(categoria);
+            await _unidadeMedidaService.InserirAsync(unidadeMedida);
             return RedirectToAction(nameof(Index));
         }
 
@@ -48,13 +49,13 @@ namespace AlphaMarketPDV.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão da categoria!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão da unidade de medida!" });
             }
 
-            var obj = await _categoriaService.ListarPorIdAsync(id.Value);
+            var obj = await _unidadeMedidaService.ListarPorIdAsync(id.Value);
             if (obj == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para exclusão da categoria!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para exclusão da unidade de medida!" });
             }
 
             return View(obj);
@@ -66,7 +67,7 @@ namespace AlphaMarketPDV.Controllers
         {
             try
             {
-                await _categoriaService.RemoverAsync(id);
+                await _unidadeMedidaService.RemoverAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch (IntegrityException e)
@@ -79,13 +80,13 @@ namespace AlphaMarketPDV.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização da categoria!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização da unidade de medida!" });
             }
 
-            var obj = await _categoriaService.ListarPorIdAsync(id.Value);
+            var obj = await _unidadeMedidaService.ListarPorIdAsync(id.Value);
             if (obj == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para visualização da categoria!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para visualização da unidade de medida!" });
             }
 
             return View(obj);
@@ -95,13 +96,13 @@ namespace AlphaMarketPDV.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não informado para edição da categoria!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para edição da unidade de medida!" });
             }
 
-            var obj = await _categoriaService.ListarPorIdAsync(id.Value);
+            var obj = await _unidadeMedidaService.ListarPorIdAsync(id.Value);
             if (obj == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição da categoria!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição da unidade de medida!" });
             }
 
             return View(obj);
@@ -109,21 +110,21 @@ namespace AlphaMarketPDV.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Categoria categoria)
+        public async Task<IActionResult> Edit(int id, UnidadeMedida unidadeMedida)
         {
             if (!ModelState.IsValid)
             {
-                return View(categoria);
+                return View(unidadeMedida);
             }
 
-            if (id != categoria.Id)
+            if (id != unidadeMedida.Id)
             {
-                return RedirectToAction(nameof(Error), new { message = "O Id informado na requisição não corresponde a categoria selecionado para edição!" });
+                return RedirectToAction(nameof(Error), new { message = "O Id informado na requisição não corresponde a unidade de medida selecionada para edição!" });
             }
 
             try
             {
-                await _categoriaService.UpdateAsync(categoria);
+                await _unidadeMedidaService.UpdateAsync(unidadeMedida);
                 return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException e)

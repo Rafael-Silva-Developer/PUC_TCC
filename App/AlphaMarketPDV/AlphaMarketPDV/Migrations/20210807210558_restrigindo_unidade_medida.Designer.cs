@@ -3,14 +3,16 @@ using System;
 using AlphaMarketPDV.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AlphaMarketPDV.Migrations
 {
     [DbContext(typeof(AlphaMarketPDVContext))]
-    partial class AlphaMarketPDVContextModelSnapshot : ModelSnapshot
+    [Migration("20210807210558_restrigindo_unidade_medida")]
+    partial class restrigindo_unidade_medida
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

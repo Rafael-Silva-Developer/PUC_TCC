@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
 {

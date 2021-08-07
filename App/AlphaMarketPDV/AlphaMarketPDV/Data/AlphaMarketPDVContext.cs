@@ -9,7 +9,7 @@ namespace AlphaMarketPDV.Data
 {
     public class AlphaMarketPDVContext : DbContext
     {
-        public AlphaMarketPDVContext (DbContextOptions<AlphaMarketPDVContext> options)
+        public AlphaMarketPDVContext(DbContextOptions<AlphaMarketPDVContext> options)
             : base(options)
         {
         }
@@ -31,5 +31,19 @@ namespace AlphaMarketPDV.Data
         public DbSet<AlphaMarketPDV.Models.UnidadeMedida> UnidadeMedida { get; set; }
         public DbSet<AlphaMarketPDV.Models.Usuario> Usuario { get; set; }
         public DbSet<AlphaMarketPDV.Models.Venda> Venda { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Categoria>()
+                .HasMany(c => c.Produtos)
+                .WithOne(p => p.Categoria)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UnidadeMedida>()
+                .HasMany(u => u.Produtos)
+                .WithOne(p => p.UnidadeMedida)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }
