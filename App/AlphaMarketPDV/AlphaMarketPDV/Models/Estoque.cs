@@ -9,30 +9,66 @@ namespace AlphaMarketPDV.Models
 {
     public class Estoque
     {
-        public int Id { get; set; }
+        [Display(Name = "Id")]
+        public int LojaId { get; set; }
+
+        public Loja Loja { get; set; }
+
+        [Display(Name = "Saldo")]
         public double Saldo { get; set; }
+
+        [Display(Name = "Status")]
         public StatusEstoque Status { get; set; }
-        public ICollection<Produto> Produtos { get; set; } = new List<Produto>();
+
+        public Produto Produto { get; set; }
+
+        [Display(Name = "Produto")]
+        public int ProdutoId { get; set; }
 
         public Estoque() 
         { 
         }
 
-        public Estoque(int id, double saldo, StatusEstoque status)
+        public Estoque(Loja loja, Produto produto, double saldo, StatusEstoque status)
         {
-            this.Id = id;
+            this.Loja = loja;
             this.Saldo = saldo;
             this.Status = status;
+            this.Produto = produto;
         }
 
-        public void AdicionarProduto(Produto p) 
+        public void AdicionarQtdProduto(double qtd) 
         {
-            Produtos.Add(p);
+            if (qtd > 0) 
+            {
+                Saldo += qtd;
+
+                if (Produto.QuantMinima >= Saldo)
+                {
+                    Status = StatusEstoque.NORMAL;
+                }
+                else
+                {
+                    Status = StatusEstoque.BAIXO;
+                }
+            }
         }
 
-        public void RemoverProduto(Produto p) 
+        public void RemoverQtdProduto(double qtd) 
         {
-            Produtos.Remove(p);
+            if (qtd > 0) 
+            {
+                Saldo -= qtd;
+
+                if (Produto.QuantMinima >= Saldo)
+                {
+                    Status = StatusEstoque.NORMAL;
+                }
+                else 
+                {
+                    Status = StatusEstoque.BAIXO;
+                }
+            }
         }
     }
 }

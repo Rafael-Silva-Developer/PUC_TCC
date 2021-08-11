@@ -9,12 +9,27 @@ namespace AlphaMarketPDV.Models
 {
     public class Venda
     {
+        [Display(Name = "Id")]
         public int Id { get; private set; }
+
+        [Display(Name = "Data/Hora Venda")]
         public DateTime DataHora { get; private set; }
+
+        [Display(Name = "Valor Total")]
         public double ValorTotal { get; private set; }
+
+        [Display(Name = "Valor Desconto")]
         public double ValorDesconto { get; private set; }
+
+        [Display(Name = "Status")]
         public StatusVenda Status { get; set; }
+
         public Caixa Caixa { get; set; }
+
+        [Display(Name = "Caixa")]
+        public int CaixaId { get; set; }
+
+        [Display(Name = "Itens")]
         public ICollection<ItemVenda> ItensVenda { get; set; } = new List<ItemVenda>();
 
         public Venda() 

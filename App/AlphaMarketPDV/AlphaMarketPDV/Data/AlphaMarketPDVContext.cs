@@ -44,6 +44,19 @@ namespace AlphaMarketPDV.Data
                 .HasMany(u => u.Produtos)
                 .WithOne(p => p.UnidadeMedida)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Estoque>()
+                .HasKey(e => new { e.LojaId, e.ProdutoId });
+
+            modelBuilder.Entity<Estoque>()
+                .HasOne(e => e.Produto)
+                .WithMany(p => p.Estoques)
+                .HasForeignKey(e => e.ProdutoId);
+
+            modelBuilder.Entity<Estoque>()
+                .HasOne(e => e.Loja)
+                .WithMany(l => l.Estoques)
+                .HasForeignKey(e => e.LojaId);
         }
     }
 }

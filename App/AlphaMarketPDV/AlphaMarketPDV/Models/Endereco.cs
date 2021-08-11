@@ -8,12 +8,25 @@ namespace AlphaMarketPDV.Models
 {
     public class Endereco
     {
+        [Display(Name = "Id")]
         public int Id { get; set; }
+
+        [Display(Name = "CEP")]
         public string Cep { get; set; }
+
+        [Display(Name = "Lougradouro")]
         public string Lougradouro { get; set; }
+
+        [Display(Name = "Bairro")]
         public string Bairro { get; set; }
+
+        [Display(Name = "Cidade")]
         public string Cidade { get; set; }
+
+        [Display(Name = "UF")]
         public string Uf { get; set; }
+
+        [Display(Name = "Fornecedores")]
         public ICollection<Fornecedor> Fornecedores { get; set; } = new List<Fornecedor>();
 
         public Endereco() 

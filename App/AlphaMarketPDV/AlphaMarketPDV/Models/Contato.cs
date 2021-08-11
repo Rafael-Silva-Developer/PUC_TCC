@@ -8,12 +8,25 @@ namespace AlphaMarketPDV.Models
 {
     public class Contato
     {
+        [Display(Name = "Id")]
         public int Id { get; set; }
+
+        [Display(Name = "Telefone")]
         public string Telefone { get; set; }
+
+        [Display(Name = "Ramal")]
         public int Ramal { get; set; }
+
+        [Display(Name = "Celular")]
         public string Celular { get; set; }
+
+        [Display(Name = "Email")]
         public string Email { get; set; }
+
         public Fornecedor Fornecedor { get; set; }
+
+        [Display(Name = "Fornecedor")]
+        public int FornecedorId { get; set; }
 
         public Contato() 
         { 

@@ -8,14 +8,33 @@ namespace AlphaMarketPDV.Models
 {
     public class ItemVenda
     {
+        [Display(Name = "Id")]
         public int Id { get; private set; }
+
+        [Display(Name = "NRSEQ")]
         public int NrSeq { get; private set; }
+
+        [Display(Name = "Valor Unitário")]
         public double ValorUnitario { get; private set; }
+
+        [Display(Name = "Quantidade")]
         public double Qtd { get; private set; }
+
+        [Display(Name = "Sub-Total")]
         public double ValorItem { get; private set; }
+
+        [Display(Name = "Cancelado")]
         public bool Cancelado { get; private set; }
+
         public Produto Produto { get; set; }
+
+        [Display(Name = "Produto")]
+        public int ProdutoId { get; set; }
+
         public Venda Venda { get; set; }
+
+        [Display(Name = "Venda")]
+        public int VendaId { get; set; }
 
         public ItemVenda() 
         { 
@@ -36,12 +55,12 @@ namespace AlphaMarketPDV.Models
 
         public void AumentarSaldo()
         {
-            Produto.AdicionarQtdEstoque(Qtd);
+           // Produto.AdicionarQtdEstoque(Qtd);
         }
 
         public void DiminuirSaldo()
         {
-            Produto.RetirarQtdEstoque(Qtd);
+            //Produto.RetirarQtdEstoque(Qtd);
         }
 
         public void CalcularSubTotal() 

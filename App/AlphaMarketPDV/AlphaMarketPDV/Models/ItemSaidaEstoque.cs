@@ -8,11 +8,24 @@ namespace AlphaMarketPDV.Models
 {
     public class ItemSaidaEstoque
     {
+        [Display(Name = "Id")]
         public int Id { get; set; }
+
+        [Display(Name = "NRSEQ")]
         public int NrSeq { get; set; }
+
+        [Display(Name = "Quantidade")]
         public double Qtd { get; set; }
+
         public Produto Produto { get; set; }
+
+        [Display(Name = "Produto")]
+        public int ProdutoId { get; set; }
+
         public SaidaEstoque SaidaEstoque { get; set; }
+
+        [Display(Name = "Saída")]
+        public int SaidaEstoqueId { get; set; }
 
         public ItemSaidaEstoque() 
         { 
@@ -29,12 +42,12 @@ namespace AlphaMarketPDV.Models
 
         public void AumentarSaldo()
         {
-            Produto.AdicionarQtdEstoque(Qtd);
+           // Produto.AdicionarQtdEstoque(Qtd);
         }
 
         public void DiminuirSaldo()
         {
-            Produto.RetirarQtdEstoque(Qtd);
+            //Produto.RetirarQtdEstoque(Qtd);
         }
     }
 }

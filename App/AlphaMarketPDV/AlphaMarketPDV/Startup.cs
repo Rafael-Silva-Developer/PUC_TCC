@@ -45,17 +45,18 @@ namespace AlphaMarketPDV
             services.AddScoped<ProdutoService>();
             services.AddScoped<CategoriaService>();
             services.AddScoped<UnidadeMedidaService>();
+            services.AddScoped<FormaPagamentoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            var ptBR = new CultureInfo("pt-BR");
+            var culturePadrao = new CultureInfo("pt-BR");
             var localizationOptions = new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture(ptBR),
-                SupportedCultures = new List<CultureInfo> { ptBR },
-                SupportedUICultures = new List<CultureInfo> { ptBR }
+                DefaultRequestCulture = new RequestCulture(culturePadrao),
+                SupportedCultures = new List<CultureInfo> {culturePadrao},
+                SupportedUICultures = new List<CultureInfo> {culturePadrao}
             };
 
             app.UseRequestLocalization(localizationOptions);

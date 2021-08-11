@@ -25,7 +25,7 @@ namespace AlphaMarketPDV.Services
 
         public async Task InserirAsync(Produto obj)
         {
-            obj.Estoque = _context.Estoque.First();
+            //obj.Estoque = _context.Estoque.First();
             _context.Add(obj);
             await _context.SaveChangesAsync();
         }
@@ -60,7 +60,7 @@ namespace AlphaMarketPDV.Services
 
             try
             {
-                obj.Estoque = await _context.Estoque.FirstAsync();
+                //obj.Estoque = await _context.Estoque.FirstAsync();
                 _context.Update(obj);
                 await _context.SaveChangesAsync();
             }
