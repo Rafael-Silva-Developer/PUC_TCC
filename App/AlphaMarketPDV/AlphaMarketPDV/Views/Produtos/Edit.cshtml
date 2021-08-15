@@ -4,71 +4,90 @@
     ViewData["Title"] = "Editar produto";
 }
 
-<h2>@ViewData["Title"]</h2>
-
-<hr />
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
 
 <div class="row">
+    <hr />
     <div class="col-md-4">
         <form asp-action="Edit">
             <input type="hidden" asp-for="Produto.Id" />
-            <div class="form-group">
-                <label asp-for="Produto.Codigo" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.Codigo" class="col-form-label"></label>
+                </strong>
                 <input asp-for="Produto.Codigo" class="form-control" />
                 <span asp-validation-for="Produto.Codigo" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.DescricaoLonga" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.DescricaoLonga" class="col-form-label"></label>
+                </strong>
                 <input asp-for="Produto.DescricaoLonga" class="form-control" />
                 <span asp-validation-for="Produto.DescricaoLonga" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.DescricaoCurta" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.DescricaoCurta" class="col-form-label"></label>
+                </strong>
                 <input asp-for="Produto.DescricaoCurta" class="form-control" />
                 <span asp-validation-for="Produto.DescricaoCurta" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.QuantMinima" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.QuantMinima" class="col-form-label"></label>
+                </strong>
                 <input asp-for="Produto.QuantMinima" class="form-control" />
                 <span asp-validation-for="Produto.QuantMinima" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.ValorVenda" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.ValorVenda" class="col-form-label"></label>
+                </strong>
                 <input asp-for="Produto.ValorVenda" class="form-control" />
                 <span asp-validation-for="Produto.ValorVenda" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.Foto" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.Foto" class="col-form-label"></label>
+                </strong>
                 <input asp-for="Produto.Foto" class="form-control" />
                 <span asp-validation-for="Produto.Foto" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.DataHoraCadastro" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.DataHoraCadastro" class="col-form-label"></label>
+                </strong>
                 <input asp-for="Produto.DataHoraCadastro" class="form-control" />
                 <span asp-validation-for="Produto.DataHoraCadastro" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.CategoriaId" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.CategoriaId" class="col-form-label"></label>
+                </strong>
                 <select asp-for="Produto.CategoriaId" asp-items="@(new SelectList(Model.Categorias,"Id","Descricao"))" class="form-control"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="Produto.UnidadeMedidaId" class="control-label"></label>
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Produto.UnidadeMedidaId" class="col-form-label"></label>
+                </strong>
                 <select asp-for="Produto.UnidadeMedidaId" asp-items="@(new SelectList(Model.UnidadesMedida,"Id","Descricao"))" class="form-control"></select>
             </div>
-            <div class="form-group">
+            <div class="form-control-plaintext">
                 <div class="checkbox">
-                    <label>
-                        <input asp-for="Produto.Ativo" /> @Html.DisplayNameFor(model => model.Produto.Ativo)
-                    </label>
+                    <strong>
+                        <label><input asp-for="Produto.Ativo" /> @Html.DisplayNameFor(model => model.Produto.Ativo)</label>
+                    </strong>
                 </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Gravar" class="btn btn-default" />
+            <div class="form-control-plaintext">
+                <input type="submit" value="Gravar" class="btn btn-dark" />
             </div>
         </form>
     </div>
 </div>
 
-@section Scripts{
+@section ScriptPage{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
