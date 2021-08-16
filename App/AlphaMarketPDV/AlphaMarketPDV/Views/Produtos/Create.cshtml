@@ -11,7 +11,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form enctype="multipart/form-data" asp-action="Create">
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.Codigo" class="col-form-label"></label>
@@ -51,15 +51,10 @@
                 <strong>
                     <label asp-for="Produto.Foto" class="col-form-label"></label>
                 </strong>
-                <input type="file" class="form-control-file" asp-for="Produto.Foto">
+                <div class="custom-file">
+                    <input asp-for="Produto.FotoProduto" class="custom-file-input" id="customFile" accept="image/png, image/jpeg">
+                </div>
                 <span asp-validation-for="Produto.Foto" class="text-danger"></span>
-            </div>
-            <div class="form-control-plaintext">
-                <strong>
-                    <label asp-for="Produto.DataHoraCadastro" class="col-form-label"></label>
-                </strong>
-                <input asp-for="Produto.DataHoraCadastro" class="form-control" />
-                <span asp-validation-for="Produto.DataHoraCadastro" class="text-danger"></span>
             </div>
             <div class="form-control-plaintext">
                 <strong>

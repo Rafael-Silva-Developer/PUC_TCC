@@ -11,8 +11,10 @@
 <div class="row">
     <hr />
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form enctype="multipart/form-data" asp-action="Edit">
             <input type="hidden" asp-for="Produto.Id" />
+            <input type="hidden" asp-for="Produto.DataHoraCadastro" />
+            <input type="hidden" asp-for="Produto.FotoAux" />
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.Codigo" class="col-form-label"></label>
@@ -49,18 +51,24 @@
                 <span asp-validation-for="Produto.ValorVenda" class="text-danger"></span>
             </div>
             <div class="form-control-plaintext">
-                <strong>
-                    <label asp-for="Produto.Foto" class="col-form-label"></label>
-                </strong>
-                <input asp-for="Produto.Foto" class="form-control" />
-                <span asp-validation-for="Produto.Foto" class="text-danger"></span>
+                @if (@Model.Produto.Foto != null || @Model.Produto.Foto == "")
+                {
+                    <figure>
+                        <img src="~/images/produtos/@Model.Produto.Foto" height="150" width="150" asp-append-version="true" alt="Imagem anterior do produto" class="border"/>
+                        <figcaption>
+                            <strong><label class="col-form-label">Imagem atual</label></strong>
+                        </figcaption>
+                    </figure>
+                }
             </div>
             <div class="form-control-plaintext">
                 <strong>
-                    <label asp-for="Produto.DataHoraCadastro" class="col-form-label"></label>
+                    <label asp-for="Produto.Foto" class="col-form-label"></label>
                 </strong>
-                <input asp-for="Produto.DataHoraCadastro" class="form-control" />
-                <span asp-validation-for="Produto.DataHoraCadastro" class="text-danger"></span>
+                <div class="custom-file">
+                    <input asp-for="Produto.FotoProduto" class="custom-file-input" id="customFile" accept="image/png, image/jpeg">
+                </div>
+                <span asp-validation-for="Produto.Foto" class="text-danger"></span>
             </div>
             <div class="form-control-plaintext">
                 <strong>

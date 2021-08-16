@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Services;
 using AlphaMarketPDV.Models;
@@ -16,12 +14,13 @@ namespace AlphaMarketPDV.Controllers
         private readonly ProdutoService _produtoService;
         private readonly CategoriaService _categoriaService;
         private readonly UnidadeMedidaService _unidadeMedidaService;
-
-        public ProdutosController(ProdutoService produtoService, CategoriaService categoriaService, UnidadeMedidaService unidadeMedidaService)
+        
+        public ProdutosController(ProdutoService produtoService, CategoriaService categoriaService, 
+                                  UnidadeMedidaService unidadeMedidaService)
         {
             this._produtoService = produtoService;
             this._categoriaService = categoriaService;
-            this._unidadeMedidaService = unidadeMedidaService;
+            this._unidadeMedidaService = unidadeMedidaService;           
         }
 
         public async Task<IActionResult> Index()
@@ -49,6 +48,12 @@ namespace AlphaMarketPDV.Controllers
                 var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
                 return View(viewModel);
             }
+
+            string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
+            produto.Foto = nomeFotoProduto;
+
+            DateTime data = DateTime.Now;
+            produto.DataHoraCadastro = data;
 
             await _produtoService.InserirAsync(produto);
             return RedirectToAction(nameof(Index));
@@ -116,6 +121,7 @@ namespace AlphaMarketPDV.Controllers
 
             var categorias = await _categoriaService.ListarTodosAsync();
             var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
+            obj.FotoAux = obj.Foto;
             var viewModel = new ProdutoFormViewModel { Produto = obj, Categorias = categorias, UnidadesMedida = unidadesMedida };
             return View(viewModel);
         }
@@ -139,6 +145,13 @@ namespace AlphaMarketPDV.Controllers
 
             try
             {
+                string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
+                if (nomeFotoProduto != "") 
+                {
+                    produto.Foto = nomeFotoProduto;
+                }
+                _produtoService.ExcluirImagemProduto(produto);
+                
                 await _produtoService.UpdateAsync(produto);
                 return RedirectToAction(nameof(Index));
             }

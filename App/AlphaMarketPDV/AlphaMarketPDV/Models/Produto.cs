@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlphaMarketPDV.Models
 {
     public class Produto
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
         [StringLength(13, MinimumLength = 1, ErrorMessage = "O código do produto dever ter entre 3 e 13 caracteres.")]
@@ -46,6 +48,12 @@ namespace AlphaMarketPDV.Models
         [DataType(DataType.Upload)]
         public string Foto { get; set; }
 
+        [NotMapped]
+        public IFormFile FotoProduto { get; set; }
+
+        [NotMapped]
+        public string FotoAux { get; set; }
+
         [Display(Name = "Data/Hora Cadastro")]
         public DateTime DataHoraCadastro { get; set; }
 
@@ -71,7 +79,7 @@ namespace AlphaMarketPDV.Models
         public Produto(int id, string codigo, string descricaoLonga, string descricaoCurta, 
                        double quantMinima, double valorVenda, bool ativo, string observacoes, 
                        string foto, DateTime dataHoraCadastro, UnidadeMedida unidadeMedida, 
-                       Categoria categoria)
+                       Categoria categoria, IFormFile fotoProduto, string fotoAux)
         {
             this.Id = id;
             this.Codigo = codigo;
@@ -85,6 +93,8 @@ namespace AlphaMarketPDV.Models
             this.DataHoraCadastro = dataHoraCadastro;
             this.UnidadeMedida = unidadeMedida;
             this.Categoria = categoria;
+            this.FotoProduto = fotoProduto;
+            this.FotoAux = fotoAux;
         }
 
         public void AdicionarEstoque(Estoque e)

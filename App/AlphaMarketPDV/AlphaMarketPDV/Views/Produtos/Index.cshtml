@@ -41,6 +41,9 @@
             <thead class="table-dark">
                 <tr>
                     <th>
+                        <!--Imagem do produto-->
+                    </th>
+                    <th>
                         @Html.DisplayNameFor(model => model.Id)
                     </th>
                     <th>
@@ -64,6 +67,16 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td>
+                            @if (item.Foto != null || item.Foto == "")
+                            {
+                                <img src="~/images/produtos/@item.Foto" height="40" width="40" asp-append-version="true" alt="Imagem do produto"/>
+                            }
+                            else
+                            {
+                                <img src="~/images/produtos/default.png" height="40" width="40" asp-append-version="true" alt="Imagem do produto"/>
+                            }
+                        </td>
                         <td valign="middle">
                             @Html.DisplayFor(modelItem => item.Id)
                         </td>

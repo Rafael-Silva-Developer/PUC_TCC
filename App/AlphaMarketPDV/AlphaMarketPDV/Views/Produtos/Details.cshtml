@@ -10,57 +10,89 @@
 
 <div>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Codigo)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Codigo)
-        </dd>
+    <div class="row">
+        <dl class="dl-horizontal col-8">
+            <dt>
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Id)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DescricaoLonga)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DescricaoLonga)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Codigo)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Codigo)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DescricaoCurta)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DescricaoCurta)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DescricaoLonga)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DescricaoLonga)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.QuantMinima)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.QuantMinima)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.DescricaoCurta)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DescricaoCurta)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ValorVenda)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.ValorVenda)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.QuantMinima)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.QuantMinima)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Categoria)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Categoria.Descricao)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.ValorVenda)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ValorVenda)
+            </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UnidadeMedida)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UnidadeMedida.Descricao)
-        </dd>
-    </dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.Categoria)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Categoria.Descricao)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.UnidadeMedida)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.UnidadeMedida.Descricao)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Observacoes)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Observacoes)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DataHoraCadastro)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DataHoraCadastro)
+            </dd>
+        </dl>
+        <div class="col-4">
+            @if (@Model.Foto != null || @Model.Foto == "")
+            {
+                <figure>
+                    <img src="~/images/produtos/@Model.Foto" height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />
+                </figure>
+            }
+        </div>
+    </div>
 </div>
+
 <div>
     <br />
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-dark">
@@ -70,3 +102,5 @@
         <i class="fas fa-undo"></i> Voltar
     </a>
 </div>
+
+
