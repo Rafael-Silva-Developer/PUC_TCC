@@ -34,6 +34,11 @@ namespace AlphaMarketPDV.Services
             return await _context.UnidadeMedida.FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
+        public async Task<UnidadeMedida> ListarPorIdNoTrackingAsync(int id)
+        {
+            return await _context.UnidadeMedida.AsNoTracking().FirstOrDefaultAsync(obj => obj.Id == id);
+        }
+
         public async Task RemoverAsync(int id)
         {
             try
@@ -65,6 +70,20 @@ namespace AlphaMarketPDV.Services
             catch (DbUpdateConcurrencyException e)
             {
                 throw new DbConcurrencyException(e.Message);
+            }
+        }
+
+        public bool DescricaoUnidadeExistente(UnidadeMedida unidadeMedida)
+        {
+            var qtd = _context.UnidadeMedida.Where(u => u.Descricao == unidadeMedida.Descricao).Count();
+
+            if (qtd > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

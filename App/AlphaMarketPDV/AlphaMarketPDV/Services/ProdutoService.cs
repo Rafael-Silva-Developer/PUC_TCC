@@ -39,6 +39,11 @@ namespace AlphaMarketPDV.Services
             return await _context.Produto.Include(obj => obj.Categoria).Include(obj => obj.UnidadeMedida).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
+        public async Task<Produto> ListarPorIdNoTrackingAsync(int id)
+        {
+            return await _context.Produto.AsNoTracking().Include(obj => obj.Categoria).Include(obj => obj.UnidadeMedida).FirstOrDefaultAsync(obj => obj.Id == id);
+        }
+
         public async Task RemoverAsync(int id) 
         {
             try
@@ -77,42 +82,39 @@ namespace AlphaMarketPDV.Services
 
         public string UploadImagemProduto(Produto produto)
         {
-            string nomeUnicoArquivo = null;
-
-            if (produto.FotoProduto != null)
+            string pastaFotos = Path.Combine(_appEnvironment.WebRootPath, "images\\produtos");
+            string nomeUnicoArquivo = Guid.NewGuid().ToString() + "." + Path.GetExtension(produto.FotoProduto.FileName);
+            string caminhoArquivo = Path.Combine(pastaFotos, nomeUnicoArquivo);
+            using (var fileStream = new FileStream(caminhoArquivo, FileMode.Create))
             {
-                string pastaFotos = Path.Combine(_appEnvironment.WebRootPath, "images\\produtos");
-                nomeUnicoArquivo = Guid.NewGuid().ToString() + "." + Path.GetExtension(produto.FotoProduto.FileName);
-                string caminhoArquivo = Path.Combine(pastaFotos, nomeUnicoArquivo);
-                using (var fileStream = new FileStream(caminhoArquivo, FileMode.Create))
-                {
-                    produto.FotoProduto.CopyTo(fileStream);
-                }
+                produto.FotoProduto.CopyTo(fileStream);
             }
             return nomeUnicoArquivo;
         }
 
         public void ExcluirImagemProduto(Produto produto) 
         {
-            if ((produto.FotoAux != produto.Foto) && 
-                (produto.FotoAux != null) && 
-                (produto.FotoAux != "") &&
-                (produto.FotoProduto != null))
-            {
-                string pastaFotos = Path.Combine(_appEnvironment.WebRootPath, "images\\produtos");
-                string nomeArquivo = produto.FotoAux;
-                string caminhoArquivo = Path.Combine(pastaFotos, nomeArquivo);
-                File.Delete(caminhoArquivo);  
-            }
-
-            if ((produto.FotoAux == null && produto.FotoProduto == null && 
-                 produto.Foto != null && produto.Foto != "")) 
+            if ((produto.Foto != null) && (produto.Foto != ""))
             {
                 string pastaFotos = Path.Combine(_appEnvironment.WebRootPath, "images\\produtos");
                 string nomeArquivo = produto.Foto;
                 string caminhoArquivo = Path.Combine(pastaFotos, nomeArquivo);
-                File.Delete(caminhoArquivo);
+                File.Delete(caminhoArquivo);  
             }
+        }
+
+        public bool CodigoProdutoExistente(Produto produto) 
+        {
+            var qtd = _context.Produto.Where(p => p.Codigo == produto.Codigo).Count();
+
+            if (qtd > 0)
+            {
+                return true;
+            }
+            else 
+            {
+                return false;
+            }     
         }
     }
 }

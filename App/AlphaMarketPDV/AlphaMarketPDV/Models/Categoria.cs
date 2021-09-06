@@ -8,7 +8,7 @@ namespace AlphaMarketPDV.Models
 {
     public class Categoria
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
         [StringLength(30, ErrorMessage = "A descrição da categoria dever ter no máximo 30 caracteres.")]

@@ -40,6 +40,12 @@ namespace AlphaMarketPDV.Controllers
                 return View(obj);
             }
 
+            if (_formaPagamentoService.DescricaoFormaPagamentoExistente(obj)) 
+            {
+                TempData["Message"] = "Já existe uma forma de pagamento cadastrada com essa descrição!";
+                return View(obj);
+            }
+
             await _formaPagamentoService.InserirAsync(obj);
             return RedirectToAction(nameof(Index));
         }
@@ -123,6 +129,16 @@ namespace AlphaMarketPDV.Controllers
 
             try
             {
+                FormaPagamento formaPag = await _formaPagamentoService.ListarPorIdNoTrackingAsync(id);
+                if (obj.Descricao.ToUpper() != formaPag.Descricao.ToUpper()) 
+                {
+                    if (_formaPagamentoService.DescricaoFormaPagamentoExistente(obj))
+                    {
+                        TempData["Message"] = "Já existe uma forma de pagamento cadastrada com essa descrição!";
+                        return View(obj);
+                    }
+                }
+
                 await _formaPagamentoService.UpdateAsync(obj);
                 return RedirectToAction(nameof(Index));
             }

@@ -46,6 +46,8 @@ namespace AlphaMarketPDV
             services.AddScoped<CategoriaService>();
             services.AddScoped<UnidadeMedidaService>();
             services.AddScoped<FormaPagamentoService>();
+            services.AddScoped<UsuarioService>();
+            services.AddScoped<LojaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

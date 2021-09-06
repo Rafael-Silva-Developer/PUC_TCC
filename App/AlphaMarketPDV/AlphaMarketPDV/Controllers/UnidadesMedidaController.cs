@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Services;
 using AlphaMarketPDV.Models;
@@ -38,6 +36,12 @@ namespace AlphaMarketPDV.Controllers
         {
             if (!ModelState.IsValid)
             {
+                return View(unidadeMedida);
+            }
+
+            if (_unidadeMedidaService.DescricaoUnidadeExistente(unidadeMedida)) 
+            {
+                TempData["Message"] = "Já existe uma unidade de medida cadastrada com essa descrição!";
                 return View(unidadeMedida);
             }
 
@@ -124,6 +128,16 @@ namespace AlphaMarketPDV.Controllers
 
             try
             {
+                UnidadeMedida unidMedidaAux = await _unidadeMedidaService.ListarPorIdNoTrackingAsync(id);
+                if (unidadeMedida.Descricao.ToUpper() != unidMedidaAux.Descricao.ToUpper()) 
+                {
+                    if (_unidadeMedidaService.DescricaoUnidadeExistente(unidadeMedida))
+                    {
+                        TempData["Message"] = "Já existe uma unidade de medida cadastrada com essa descrição!";
+                        return View(unidadeMedida);
+                    }
+                }
+
                 await _unidadeMedidaService.UpdateAsync(unidadeMedida);
                 return RedirectToAction(nameof(Index));
             }

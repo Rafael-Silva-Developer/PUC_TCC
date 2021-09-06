@@ -4,24 +4,32 @@
     ViewData["Title"] = "Editar produto";
 }
 
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
 <div class="card-header text-white bg-dark text-center h2">
     @ViewData["Title"]
 </div>
+<hr />
 
 <div class="row">
-    <hr />
     <div class="col-md-4">
         <form enctype="multipart/form-data" asp-action="Edit">
             <input type="hidden" asp-for="Produto.Id" />
             <input type="hidden" asp-for="Produto.DataHoraCadastro" />
-            <input type="hidden" asp-for="Produto.FotoAux" />
+            <input type="hidden" asp-for="Produto.Foto" />
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.Codigo" class="col-form-label"></label>
                 </strong>
-                <input asp-for="Produto.Codigo" class="form-control" />
+                <input asp-for="Produto.Codigo" class="form-control" type="number" />
                 <span asp-validation-for="Produto.Codigo" class="text-danger"></span>
             </div>
+
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.DescricaoLonga" class="col-form-label"></label>
@@ -29,6 +37,7 @@
                 <input asp-for="Produto.DescricaoLonga" class="form-control" />
                 <span asp-validation-for="Produto.DescricaoLonga" class="text-danger"></span>
             </div>
+
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.DescricaoCurta" class="col-form-label"></label>
@@ -36,13 +45,15 @@
                 <input asp-for="Produto.DescricaoCurta" class="form-control" />
                 <span asp-validation-for="Produto.DescricaoCurta" class="text-danger"></span>
             </div>
+
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.QuantMinima" class="col-form-label"></label>
                 </strong>
-                <input asp-for="Produto.QuantMinima" class="form-control" />
+                <input asp-for="Produto.QuantMinima" class="form-control" type="number" />
                 <span asp-validation-for="Produto.QuantMinima" class="text-danger"></span>
             </div>
+
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.ValorVenda" class="col-form-label"></label>
@@ -50,38 +61,46 @@
                 <input asp-for="Produto.ValorVenda" class="form-control" />
                 <span asp-validation-for="Produto.ValorVenda" class="text-danger"></span>
             </div>
+
             <div class="form-control-plaintext">
-                @if (@Model.Produto.Foto != null || @Model.Produto.Foto == "")
-                {
-                    <figure>
-                        <img src="~/images/produtos/@Model.Produto.Foto" height="150" width="150" asp-append-version="true" alt="Imagem anterior do produto" class="border"/>
-                        <figcaption>
-                            <strong><label class="col-form-label">Imagem atual</label></strong>
-                        </figcaption>
-                    </figure>
-                }
-            </div>
-            <div class="form-control-plaintext">
-                <strong>
-                    <label asp-for="Produto.Foto" class="col-form-label"></label>
-                </strong>
                 <div class="custom-file">
-                    <input asp-for="Produto.FotoProduto" class="custom-file-input" id="customFile" accept="image/png, image/jpeg">
+                    @if (@Model.Produto.Foto != null || @Model.Produto.Foto == "")
+                    {                     
+                        <img src="~/images/produtos/@Model.Produto.Foto" height="150" width="150" asp-append-version="true" alt="Imagem anterior do produto" class="border" />                            
+                        <strong>
+                            <label class="col-form-label">Imagem atual</label>
+                        </strong>                                                 
+                    }
                 </div>
-                <span asp-validation-for="Produto.Foto" class="text-danger"></span>
             </div>
+
+            <div class="form-control-plaintext">
+                <div class="custom-file">
+                    <img id="img-preview" src="~/images/produtos/default.png" height="150" width="150" asp-append-version="true" alt="Nova imagem do produto" class="border" />
+                    <strong>
+                        <label asp-for="Produto.Foto" class="col-form-label"></label>
+                    </strong>
+                </div>
+                <div class="form-control-plaintext">
+                    <input asp-for="Produto.FotoProduto" class="custom-file-input" id="btn-upload-foto" accept="image/png, image/jpeg">
+                    <span asp-validation-for="Produto.Foto" class="text-danger"></span>
+                </div>               
+            </div>
+
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.CategoriaId" class="col-form-label"></label>
                 </strong>
                 <select asp-for="Produto.CategoriaId" asp-items="@(new SelectList(Model.Categorias,"Id","Descricao"))" class="form-control"></select>
             </div>
+
             <div class="form-control-plaintext">
                 <strong>
                     <label asp-for="Produto.UnidadeMedidaId" class="col-form-label"></label>
                 </strong>
                 <select asp-for="Produto.UnidadeMedidaId" asp-items="@(new SelectList(Model.UnidadesMedida,"Id","Descricao"))" class="form-control"></select>
             </div>
+
             <div class="form-control-plaintext">
                 <div class="checkbox">
                     <strong>
@@ -89,6 +108,7 @@
                     </strong>
                 </div>
             </div>
+
             <div class="form-control-plaintext">
                 <input type="submit" value="Gravar" class="btn btn-dark" />
             </div>
@@ -98,4 +118,34 @@
 
 @section ScriptPage{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <environment include="Development">
+        <script src="~/js/jquery-3.2.1.slim.js"></script>
+    </environment>
+
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.js"
+                asp-fallback-src="~/js/jquery-3.2.1.slim.js"
+                crossorigin="anonymous"
+                integrity="sha256-tA8y0XqiwnpwmOIl3SGAcFl2RvxHjA8qp0+1uCGmRmg=">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+        function leUrl(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#img-preview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#btn-upload-foto").change(function () {
+            leUrl(this);
+        });
+    </script>
 }

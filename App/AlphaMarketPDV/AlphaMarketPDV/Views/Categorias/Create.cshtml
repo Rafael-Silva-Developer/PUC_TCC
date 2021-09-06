@@ -4,6 +4,13 @@
     ViewData["Title"] = "Nova Categoria";
 }
 
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
 <div class="card-header text-white bg-dark text-center h2">
     @ViewData["Title"]
 </div>

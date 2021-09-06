@@ -8,7 +8,7 @@ namespace AlphaMarketPDV.Models
 {
     public class FormaPagamento
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
         [StringLength(30, ErrorMessage = "A descrição da forma de pagamento dever ter no máximo 30 caracteres.")]

@@ -40,6 +40,12 @@ namespace AlphaMarketPDV.Controllers
                 return View(categoria);
             }
 
+            if (_categoriaService.DescricaoCategoriaExistente(categoria)) 
+            {
+                TempData["Message"] = "Já existe uma categoria cadastrada com essa descrição!";
+                return View(categoria);
+            }
+
             await _categoriaService.InserirAsync(categoria);
             return RedirectToAction(nameof(Index));
         }
@@ -123,6 +129,16 @@ namespace AlphaMarketPDV.Controllers
 
             try
             {
+                Categoria categoriaAux = await _categoriaService.ListarPorIdNoTrackingAsync(id);
+                if (categoria.Descricao.ToUpper() != categoriaAux.Descricao.ToUpper()) 
+                {
+                    if (_categoriaService.DescricaoCategoriaExistente(categoria))
+                    {
+                        TempData["Message"] = "Já existe uma categoria cadastrada com essa descrição!";
+                        return View(categoria);
+                    }
+                }
+
                 await _categoriaService.UpdateAsync(categoria);
                 return RedirectToAction(nameof(Index));
             }

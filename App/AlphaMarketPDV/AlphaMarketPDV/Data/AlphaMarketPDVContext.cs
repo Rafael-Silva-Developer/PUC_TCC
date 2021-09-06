@@ -31,6 +31,7 @@ namespace AlphaMarketPDV.Data
         public DbSet<AlphaMarketPDV.Models.UnidadeMedida> UnidadeMedida { get; set; }
         public DbSet<AlphaMarketPDV.Models.Usuario> Usuario { get; set; }
         public DbSet<AlphaMarketPDV.Models.Venda> Venda { get; set; }
+        public DbSet<AlphaMarketPDV.Models.Loja> Loja { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,7 +57,7 @@ namespace AlphaMarketPDV.Data
             modelBuilder.Entity<Estoque>()
                 .HasOne(e => e.Loja)
                 .WithMany(l => l.Estoques)
-                .HasForeignKey(e => e.LojaId);
+                .HasForeignKey(e => e.LojaId);        
         }
     }
 }

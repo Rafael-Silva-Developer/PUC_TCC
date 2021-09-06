@@ -34,6 +34,11 @@ namespace AlphaMarketPDV.Services
             return await _context.Categoria.FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
+        public async Task<Categoria> ListarPorIdNoTrackingAsync(int id)
+        {
+            return await _context.Categoria.AsNoTracking().FirstOrDefaultAsync(obj => obj.Id == id);
+        }
+
         public async Task RemoverAsync(int id)
         {
             try
@@ -65,6 +70,20 @@ namespace AlphaMarketPDV.Services
             catch (DbUpdateConcurrencyException e)
             {
                 throw new DbConcurrencyException(e.Message);
+            }
+        }
+
+        public bool DescricaoCategoriaExistente(Categoria categoria)
+        {
+            var qtd = _context.Categoria.Where(c => c.Descricao == categoria.Descricao).Count();
+
+            if (qtd > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

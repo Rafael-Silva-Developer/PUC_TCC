@@ -34,6 +34,11 @@ namespace AlphaMarketPDV.Services
             return await _context.FormaPagamento.FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
+        public async Task<FormaPagamento> ListarPorIdNoTrackingAsync(int id)
+        {
+            return await _context.FormaPagamento.AsNoTracking().FirstOrDefaultAsync(obj => obj.Id == id);
+        }
+
         public async Task RemoverAsync(int id)
         {
             try
@@ -65,6 +70,20 @@ namespace AlphaMarketPDV.Services
             catch (DbUpdateConcurrencyException e)
             {
                 throw new DbConcurrencyException(e.Message);
+            }
+        }
+
+        public bool DescricaoFormaPagamentoExistente(FormaPagamento formaPag)
+        {
+            var qtd = _context.FormaPagamento.Where(f => f.Descricao == formaPag.Descricao).Count();
+
+            if (qtd > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

@@ -5,7 +5,7 @@ namespace AlphaMarketPDV.Models
 {
     public class UnidadeMedida
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
         [StringLength(30, MinimumLength = 4, ErrorMessage = "A descrição da unidade de medida dever ter entre 4 e 30 caracteres.")]

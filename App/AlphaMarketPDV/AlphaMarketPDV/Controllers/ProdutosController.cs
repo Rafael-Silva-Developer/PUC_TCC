@@ -49,9 +49,22 @@ namespace AlphaMarketPDV.Controllers
                 return View(viewModel);
             }
 
-            string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
-            produto.Foto = nomeFotoProduto;
+            if (_produtoService.CodigoProdutoExistente(produto)) 
+            {
+                TempData["Message"] = "Já existe um produto cadastrado com esse código!";
 
+                var categorias = await _categoriaService.ListarTodosAsync();
+                var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
+                var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                return View(viewModel);
+            }
+
+            if (produto.FotoProduto != null) 
+            {
+                string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
+                produto.Foto = nomeFotoProduto;
+            }
+                
             DateTime data = DateTime.Now;
             produto.DataHoraCadastro = data;
 
@@ -121,7 +134,6 @@ namespace AlphaMarketPDV.Controllers
 
             var categorias = await _categoriaService.ListarTodosAsync();
             var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-            obj.FotoAux = obj.Foto;
             var viewModel = new ProdutoFormViewModel { Produto = obj, Categorias = categorias, UnidadesMedida = unidadesMedida };
             return View(viewModel);
         }
@@ -145,13 +157,28 @@ namespace AlphaMarketPDV.Controllers
 
             try
             {
-                string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
-                if (nomeFotoProduto != "") 
+                Produto produtoAux = await _produtoService.ListarPorIdNoTrackingAsync(id);
+
+                if (produto.Codigo != produtoAux.Codigo)
                 {
+                    if (_produtoService.CodigoProdutoExistente(produto)) 
+                    {
+                        TempData["Message"] = "Já existe um produto cadastrado com esse código!";
+
+                        var categorias = await _categoriaService.ListarTodosAsync();
+                        var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
+                        var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                        return View(viewModel);
+                    }
+                }
+
+                if (produto.FotoProduto != null) 
+                {
+                    string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);                          
+                    _produtoService.ExcluirImagemProduto(produto);
                     produto.Foto = nomeFotoProduto;
                 }
-                _produtoService.ExcluirImagemProduto(produto);
-                
+                          
                 await _produtoService.UpdateAsync(produto);
                 return RedirectToAction(nameof(Index));
             }

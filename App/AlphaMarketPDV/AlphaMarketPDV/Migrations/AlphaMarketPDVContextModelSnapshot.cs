@@ -349,7 +349,7 @@ namespace AlphaMarketPDV.Migrations
 
                     b.Property<string>("DescricaoCurta")
                         .IsRequired()
-                        .HasMaxLength(25);
+                        .HasMaxLength(30);
 
                     b.Property<string>("DescricaoLonga")
                         .IsRequired()
@@ -425,6 +425,8 @@ namespace AlphaMarketPDV.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<bool>("Ativo");
+
+                    b.Property<string>("FotoUsuario");
 
                     b.Property<string>("Login")
                         .IsRequired()

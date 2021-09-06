@@ -21,7 +21,7 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Descrição Longa")]
         public string DescricaoLonga { get; set; }
 
-        [StringLength(25, MinimumLength = 4, ErrorMessage = "A descrição curta do produto dever ter entre 4 e 25 caracteres.")]
+        [StringLength(30, MinimumLength = 4, ErrorMessage = "A descrição curta do produto dever ter entre 4 e 30 caracteres.")]
         [Required(ErrorMessage = "A descrição curta do produto é obrigatória!")]
         [Display(Name = "Descrição Curta")]
         public string DescricaoCurta { get; set; }
@@ -51,9 +51,6 @@ namespace AlphaMarketPDV.Models
         [NotMapped]
         public IFormFile FotoProduto { get; set; }
 
-        [NotMapped]
-        public string FotoAux { get; set; }
-
         [Display(Name = "Data/Hora Cadastro")]
         public DateTime DataHoraCadastro { get; set; }
 
@@ -79,7 +76,7 @@ namespace AlphaMarketPDV.Models
         public Produto(int id, string codigo, string descricaoLonga, string descricaoCurta, 
                        double quantMinima, double valorVenda, bool ativo, string observacoes, 
                        string foto, DateTime dataHoraCadastro, UnidadeMedida unidadeMedida, 
-                       Categoria categoria, IFormFile fotoProduto, string fotoAux)
+                       Categoria categoria, IFormFile fotoProduto)
         {
             this.Id = id;
             this.Codigo = codigo;
@@ -94,7 +91,6 @@ namespace AlphaMarketPDV.Models
             this.UnidadeMedida = unidadeMedida;
             this.Categoria = categoria;
             this.FotoProduto = fotoProduto;
-            this.FotoAux = fotoAux;
         }
 
         public void AdicionarEstoque(Estoque e)

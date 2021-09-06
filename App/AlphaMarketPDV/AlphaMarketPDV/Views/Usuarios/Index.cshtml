@@ -1,0 +1,221 @@
+﻿@model IEnumerable<AlphaMarketPDV.Models.Usuario>
+
+@section Styles {
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/jquery.dataTables.min.css" />
+        <link rel="stylesheet" href="~/css/buttons.dataTables.min.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css"
+              asp-fallback-href="~/css/jquery.dataTables.min.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css"
+              asp-fallback-href="~/css/buttons.dataTables.min.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute" />
+    </environment>
+}
+
+@{
+    ViewData["Title"] = "Usuários";
+}
+
+<!--Inicio do HTML-->
+<div class="card-block">
+    <div class="card-header text-white bg-dark text-center h1">
+        @ViewData["Title"]
+    </div>
+
+    <p>
+        <br />
+        <a asp-action="Create" class="btn btn-dark">
+            <i class="fas fa-plus-circle"></i> Novo Usuário
+        </a>
+    </p>
+
+    <div class="card-body">
+        <table id="unidades" class="table table-striped table-hover table-row-border compact">
+            <thead class="table-dark">
+                <tr>
+                    <th>
+                        <!--Imagem do usuário-->
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Login)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Nome)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Tipo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Ativo)
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (item.FotoUsuario != null || item.FotoUsuario == "")
+                            {
+                                <img src="~/images/usuarios/@item.FotoUsuario" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
+                            }
+                            else
+                            {
+                                <img src="~/images/usuarios/default.png" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
+                            }
+                        </td>
+
+                        <td valign="middle">
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td valign="middle">
+                            @Html.DisplayFor(modelItem => item.Login)
+                        </td>
+                        <td valign="middle">
+                            @Html.DisplayFor(modelItem => item.Nome)
+                        </td>
+                        <td valign="middle">
+                            @Html.DisplayFor(modelItem => item.Tipo)
+                        </td>
+                        <td valign="middle">
+                            @Html.DisplayFor(modelItem => item.Ativo)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="btn btn-link">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.Id" title="Visualizar" class="btn btn-link">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" title="Excluir" class="btn btn-link">
+                                <span style="color: Tomato;">
+                                    <i class="fas fa-trash-alt"></i>
+                                </span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section ScriptPage {
+    <environment include="Development">
+        <script src="~/js/jquery-3.5.1.js"></script>
+        <script src="~/js/jquery.dataTables.min.js"></script>
+        <script src="~/js/dataTables.buttons.min.js"></script>
+        <script src="~/js/jszip.min.js"></script>
+        <script src="~/js//pdfmake.min.js"></script>
+        <script src="~/js/vfs_fonts.js"></script>
+        <script src="~/js/buttons.html5.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                asp-fallback-src="~/js/jquery-3.5.1.js">
+        </script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"
+                asp-fallback-src="~/js/jquery.dataTables.min.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"
+                asp-fallback-src="~/js/dataTables.buttons.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"
+                asp-fallback-src="~/js/jszip.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"
+                asp-fallback-src="~/js//pdfmake.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"
+                asp-fallback-src="~/js/vfs_fonts.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"
+                asp-fallback-src="~/js/buttons.html5.min.js">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#unidades').DataTable(
+                {
+                    "order": [[1, "asc"]],
+                    columnDefs: [{ targets: 0, className: 'dt-center' }],
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Exibindo de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "Último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        },
+                        "select": {
+                            "rows": {
+                                "_": "Selecionado %d linhas",
+                                "0": "Nenhuma linha selecionada",
+                                "1": "Selecionado 1 linha"
+                            }
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "copyTitle": "Cópia bem sucedida",
+                            "copySuccess": {
+                                "1": "Uma linha copiada com sucesso",
+                                "_": "%d linhas copiadas com sucesso"
+                            }
+                        }
+                    },
+
+                    dom: 'Blfrtip',
+                    buttons: [
+                        {
+                            extend: 'copy',
+                            className: 'btn btn-dark rounded-0',
+                            text: '<i class="far fa-copy"></i> Copy'
+                        },
+                        {
+                            extend: 'excel',
+                            className: 'btn btn-dark rounded-0',
+                            text: '<i class="far fa-file-excel"></i> Excel'
+                        },
+                        {
+                            extend: 'csv',
+                            className: 'btn btn-dark rounded-0',
+                            text: '<i class="fas fa-file-csv"></i> CSV'
+                        },
+                        {
+                            extend: 'pdf',
+                            className: 'btn btn-dark rounded-0',
+                            text: '<i class="far fa-file-pdf"></i> Pdf'
+                        }
+                    ]
+                }
+            );
+        });
+    </script>
+}

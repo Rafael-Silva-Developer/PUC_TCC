@@ -9,7 +9,7 @@ namespace AlphaMarketPDV.Models
 {
     public class Loja
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
         [StringLength(30, ErrorMessage = "A descrição da loja deve ter até 30 caracteres.")]

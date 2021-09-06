@@ -11,7 +11,7 @@
 
     .dl-horizontal dd {
         margin-left: 180px;
-        height: 15px;
+        height: 15px;      
     }
 }
 
@@ -79,4 +79,8 @@
             margin-left: 17rem;
             width: calc(100% - 17rem);
         }
+}
+
+#number {
+    width: 3em;
 }
