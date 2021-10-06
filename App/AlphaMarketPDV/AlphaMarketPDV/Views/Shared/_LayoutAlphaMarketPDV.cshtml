@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<AlphaMarketPDV.Models.UsuarioApp> SignInManager
+@inject Microsoft.AspNetCore.Identity.UserManager<AlphaMarketPDV.Models.UsuarioApp> UserManager
+@inject Microsoft.AspNetCore.Identity.RoleManager<AlphaMarketPDV.Models.PerfilApp> RoleManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -41,87 +45,178 @@
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home"></i> Home
+                        </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Cadastro
+                            <i class="fas fa-book"></i> Cadastro
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Produtos" asp-action="Index">Produtos</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Produtos" asp-action="Index">
+                                    <i class="fas fa-tshirt"></i> Produtos
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Fornecedores</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-truck-moving"></i> Fornecedores
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="FormasPagamento" asp-action="Index">Formas de Pagamento</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="FormasPagamento" asp-action="Index">
+                                    <i class="fas fa-money-bill-wave"></i> Formas de Pagamento
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="UnidadesMedida" asp-action="Index">Unidades de Medida</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="UnidadesMedida" asp-action="Index">
+                                    <i class="fas fa-balance-scale"></i> Unidades de Medida
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias de Produto</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Categorias" asp-action="Index">
+                                    <i class="fas fa-clipboard-list"></i> Categorias de Produto
+                                </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Estoque</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-boxes"></i> Estoque
+                        </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuVenda" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Venda
+                            <i class="fas fa-shopping-basket"></i> Venda
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="DropdownMenuVenda">
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Acompanhar Vendas</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-calculator"></i> Acompanhar Vendas                     
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Processar Venda</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-cart-plus"></i> Processar Venda
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Consultar Preço</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-search-dollar"></i> Consultar Preço
+                                </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuCaixa" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Caixa
+                            <i class="fas fa-piggy-bank"></i> Caixa
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="DropdownMenuCaixa">
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Fluxo de Caixa</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-chart-line"></i> Fluxo de Caixa
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Operar</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-cash-register"></i> Operar
+                                </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuManutencao" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Manutenção
+                            <i class="fas fa-tools"></i> Manutenção
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="DropdownMenuManutencao">
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuários</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Infra" asp-action="Index">
+                                    <i class="fas fa-users"></i> Usuários
+                                </a>
                             </li>
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">Alteração de Senha</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Administration" asp-action="Index">
+                                    <i class="fas fa-user-shield"></i> Perfils
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-key"></i> Alterar de Senha
+                                </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">Sobre</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
+                            <i class="fas fa-info-circle"></i> Sobre
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contato</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">
+                            <i class="fas fa-envelope"></i> Contato
+                        </a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+
+
+
+
+
+                <p class="row text-white" style="text-align:right;">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var usuarioApp = await UserManager.FindByNameAsync(UserManager.GetUserName(User));
+                        var listaPerfils = RoleManager.Roles.ToList();
+                        var perfilApp = "";
+
+                        foreach (var perfil in listaPerfils)
+                        {
+                            if (await UserManager.IsInRoleAsync(usuarioApp, perfil.Name))
+                            {
+                                perfilApp = perfil.Name;
+                            }
+                        }
+
+                        <div class="box">
+                            <div>
+                                @if (usuarioApp.FotoUsuario != null || usuarioApp.FotoUsuario == "")
+                                {
+                                    <img src="~/images/usuarios/@usuarioApp.FotoUsuario" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/usuarios/default.png" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
+                                }
+                            </div>
+                            <div class="text-white" id="email-usuario">                               
+                                @usuarioApp.Email 
+                            </div>
+                            <div class="text-white" id="tipo-usuario">
+                                @perfilApp
+                            </div>    
+                            <div id="logoff-usuario">
+                                <a asp-controller="Infra" asp-action="Sair">
+                                    <i class="fas fa-sign-out-alt"></i> Logoff
+                                </a>
+                            </div>
+                        </div>                       
+                    }
+                    else
+                    {
+                        <a class="nav-item nav-link" asp-area="" asp-controller="Infra" asp-action="Acessar">
+                            Login
+                        </a>
+                    }
             </div>
+
+
+
+
+
+
+
+        </div>
         </div>
     </nav>
 

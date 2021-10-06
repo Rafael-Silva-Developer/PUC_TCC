@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AlphaMarketPDV.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace AlphaMarketPDV.Data
 {
-    public class AlphaMarketPDVContext : DbContext
+    public class AlphaMarketPDVContext : IdentityDbContext<UsuarioApp, PerfilApp, string>
     {
         public AlphaMarketPDVContext(DbContextOptions<AlphaMarketPDVContext> options)
             : base(options)

@@ -2,30 +2,119 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+<div class="container">
+    <div class="row mx-lg-n5">
+        <div class="col py-3 px-lg-5">          
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-cart-plus fa-2x"></i>
+                </span>
+                PDV
+            </a>
+        </div>
+        <div class="col py-3 px-lg-5">
+            <a asp-action="Produtos" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-tshirt fa-2x"></i>
+                </span> 
+                Produtos
+            </a>
+        </div>
     </div>
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-            <img src="~/images/banner1.svg" class="d-block w-100" alt="...">
-        </div>
-        <div class="carousel-item">
-            <img src="~/images/banner2.svg" class="d-block w-100" alt="...">
-        </div>
-        <div class="carousel-item">
-            <img src="~/images/banner3.svg" class="d-block w-100" alt="...">
-        </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
 
+    <div class="row mx-lg-n5">
+        <div class="col py-3 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-store fa-2x"></i>
+                </span>
+                Abertura de Caixa
+            </a>
+        </div>
+        <div class="col py-3 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-truck-moving fa-2x"></i>
+                </span>
+                Fornecedores
+            </a>
+        </div>
+    </div>
+
+    <div class="row mx-lg-n5">
+        <div class="col py-3 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-store-slash fa-2x"></i>
+                </span>
+                Fechamento de Caixa
+            </a>
+        </div>
+        <div class="col py-3 px-lg-5">
+            <a asp-action="FormasPagamento" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-money-bill-wave fa-2x"></i>
+                </span>
+                Formas de Pagamento
+            </a>
+        </div>
+    </div>
+
+    <div class="row mx-lg-n5">
+        <div class="col py-3 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-hand-holding-usd fa-2x"></i>
+                </span>
+                 Sangria de Caixa
+            </a>
+        </div>
+        <div class="col py-3 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-calculator fa-2x"></i>
+                </span>
+                Acompanhamento de Vendas
+            </a>
+        </div>
+    </div>
+
+    <div class="row mx-lg-n5">
+        <div class="col py-3 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-search-dollar fa-2x"></i>
+                </span>
+                Consultar Preço
+            </a>
+        </div>
+        <div class="col py-3 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-boxes fa-2x"></i>
+                </span>
+                Estoque
+            </a>
+        </div>
+    </div>
+
+    <div class="row mx-lg-n5">
+        <div class="col py-5 px-lg-5">
+            <a asp-controller="Infra" asp-action="Index" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-users fa-2x"></i>
+                </span>
+                Usuários
+            </a>
+        </div>
+        <div class="col py-5 px-lg-5">
+            <a asp-action="" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;">
+                <span>
+                    <i class="fas fa-key fa-2x"></i>
+                </span>
+                Alterar Senha
+            </a>
+        </div>
+    </div>
+
+</div>

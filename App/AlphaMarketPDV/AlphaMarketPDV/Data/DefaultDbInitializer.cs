@@ -4,16 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Models;
 using AlphaMarketPDV.Models.Enums;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AlphaMarketPDV.Data
 {
     public class DefaultDbInitializer
     {
-        public static void Initialize(AlphaMarketPDVContext context)
+        public static async Task Initialize(AlphaMarketPDVContext context, 
+                                      UserManager<UsuarioApp> userManager,
+                                      RoleManager<PerfilApp> roleManager)
         {
             context.Database.EnsureCreated();
 
-            if (context.Loja.Any() || context.Endereco.Any() || context.Usuario.Any())
+            if (context.Users.Any())
             {
                 return;
             }
@@ -21,7 +26,7 @@ namespace AlphaMarketPDV.Data
             var enderecoDefault = new Endereco
             {
                 Id = 1,
-                Cep = "00000-000",
+                Cep = "99999-999",
                 Lougradouro = "Rua Central",
                 Bairro = "Central",
                 Cidade = "Rio de Janeiro",
@@ -40,22 +45,51 @@ namespace AlphaMarketPDV.Data
                 Endereco = enderecoDefault
             };
 
-            context.Loja.Add(lojaMatriz);
+            context.Loja.Add(lojaMatriz);          
             context.SaveChanges();
 
-            var usuarioDefault = new Usuario 
-            { 
-                Id = 1,
-                Login = "supervisor",
-                Senha = "03dbef3b07b910f5a6bc78572dac9a23",
-                Ativo = true,
-                Nome = "Suporte",
-                Tipo = TipoUsuario.SUPERVISOR,
-                Loja = lojaMatriz
-            };
+            //Adicionando os perfils e usuários padrões...
+            string supervisorId = "";
 
-            context.Usuario.Add(usuarioDefault);
-            context.SaveChanges();
+            string perfil1 = "Supervisor";
+            string descr1 = "Este é o perfil de supervisor que dar acesso a todas as funcionalidades do sistema.";
+
+            string perfil2 = "Atendente";
+            string descr2 = "Este é um perfil restrito para atendimento.";
+
+            string password = "P@ssw0rd";
+
+            if (await roleManager.FindByNameAsync(perfil1) == null) 
+            {
+                await roleManager.CreateAsync(new PerfilApp(perfil1, descr1, DateTime.Now, TipoPerfil.SUPERVISOR));
+            }
+
+            if (await roleManager.FindByNameAsync(perfil2) == null) 
+            {
+                await roleManager.CreateAsync(new PerfilApp(perfil2, descr2, DateTime.Now, TipoPerfil.ATENDENTE));
+            }
+
+            if (await userManager.FindByNameAsync("suporte@alphamarket.com.br") == null) 
+            {
+                var supervisor = new UsuarioApp
+                {
+                    UserName = "suporte@alphamarket.com.br",
+                    Email = "suporte@alphamarket.com.br",
+                    Nome = "Suporte",
+                    Ativo = true,
+                    LojaId = 1
+                };
+
+                var result = await userManager.CreateAsync(supervisor);
+                if (result.Succeeded) 
+                {
+                    await userManager.AddPasswordAsync(supervisor, password);
+                    await userManager.AddToRoleAsync(supervisor, perfil1);
+                }
+                supervisorId = supervisor.Id;
+            }
+            
+
         }
     }
 }

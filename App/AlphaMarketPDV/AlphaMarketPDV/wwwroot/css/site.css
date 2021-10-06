@@ -84,3 +84,22 @@
 #number {
     width: 3em;
 }
+
+.box {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1px 1em;
+}
+
+    .box :first-child {
+        align-self: center;
+    }
+
+    .box#email-usuario {
+        align-self: self-start;
+    }
+
+    .box#tipo-usuario {
+        align-self: self-end;
+    }

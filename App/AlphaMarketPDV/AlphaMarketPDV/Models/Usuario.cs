@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AlphaMarketPDV.Models.Enums;
+﻿using AlphaMarketPDV.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
@@ -35,7 +31,7 @@ namespace AlphaMarketPDV.Models
 
         [Required(ErrorMessage = "O tipo de usuário é obrigatório!")]
         [Display(Name = "Tipo de Usuário")]
-        public TipoUsuario Tipo { get; set; }
+        public TipoPerfil Tipo { get; set; }
 
         public Loja Loja { get; set; }
 
@@ -56,7 +52,7 @@ namespace AlphaMarketPDV.Models
         }
 
         public Usuario(int id, string login, string senha, bool ativo, string nome,
-                       TipoUsuario tipo, Loja loja, string fotoUsuario, IFormFile fotoUsuarioLoad)
+                       TipoPerfil tipo, Loja loja, string fotoUsuario, IFormFile fotoUsuarioLoad)
         {
             this.Id = id;
             this.Login = login;

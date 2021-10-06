@@ -6,9 +6,11 @@ using AlphaMarketPDV.Models;
 using AlphaMarketPDV.Models.ViewModels;
 using AlphaMarketPDV.Services.Exceptions;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
+    [Authorize]
     public class ProdutosController : Controller
     {
         private readonly ProdutoService _produtoService;

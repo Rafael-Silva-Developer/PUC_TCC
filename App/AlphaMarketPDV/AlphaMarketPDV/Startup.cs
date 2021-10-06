@@ -2,18 +2,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AlphaMarketPDV.Data;
 using AlphaMarketPDV.Services;
+using AlphaMarketPDV.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AlphaMarketPDV
 {
@@ -48,10 +46,25 @@ namespace AlphaMarketPDV
             services.AddScoped<FormaPagamentoService>();
             services.AddScoped<UsuarioService>();
             services.AddScoped<LojaService>();
+            services.AddScoped<InfraService>();
+            services.AddScoped<AdministrationService>();
+            services.AddIdentity<UsuarioApp, PerfilApp>(
+                options => options.Stores.MaxLengthForKeys = 128)
+                .AddEntityFrameworkStores<AlphaMarketPDVContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options => {
+                options.LoginPath = "/Infra/Acessar";
+                options.AccessDeniedPath = "/Infra/AcessoNegado";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+                              IHostingEnvironment env,
+                              AlphaMarketPDVContext context,
+                              RoleManager<PerfilApp> roleManager,
+                              UserManager<UsuarioApp> userManager)
         {
             var culturePadrao = new CultureInfo("pt-BR");
             var localizationOptions = new RequestLocalizationOptions
@@ -76,6 +89,7 @@ namespace AlphaMarketPDV
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -83,6 +97,11 @@ namespace AlphaMarketPDV
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            DefaultDbInitializer.Initialize(context, userManager, roleManager).Wait();
+
+
+
         }
     }
 }

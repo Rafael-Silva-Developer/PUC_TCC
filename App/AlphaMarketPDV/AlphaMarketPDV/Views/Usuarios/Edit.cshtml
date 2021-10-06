@@ -60,7 +60,7 @@
                 <strong>
                     <label asp-for="Usuario.Tipo" class="col-form-label"></label>
                 </strong>
-                <select asp-for="Usuario.Tipo" asp-items="@Html.GetEnumSelectList<TipoUsuario>()" class="form-control">
+                <select asp-for="Usuario.Tipo" asp-items="@Html.GetEnumSelectList<TipoPerfil>()" class="form-control">
                     <option value="">--Selecione--</option>
                 </select>
             </div>

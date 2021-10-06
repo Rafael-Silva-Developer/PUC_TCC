@@ -3,15 +3,30 @@
     ViewData["Title"] = "Error";
 }
 
-<h1 class="text-danger">@ViewData["Title"]</h1>
-<h2 class="text-danger">Houve um erro durante o processamento da sua requisição.</h2>
-<h3 class="text-danger">@Model.Message</h3>
+<div class="card">
+    <div class="card-header">
+        <h1 class="text-danger">@ViewData["Title"]</h1>
+    </div>
+    <div class="card-body">
+        <h2 class="text-danger">Houve um erro durante o processamento da sua requisição.</h2>
+    </div>
+    <div class="card-footer">
+        <h3 class="text-danger">@Model.Message</h3>
 
-@if (Model.ShowRequestId)
-{
-    <p>
-        <strong>Request ID:</strong> <code>@Model.RequestId</code>
-    </p>
-}
+        @if (Model.ShowRequestId)
+        {
+            <p>
+                <strong>Request ID:</strong> <code>@Model.RequestId</code>
+            </p>
+        }
+    </div>
+</div>
+
+
+
+
+
+
+
 
 

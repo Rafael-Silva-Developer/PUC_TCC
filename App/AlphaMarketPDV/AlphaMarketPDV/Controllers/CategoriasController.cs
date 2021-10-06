@@ -8,9 +8,11 @@ using AlphaMarketPDV.Models;
 using AlphaMarketPDV.Services.Exceptions;
 using AlphaMarketPDV.Models.ViewModels;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
+    [Authorize]
     public class CategoriasController : Controller
     {
         private readonly CategoriaService _categoriaService;

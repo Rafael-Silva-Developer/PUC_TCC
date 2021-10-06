@@ -1,0 +1,66 @@
+﻿@model AlphaMarketPDV.Models.Infra.AcessarViewModel
+
+@section Styles {
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/signin_aux.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/signin_aux.css"
+              asp-fallback-href="~/css/signin_aux.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute" />
+    </environment>
+}
+
+@{
+    Layout = "_LayoutLogin";
+    ViewData["Title"] = "Autenticação";
+}
+
+<main class="form-signin">
+    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <img class="mb-4" src="~/images/app/Logo_Transp.png" alt="" width="72" height="57">
+        <h1 class="h3 mb-3 fw-normal">Alpha Market PDV</h1>
+
+        <div class="form-floating">
+            <input asp-for="Email" class="form-control" id="floatingInput" placeholder="name@example.com" type="email" />
+            <label for="floatingInput">@Html.DisplayNameFor(m => m.Email)</label>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="Senha" class="form-control" id="floatingPassword" placeholder="Password" type="password" />
+            <label for="floatingPassword">@Html.DisplayNameFor(m => m.Senha)</label>
+            <span asp-validation-for="Senha" class="text-danger"></span>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label asp-for="LembrarDeMim">
+                <input asp-for="LembrarDeMim" />
+                @Html.DisplayNameFor(m => m.LembrarDeMim)
+            </label>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="w-100 btn btn-lg btn-primary">
+                Acessar
+            </button>
+        </div>
+
+        <div class="form-group">
+            <p>
+                <a asp-action="" asp-route-returnurl="@ViewData["ReturnUrl"]">
+                    Registrar um novo usuário?
+                </a>
+            </p>
+        </div>
+        <p class="mt-5 mb-3 text-muted">&copy; Rafael de Oliveira Silva - 2021</p>
+    </form>
+</main>
+
+@section ScriptPage {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
