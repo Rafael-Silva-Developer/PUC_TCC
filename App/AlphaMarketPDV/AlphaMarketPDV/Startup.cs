@@ -36,6 +36,13 @@ namespace AlphaMarketPDV
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddAuthentication()
+                .AddGoogle(options => 
+                {
+                    options.ClientId = "108549666031-4v15eojda5f7t6u2k7ifb4696040d851.apps.googleusercontent.com";
+                    options.ClientSecret = "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";
+                });
+
             services.AddDbContext<AlphaMarketPDVContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("AlphaMarketPDVContext"), builder =>
                     builder.MigrationsAssembly("AlphaMarketPDV")));
@@ -44,18 +51,20 @@ namespace AlphaMarketPDV
             services.AddScoped<CategoriaService>();
             services.AddScoped<UnidadeMedidaService>();
             services.AddScoped<FormaPagamentoService>();
-            services.AddScoped<UsuarioService>();
             services.AddScoped<LojaService>();
-            services.AddScoped<InfraService>();
-            services.AddScoped<AdministrationService>();
+            services.AddScoped<UsuarioManagerService>();
+            services.AddScoped<PerfilManagerService>();
+            services.AddScoped<FornecedorService>();
+            services.AddScoped<ManutencaoService>();
+
             services.AddIdentity<UsuarioApp, PerfilApp>(
                 options => options.Stores.MaxLengthForKeys = 128)
                 .AddEntityFrameworkStores<AlphaMarketPDVContext>()
                 .AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(options => {
-                options.LoginPath = "/Infra/Acessar";
-                options.AccessDeniedPath = "/Infra/AcessoNegado";
+                options.LoginPath = "/UsuarioManager/Acessar";
+                options.AccessDeniedPath = "/UsuarioManager/AcessoNegado";
             });
         }
 
@@ -99,9 +108,6 @@ namespace AlphaMarketPDV
             });
 
             DefaultDbInitializer.Initialize(context, userManager, roleManager).Wait();
-
-
-
         }
     }
 }

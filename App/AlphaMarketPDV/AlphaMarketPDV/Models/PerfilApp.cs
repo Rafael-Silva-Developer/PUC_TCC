@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using AlphaMarketPDV.Models.Enums;
 
 namespace AlphaMarketPDV.Models
@@ -23,7 +22,10 @@ namespace AlphaMarketPDV.Models
         { 
         }
 
-        public PerfilApp(string roleName, string description, DateTime creationDate, TipoPerfil tipoPerfil) : base(roleName) 
+        public PerfilApp(string roleName, 
+                         string description, 
+                         DateTime creationDate, 
+                         TipoPerfil tipoPerfil) : base(roleName) 
         {
             Description = description;
             CreationDate = creationDate;

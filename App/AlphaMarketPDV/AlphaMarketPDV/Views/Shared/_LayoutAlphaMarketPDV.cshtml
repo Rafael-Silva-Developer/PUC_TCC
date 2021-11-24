@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.css" />
         <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/sweetalert.css" />
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css"
@@ -30,6 +31,11 @@
               asp-fallback-test-property="position"
               asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"
+              asp-fallback-href="~/css/sweetalert.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute" />
     </environment>
     @RenderSection("Styles", required: false)
 </head>
@@ -49,99 +55,120 @@
                             <i class="fas fa-home"></i> Home
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-book"></i> Cadastro
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Produtos" asp-action="Index">
-                                    <i class="fas fa-tshirt"></i> Produtos
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fas fa-truck-moving"></i> Fornecedores
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="FormasPagamento" asp-action="Index">
-                                    <i class="fas fa-money-bill-wave"></i> Formas de Pagamento
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="UnidadesMedida" asp-action="Index">
-                                    <i class="fas fa-balance-scale"></i> Unidades de Medida
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Categorias" asp-action="Index">
-                                    <i class="fas fa-clipboard-list"></i> Categorias de Produto
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                            <i class="fas fa-boxes"></i> Estoque
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuVenda" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-shopping-basket"></i> Venda
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="DropdownMenuVenda">
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fas fa-calculator"></i> Acompanhar Vendas                     
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fas fa-cart-plus"></i> Processar Venda
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fas fa-search-dollar"></i> Consultar Preço
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuCaixa" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-piggy-bank"></i> Caixa
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="DropdownMenuCaixa">
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fas fa-chart-line"></i> Fluxo de Caixa
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
-                                    <i class="fas fa-cash-register"></i> Operar
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+
+                    @if (User.IsInRole("Supervisor"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-book"></i> Cadastro
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Produtos" asp-action="Index">
+                                        <i class="fas fa-tshirt"></i> Produtos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Fornecedores" asp-action="Index">
+                                        <i class="fas fa-truck-moving"></i> Fornecedores
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="FormasPagamento" asp-action="Index">
+                                        <i class="fas fa-money-bill-wave"></i> Formas de Pagamento
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="UnidadesMedida" asp-action="Index">
+                                        <i class="fas fa-balance-scale"></i> Unidades de Medida
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Categorias" asp-action="Index">
+                                        <i class="fas fa-clipboard-list"></i> Categorias de Produto
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Supervisor"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-boxes"></i> Estoque
+                            </a>
+                        </li>
+                    }
+
+                    @if ((User.IsInRole("Supervisor")) || (User.IsInRole("Atendente")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuVenda" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-shopping-basket"></i> Venda
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="DropdownMenuVenda">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-calculator"></i> Acompanhar Vendas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-cart-plus"></i> Processar Venda
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-search-dollar"></i> Consultar Preço
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((User.IsInRole("Supervisor")) || (User.IsInRole("Atendente")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuCaixa" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-piggy-bank"></i> Caixa
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="DropdownMenuCaixa">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-chart-line"></i> Fluxo de Caixa
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-cash-register"></i> Operar
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuManutencao" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-tools"></i> Manutenção
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="DropdownMenuManutencao">
+                            @if (User.IsInRole("Supervisor"))
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="UsuarioManager" asp-action="Index">
+                                        <i class="fas fa-users"></i> Usuários
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="PerfilManager" asp-action="Index">
+                                        <i class="fas fa-user-shield"></i> Perfils
+                                    </a>
+                                </li>
+                            }
+
                             <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Infra" asp-action="Index">
-                                    <i class="fas fa-users"></i> Usuários
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Administration" asp-action="Index">
-                                    <i class="fas fa-user-shield"></i> Perfils
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                <a class="dropdown-item" asp-area="" asp-controller="UsuarioManager" asp-action="AlterarSenha">
                                     <i class="fas fa-key"></i> Alterar de Senha
                                 </a>
                             </li>
@@ -159,10 +186,6 @@
                     </li>
                 </ul>
 
-
-
-
-
                 <p class="row text-white" style="text-align:right;">
                     @if (SignInManager.IsSignedIn(User))
                     {
@@ -179,7 +202,7 @@
                         }
 
                         <div class="box">
-                            <div>
+                            <div id="foto-usuario-menu">
                                 @if (usuarioApp.FotoUsuario != null || usuarioApp.FotoUsuario == "")
                                 {
                                     <img src="~/images/usuarios/@usuarioApp.FotoUsuario" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
@@ -189,38 +212,27 @@
                                     <img src="~/images/usuarios/default.png" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
                                 }
                             </div>
-                            <div class="text-white" id="email-usuario">                               
-                                @usuarioApp.Email 
+                            <div class="text-white" id="dados-usuario">
+                                <div id="email-usuario">@usuarioApp.Email</div>
+                                <div id="tipo-usuario">@perfilApp</div>
                             </div>
-                            <div class="text-white" id="tipo-usuario">
-                                @perfilApp
-                            </div>    
                             <div id="logoff-usuario">
-                                <a asp-controller="Infra" asp-action="Sair">
+                                <a asp-controller="UsuarioManager" asp-action="Logoff">
                                     <i class="fas fa-sign-out-alt"></i> Logoff
                                 </a>
                             </div>
-                        </div>                       
+                        </div>
                     }
                     else
                     {
-                        <a class="nav-item nav-link" asp-area="" asp-controller="Infra" asp-action="Acessar">
+                        <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioManager" asp-action="Acessar">
                             Login
                         </a>
                     }
+                </p>
             </div>
-
-
-
-
-
-
-
-        </div>
         </div>
     </nav>
-
-    <partial name="_CookieConsentPartial" />
 
     <div class="container" style="margin-top: 20px;">
         <div class="row">
@@ -249,6 +261,7 @@
         <script src="~/lib/popper.js/umd/popper.js"></script>
         <script src="~/lib/jquery/jquery.slim.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/sweetalert.min.js"></script>
     </environment>
 
     <environment exclude="Development">
@@ -260,6 +273,9 @@
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"
+                asp-fallback-src="~/js/sweetalert.min.js">
         </script>
     </environment>
 

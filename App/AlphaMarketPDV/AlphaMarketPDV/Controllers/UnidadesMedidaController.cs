@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Supervisor")]
     public class UnidadesMedidaController : Controller
     {
 

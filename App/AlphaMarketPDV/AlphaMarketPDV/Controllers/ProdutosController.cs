@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Supervisor")]
     public class ProdutosController : Controller
     {
         private readonly ProdutoService _produtoService;
@@ -35,7 +35,7 @@ namespace AlphaMarketPDV.Controllers
         {
             var categorias = await _categoriaService.ListarTodosAsync();
             var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-            var viewModel = new ProdutoFormViewModel { Categorias = categorias, UnidadesMedida = unidadesMedida };
+            var viewModel = new ProdutoViewModel { Categorias = categorias, UnidadesMedida = unidadesMedida };
             return View(viewModel);
         }
 
@@ -47,7 +47,7 @@ namespace AlphaMarketPDV.Controllers
             {
                 var categorias = await _categoriaService.ListarTodosAsync();
                 var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
                 return View(viewModel);
             }
 
@@ -57,7 +57,7 @@ namespace AlphaMarketPDV.Controllers
 
                 var categorias = await _categoriaService.ListarTodosAsync();
                 var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
                 return View(viewModel);
             }
 
@@ -78,13 +78,13 @@ namespace AlphaMarketPDV.Controllers
         {
             if (id == null) 
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão do produto!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão do produto!", codigoErro = 404 });
             }
 
             var obj = await _produtoService.ListarPorIdAsync(id.Value);
             if (obj == null) 
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para exclusão do produto!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para exclusão do produto!", codigoErro = 404 });
             }
 
             return View(obj);
@@ -109,13 +109,13 @@ namespace AlphaMarketPDV.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização do produto!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização do produto!", codigoErro = 404 });
             }
 
             var obj = await _produtoService.ListarPorIdAsync(id.Value);
             if (obj == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para visualização do produto!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para visualização do produto!", codigoErro = 404 });
             }
 
             return View(obj);
@@ -125,18 +125,18 @@ namespace AlphaMarketPDV.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não informado para edição do produto!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não informado para edição do produto!", codigoErro = 404 });
             }
 
             var obj = await _produtoService.ListarPorIdAsync(id.Value);
             if (obj == null)
             {
-                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição do produto!" });
+                return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição do produto!", codigoErro = 404 });
             }
 
             var categorias = await _categoriaService.ListarTodosAsync();
             var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-            var viewModel = new ProdutoFormViewModel { Produto = obj, Categorias = categorias, UnidadesMedida = unidadesMedida };
+            var viewModel = new ProdutoViewModel { Produto = obj, Categorias = categorias, UnidadesMedida = unidadesMedida };
             return View(viewModel);
         }
 
@@ -148,13 +148,13 @@ namespace AlphaMarketPDV.Controllers
             {
                 var categorias = await _categoriaService.ListarTodosAsync();
                 var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
                 return View(viewModel);
             }
 
             if (id != produto.Id) 
             {
-                return RedirectToAction(nameof(Error), new { message = "O Id informado na requisição não corresponde ao produto selecionado para edição!" });
+                return RedirectToAction(nameof(Error), new { message = "O Id informado na requisição não corresponde ao produto selecionado para edição!", codigoErro = 404 });
             }
 
             try
@@ -169,7 +169,7 @@ namespace AlphaMarketPDV.Controllers
 
                         var categorias = await _categoriaService.ListarTodosAsync();
                         var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                        var viewModel = new ProdutoFormViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
+                        var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
                         return View(viewModel);
                     }
                 }
@@ -190,9 +190,10 @@ namespace AlphaMarketPDV.Controllers
             }
         }
 
-        public IActionResult Error(string message) 
+        [HttpGet]
+        public IActionResult Error(string message, int codigoErro)
         {
-            var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+            var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Codigo = codigoErro };
             return View(viewModel);
         }
     }

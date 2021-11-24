@@ -28,11 +28,13 @@ namespace AlphaMarketPDV.Migrations
 
                     b.Property<int>("UsuarioId");
 
+                    b.Property<string>("UsuarioId1");
+
                     b.Property<double>("Valor");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioId1");
 
                     b.ToTable("Caixa");
                 });
@@ -135,13 +137,15 @@ namespace AlphaMarketPDV.Migrations
 
                     b.Property<int>("UsuarioId");
 
+                    b.Property<string>("UsuarioId1");
+
                     b.Property<double>("ValorTotal");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FornecedorId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioId1");
 
                     b.ToTable("EntradaEstoque");
                 });
@@ -419,11 +423,13 @@ namespace AlphaMarketPDV.Migrations
 
                     b.Property<int>("UsuarioId");
 
+                    b.Property<string>("UsuarioId1");
+
                     b.Property<double>("ValorTotal");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioId1");
 
                     b.ToTable("SaidaEstoque");
                 });
@@ -448,38 +454,6 @@ namespace AlphaMarketPDV.Migrations
                     b.ToTable("UnidadeMedida");
                 });
 
-            modelBuilder.Entity("AlphaMarketPDV.Models.Usuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<bool>("Ativo");
-
-                    b.Property<string>("FotoUsuario");
-
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasMaxLength(25);
-
-                    b.Property<int>("LojaId");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<string>("Senha")
-                        .IsRequired()
-                        .HasMaxLength(32);
-
-                    b.Property<int>("Tipo");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LojaId");
-
-                    b.ToTable("Usuario");
-                });
-
             modelBuilder.Entity("AlphaMarketPDV.Models.UsuarioApp", b =>
                 {
                     b.Property<string>("Id")
@@ -488,6 +462,8 @@ namespace AlphaMarketPDV.Migrations
                     b.Property<int>("AccessFailedCount");
 
                     b.Property<bool>("Ativo");
+
+                    b.Property<bool>("CadastroLocal");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
@@ -522,8 +498,6 @@ namespace AlphaMarketPDV.Migrations
                     b.Property<bool>("PhoneNumberConfirmed");
 
                     b.Property<string>("SecurityStamp");
-
-                    b.Property<int>("Tipo");
 
                     b.Property<bool>("TwoFactorEnabled");
 
@@ -656,10 +630,9 @@ namespace AlphaMarketPDV.Migrations
 
             modelBuilder.Entity("AlphaMarketPDV.Models.Caixa", b =>
                 {
-                    b.HasOne("AlphaMarketPDV.Models.Usuario", "Usuario")
+                    b.HasOne("AlphaMarketPDV.Models.UsuarioApp", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UsuarioId1");
                 });
 
             modelBuilder.Entity("AlphaMarketPDV.Models.CaixaPagamento", b =>
@@ -690,10 +663,9 @@ namespace AlphaMarketPDV.Migrations
                         .HasForeignKey("FornecedorId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("AlphaMarketPDV.Models.Usuario", "Usuario")
+                    b.HasOne("AlphaMarketPDV.Models.UsuarioApp", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UsuarioId1");
                 });
 
             modelBuilder.Entity("AlphaMarketPDV.Models.Estoque", b =>
@@ -779,24 +751,15 @@ namespace AlphaMarketPDV.Migrations
 
             modelBuilder.Entity("AlphaMarketPDV.Models.SaidaEstoque", b =>
                 {
-                    b.HasOne("AlphaMarketPDV.Models.Usuario", "Usuario")
+                    b.HasOne("AlphaMarketPDV.Models.UsuarioApp", "Usuario")
                         .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AlphaMarketPDV.Models.Usuario", b =>
-                {
-                    b.HasOne("AlphaMarketPDV.Models.Loja", "Loja")
-                        .WithMany("Usuarios")
-                        .HasForeignKey("LojaId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UsuarioId1");
                 });
 
             modelBuilder.Entity("AlphaMarketPDV.Models.UsuarioApp", b =>
                 {
                     b.HasOne("AlphaMarketPDV.Models.Loja", "Loja")
-                        .WithMany()
+                        .WithMany("Usuarios")
                         .HasForeignKey("LojaId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

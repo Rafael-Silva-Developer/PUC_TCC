@@ -4,9 +4,9 @@ namespace AlphaMarketPDV.Models.Enums
 {
     public enum TipoPessoa : int
     {
-        [Display(Name = "Jurídica")]
+        [Display(Name = "Pessoa Jurídica")]
         JURIDICA = 1,
-        [Display(Name = "Física")]
+        [Display(Name = "Pessoa Física")]
         FISICA = 2
     }
 }

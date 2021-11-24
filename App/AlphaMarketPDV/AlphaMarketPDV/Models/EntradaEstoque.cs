@@ -30,7 +30,7 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Fornecedor")]
         public int FornecedorId { get; set; }
 
-        public Usuario Usuario { get; set; }
+        public UsuarioApp Usuario { get; set; }
 
         [Display(Name = "Usuário")]
         public int UsuarioId { get; set; }
@@ -43,7 +43,7 @@ namespace AlphaMarketPDV.Models
         }
 
         public EntradaEstoque(int id, DateTime dataHora, double valorTotal, string observacao, 
-                              DateTime dataHoraInformada, Fornecedor fornecedor, Usuario usuario)
+                              DateTime dataHoraInformada, Fornecedor fornecedor, UsuarioApp usuario)
         {
             this.Id = id;
             this.DataHora = dataHora;

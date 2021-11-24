@@ -9,7 +9,7 @@ namespace AlphaMarketPDV.Models
 {
     public class Fornecedor
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
         [StringLength(100, ErrorMessage = "A razão social dever ter até 100 caracteres.")]

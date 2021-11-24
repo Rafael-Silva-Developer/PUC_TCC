@@ -27,7 +27,7 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Detalhe Pagamento")]
         public ICollection<CaixaPagamento> CaixaPagamentos { get; set; } = new List<CaixaPagamento>();
 
-        public Usuario Usuario { get; set; }
+        public UsuarioApp Usuario { get; set; }
 
         [Display(Name = "Usuário")]
         public int UsuarioId { get; set; }
@@ -36,7 +36,7 @@ namespace AlphaMarketPDV.Models
         { 
         }
 
-        public Caixa(int id, DateTime dataHora, double valor, TipoCaixa tipoOperacao, Usuario usuario)
+        public Caixa(int id, DateTime dataHora, double valor, TipoCaixa tipoOperacao, UsuarioApp usuario)
         {
             this.Id = id;
             this.DataHora = dataHora;

@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
-using AlphaMarketPDV.Models.Enums;
 
 namespace AlphaMarketPDV.Models
 {
@@ -23,9 +22,7 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Ativo")]
         public bool Ativo { get; set; }
 
-        [Required(ErrorMessage = "O tipo de usuário é obrigatório!")]
-        [Display(Name = "Tipo de Usuário")]
-        public TipoPerfil Tipo { get; set; }
+        public bool CadastroLocal { get; set; }
 
         public Loja Loja { get; set; }
 
@@ -37,15 +34,19 @@ namespace AlphaMarketPDV.Models
         { 
         }
 
-        public UsuarioApp(string nome, string fotoUsuario, IFormFile fotoUsuarioLoad, bool ativo,
-                           TipoPerfil tipo, Loja loja) : base() 
+        public UsuarioApp(string nome, 
+                          string fotoUsuario, 
+                          IFormFile fotoUsuarioLoad, 
+                          bool ativo,
+                          bool cadastroLocal,
+                          Loja loja) : base() 
         {
             Nome = nome;
             FotoUsuario = fotoUsuario;
             FotoUsuarioLoad = fotoUsuarioLoad;
             Ativo = ativo;
-            Tipo = tipo;
             Loja = loja;
+            CadastroLocal = cadastroLocal;
         }
     }
 }

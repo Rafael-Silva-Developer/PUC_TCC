@@ -3,16 +3,122 @@
     ViewData["Title"] = "Error";
 }
 
-<div class="card">
-    <div class="card-header">
-        <h1 class="text-danger">@ViewData["Title"]</h1>
+<div class="container">
+    <div class="text-center">
+        <span style="color: tomato;">
+            <i class="fas fa-exclamation-triangle fa-10x"></i>
+        </span>
+        <h1 class="text-danger">Oops!</h1>
     </div>
-    <div class="card-body">
-        <h2 class="text-danger">Houve um erro durante o processamento da sua requisição.</h2>
-    </div>
-    <div class="card-footer">
-        <h3 class="text-danger">@Model.Message</h3>
 
+    <div class="text-center">
+        <h2 class="text-danger">
+            @switch (Model.Codigo)
+            {
+                case 400:
+                    <code>Error 400 - Bad Request</code>
+                    break;
+
+                case 401:
+                    <code>Error 401 - Unauthorized</code>
+                    break;
+
+                case 403:
+                    <code>Error 403 - Forbidden</code>
+                    break;
+
+                case 404:
+                    <code>Error 404 - Page Not Found</code>
+                    break;
+
+                case 405:
+                    <code>Error 405 - Method Not Allowed</code>
+                    break;
+
+                case 406:
+                    <code>Error 406 - Not Acceptable</code>
+                    break;
+
+                case 407:
+                    <code>Error 407 - Proxy Authentication Required</code>
+                    break;
+
+                case 408:
+                    <code>Error 408 - Request Time-out</code>
+                    break;
+
+                case 409:
+                    <code>Error 409 - Conflict</code>
+                    break;
+
+                case 410:
+                    <code>Error 410 - Gone</code>
+                    break;
+
+                case 411:
+                    <code>Error 411 - Length Required</code>
+                    break;
+
+                case 412:
+                    <code>Error 412 - Precondition Failed</code>
+                    break;
+
+                case 413:
+                    <code>Error 413 - Request Entity Too Large</code>
+                    break;
+
+                case 414:
+                    <code>Error 414 - Request-URL Too Large</code>
+                    break;
+
+                case 415:
+                    <code>Error 415 - Unsupported Media Type</code>
+                    break;
+
+                case 416:
+                    <code>Error 416 - Request Range Not Satisfiable</code>
+                    break;
+
+                case 417:
+                    <code>Error 417 - Expectation Failed</code>
+                    break;
+
+                case 500:
+                    <code>Error 500 - Internal Server Error</code>
+                    break;
+
+                case 501:
+                    <code>Error 501 - Not Implemented</code>
+                    break;
+
+                case 502:
+                    <code>Error 502 - Bad Gateway</code>
+                    break;
+
+                case 503:
+                    <code>Error 503 - Service Unavailable</code>
+                    break;
+
+                case 504:
+                    <code>Error 504 - Gateway Time-out</code>
+                    break;
+
+                case 505:
+                    <code>Error 505 - HTTP Version Not Supported</code>
+                    break;
+
+                default:
+                    <code>Error</code>
+                    break;
+            }
+        </h2>
+
+        <hr />
+
+        <h5 class="text-danger">@Model.Message</h5>
+    </div>
+
+    <div class="text-center">
         @if (Model.ShowRequestId)
         {
             <p>
@@ -20,7 +126,8 @@
             </p>
         }
     </div>
-</div>
+
+
 
 
 

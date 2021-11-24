@@ -32,7 +32,7 @@ namespace AlphaMarketPDV.Models
         public int EnderecoId { get; set; }
 
         [Display(Name = "Usuários")]
-        public ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
+        public ICollection<UsuarioApp> Usuarios { get; set; } = new List<UsuarioApp>();
 
         public ICollection<Estoque> Estoques { get; set; } = new List<Estoque>();
 
@@ -49,12 +49,12 @@ namespace AlphaMarketPDV.Models
             this.Endereco = endereco;
         }
 
-        public void AdicionarUsuario(Usuario u)
+        public void AdicionarUsuario(UsuarioApp u)
         {
             Usuarios.Add(u);
         }
 
-        public void RemoverUsuario(Usuario u)
+        public void RemoverUsuario(UsuarioApp u)
         {
             Usuarios.Remove(u);
         }

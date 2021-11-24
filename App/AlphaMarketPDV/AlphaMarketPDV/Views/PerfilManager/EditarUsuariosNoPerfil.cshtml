@@ -1,0 +1,56 @@
+﻿@model List<AlphaMarketPDV.Models.ViewModels.UsuarioPerfilViewModel>
+
+@{
+    var roleId = ViewBag.roleId;
+    var NomePerfilEdicao = ViewBag.NomePerfil;
+}
+
+@{
+    ViewData["Title"] = @NomePerfilEdicao;
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<form method="post">
+    <div class="card">
+        <div class="card-header">
+            <h2>Lista de usuários disponíveis</h2>
+        </div>
+        <div class="card-body">
+            @if (Model.Count <= 0)
+            {
+                <div class="form-check m-1">
+                    Sem usuários disponíveis para este perfil
+                </div>
+            }
+            else
+            {
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    <div class="form-check m-1">
+                        <input type="hidden" asp-for="@Model[i].UsuarioId" />
+                        <input type="hidden" asp-for="@Model[i].UsuarioEmail" />
+                        <input asp-for="@Model[i].IsSelected" class="form-check-input" />
+                        <label class="form-check-label" asp-for="@Model[i].IsSelected">
+                            @Model[i].UsuarioEmail
+                        </label>
+                    </div>
+                }
+            }
+        </div>
+        <div class="card-footer">
+            <input type="submit" value="Atualizar" class="btn btn-dark" style="width:auto" />
+            <a asp-action="Edit" asp-route-id="@roleId" class="btn btn-dark" style="width:auto">Cancelar</a>
+        </div>
+    </div>
+</form>

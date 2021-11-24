@@ -26,7 +26,7 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Valor Total")]
         public double ValorTotal { get; set; }
 
-        public Usuario Usuario { get; set; }
+        public UsuarioApp Usuario { get; set; }
 
         [Display(Name = "Usuário")]
         public int UsuarioId { get; set; }
@@ -39,7 +39,7 @@ namespace AlphaMarketPDV.Models
         }
 
         public SaidaEstoque(int id, DateTime dataHora, string justificativa, DateTime dataHoraInformada, 
-                            double valorTotal, Usuario usuario)
+                            double valorTotal, UsuarioApp usuario)
         {
             this.Id = id;
             this.DataHora = dataHora;

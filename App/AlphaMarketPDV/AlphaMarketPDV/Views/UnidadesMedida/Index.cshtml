@@ -50,7 +50,7 @@
                         @Html.DisplayNameFor(model => model.Sigla)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Ativo)
+                        Situação
                     </th>
                     <th>
 
@@ -70,8 +70,15 @@
                         <td valign="middle">
                             @Html.DisplayFor(modelItem => item.Sigla)
                         </td>
-                        <td valign="middle">
-                            @Html.DisplayFor(modelItem => item.Ativo)
+                        <td valign="middle">                          
+                            @if (item.Ativo == true)
+                            {
+                                <span>Ativo</span>
+                            }
+                            else
+                            {
+                                <span>Inativo</span>
+                            }
                         </td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="btn btn-link">
@@ -132,7 +139,12 @@
             $('#unidades').DataTable(
                 {
                     "order": [[1, "asc"]],
-                    columnDefs: [{ targets: 0, className: 'dt-center' }],
+                    columnDefs: [
+                        { targets: 0, className: 'dt-center' },
+                        { targets: 1, className: 'dt-justify' },
+                        { targets: 2, className: 'dt-center' },
+                        { targets: 3, className: 'dt-center' }
+                    ],
                     "language": {
                         "sEmptyTable": "Nenhum registro encontrado",
                         "sInfo": "Exibindo de _START_ até _END_ de _TOTAL_ registros",

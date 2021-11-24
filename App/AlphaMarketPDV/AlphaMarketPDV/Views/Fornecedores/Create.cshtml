@@ -1,0 +1,169 @@
+﻿@model AlphaMarketPDV.Models.ViewModels.FornecedorViewModel;
+@using AlphaMarketPDV.Models.Enums;
+
+@{
+    ViewData["Title"] = "Novo Fornecedor";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.NomeFantasia" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.NomeFantasia" class="form-control" />
+                <span asp-validation-for="Fornecedor.NomeFantasia" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.RazaoSocial" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.RazaoSocial" class="form-control" />
+                <span asp-validation-for="Fornecedor.RazaoSocial" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.NomeRepresentante" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.NomeRepresentante" class="form-control" />
+                <span asp-validation-for="Fornecedor.NomeRepresentante" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Endereco.Cep" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Endereco.Cep" class="form-control" />
+                <span asp-validation-for="Endereco.Cep" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Endereco.Lougradouro" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Endereco.Lougradouro" class="form-control" disabled />
+                <span asp-validation-for="Endereco.Lougradouro" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Endereco.Bairro" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Endereco.Bairro" class="form-control" disabled />
+                <span asp-validation-for="Endereco.Bairro" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Endereco.Cidade" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Endereco.Cidade" class="form-control" disabled />
+                <span asp-validation-for="Endereco.Cidade" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Endereco.Uf" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Endereco.Uf" class="form-control" disabled />
+                <span asp-validation-for="Endereco.Uf" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.EndComplemento" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.EndComplemento" class="form-control" />
+                <span asp-validation-for="Fornecedor.EndComplemento" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.EndNumero" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.EndNumero" class="form-control" />
+                <span asp-validation-for="Fornecedor.EndNumero" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.Site" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.Site" class="form-control" />
+                <span asp-validation-for="Fornecedor.Site" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.TipoEmpresa" class="col-form-label"></label>
+                </strong>
+                <select asp-for="Fornecedor.TipoEmpresa" asp-items="@Html.GetEnumSelectList<TipoPessoa>()" class="form-control">
+                    <option value="">--Selecione--</option>
+                </select>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.NumDocumento" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.NumDocumento" class="form-control" />
+                <span asp-validation-for="Fornecedor.NumDocumento" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.InscrEstadual" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.InscrEstadual" class="form-control" />
+                <span asp-validation-for="Fornecedor.InscrEstadual" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.InscrMunicipal" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.InscrMunicipal" class="form-control" />
+                <span asp-validation-for="Fornecedor.InscrMunicipal" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.Observacoes" class="col-form-label"></label>
+                </strong>
+                <textarea asp-for="Fornecedor.Observacoes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Fornecedor.Observacoes" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <div class="checkbox">
+                    <strong>
+                        <label><input asp-for="Fornecedor.Ativo" /> @Html.DisplayNameFor(model => model.Fornecedor.Ativo)</label>
+                    </strong>
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <input type="submit" value="Gravar" class="btn btn-dark" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

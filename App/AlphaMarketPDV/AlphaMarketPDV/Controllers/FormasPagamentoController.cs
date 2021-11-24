@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Supervisor")]
     public class FormasPagamentoController : Controller
     {
         private readonly FormaPagamentoService _formaPagamentoService;

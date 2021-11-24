@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Services;
 using AlphaMarketPDV.Models;
@@ -12,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Supervisor")]
     public class CategoriasController : Controller
     {
         private readonly CategoriaService _categoriaService;
@@ -150,9 +148,10 @@ namespace AlphaMarketPDV.Controllers
             }
         }
 
-        public IActionResult Error(string message)
+        [HttpGet]
+        public IActionResult Error(string message, int codigoErro)
         {
-            var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier };
+            var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Codigo = codigoErro };
             return View(viewModel);
         }
     }

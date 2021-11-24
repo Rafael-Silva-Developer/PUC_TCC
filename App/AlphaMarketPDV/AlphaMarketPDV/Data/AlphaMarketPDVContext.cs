@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using AlphaMarketPDV.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -30,7 +26,6 @@ namespace AlphaMarketPDV.Data
         public DbSet<AlphaMarketPDV.Models.Produto> Produto { get; set; }
         public DbSet<AlphaMarketPDV.Models.SaidaEstoque> SaidaEstoque { get; set; }
         public DbSet<AlphaMarketPDV.Models.UnidadeMedida> UnidadeMedida { get; set; }
-        public DbSet<AlphaMarketPDV.Models.Usuario> Usuario { get; set; }
         public DbSet<AlphaMarketPDV.Models.Venda> Venda { get; set; }
         public DbSet<AlphaMarketPDV.Models.Loja> Loja { get; set; }
 

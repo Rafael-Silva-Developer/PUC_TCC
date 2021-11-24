@@ -1,0 +1,58 @@
+﻿@model AlphaMarketPDV.Models.ViewModels.EditarPerfilViewModel
+
+@{
+    ViewData["Title"] = @Model.NomePerfil;
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div class="row">
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <div class="card">
+            <div class="card-header">
+                <h3>Usuários do Perfil</h3>
+            </div>
+            <div class="card-body">
+                @if (Model.ListaUsuarios.Any())
+                {
+                    foreach (var user in Model.ListaUsuarios)
+                    {
+                        <h5 class="card-title">@user</h5>
+                    }
+                }
+                else
+                {
+                    <h5 class="card-title">Nenhum usuário neste perfil.</h5>
+                }
+            </div>
+            <div class="card-footer">
+                <h5>Total de usuários: @Model.ListaUsuarios.Count() usuário(s).</h5>   
+            </div>
+        </div>
+        <div class="form-control-plaintext">
+            <a asp-controller="PerfilManager"
+               asp-action="EditarUsuariosNoPerfil"
+               asp-route-roleId="@Model.Id" class="btn btn-dark" style="width:auto">
+                Incluir/Remover Usuário
+            </a>
+            <a asp-action="Index" class="btn btn-dark" style="width:auto">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
