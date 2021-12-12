@@ -1,0 +1,60 @@
+﻿@model AlphaMarketPDV.Models.Contato;
+
+<form asp-action="">
+    <div class="form-control-plaintext">
+        <div class="card">
+            <div class="card-header">
+                <h5>Contato</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-control-plaintext">
+                            <strong>
+                                <label asp-for="Telefone" class="col-form-label"></label>
+                            </strong>
+                            <input asp-for="Telefone" class="form-control" />
+                            <span asp-validation-for="Telefone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="form-control-plaintext">
+                            <strong>
+                                <label asp-for="Ramal" class="col-form-label"></label>
+                            </strong>
+                            <input asp-for="Ramal" class="form-control" />
+                            <span asp-validation-for="Ramal" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-control-plaintext">
+                    <strong>
+                        <label asp-for="Celular" class="col-form-label"></label>
+                    </strong>
+                    <input asp-for="Celular" class="form-control" />
+                    <span asp-validation-for="Celular" class="text-danger"></span>
+                </div>
+
+                <div class="form-control-plaintext">
+                    <strong>
+                        <label asp-for="Email" class="col-form-label"></label>
+                    </strong>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-control-plaintext">
+                    <input type="submit"
+                           value="Incluir contato"
+                           class="btn btn-dark"
+                           asp-action="AdicionarContato"
+                           asp-controller="Fornecedores"
+                           asp-route-FornecedorViewModel="@Model" />
+
+                </div>   
+            </div>
+        </div>
+    </div>
+</form>

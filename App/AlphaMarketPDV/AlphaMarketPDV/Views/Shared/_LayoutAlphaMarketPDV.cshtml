@@ -1,0 +1,277 @@
+﻿@inject Microsoft.AspNetCore.Identity.SignInManager<AlphaMarketPDV.Models.UsuarioApp> SignInManager
+@inject Microsoft.AspNetCore.Identity.UserManager<AlphaMarketPDV.Models.UsuarioApp> UserManager
+@inject Microsoft.AspNetCore.Identity.RoleManager<AlphaMarketPDV.Models.PerfilApp> RoleManager
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AlphaMarketPDV</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/bootstrap-grid.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/sweetalert.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" />        
+        <link rel="stylesheet" href="~/css/bootstrap-grid.css" />  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.css" />       
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/sweetalert.min.css"
+              asp-fallback-href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute" />
+
+    </environment>
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                <img class="d-inline-block align-text-top" src="~/images/app/Logo_Transp.png" width="30" height="30" alt="Logo da aplicação">&nbsp; Alpha Market PDV
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggler">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+
+                    @if (User.IsInRole("Supervisor"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-book"></i> Cadastro
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Produtos" asp-action="Index">
+                                        <i class="fas fa-tshirt"></i> Produtos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Fornecedores" asp-action="Index">
+                                        <i class="fas fa-truck-moving"></i> Fornecedores
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="FormasPagamento" asp-action="Index">
+                                        <i class="fas fa-money-bill-wave"></i> Formas de Pagamento
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="UnidadesMedida" asp-action="Index">
+                                        <i class="fas fa-balance-scale"></i> Unidades de Medida
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Categorias" asp-action="Index">
+                                        <i class="fas fa-clipboard-list"></i> Categorias de Produto
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Supervisor"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-boxes"></i> Estoque
+                            </a>
+                        </li>
+                    }
+
+                    @if ((User.IsInRole("Supervisor")) || (User.IsInRole("Atendente")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuVenda" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-shopping-basket"></i> Venda
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="DropdownMenuVenda">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-calculator"></i> Acompanhar Vendas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-cart-plus"></i> Processar Venda
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-search-dollar"></i> Consultar Preço
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if ((User.IsInRole("Supervisor")) || (User.IsInRole("Atendente")))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuCaixa" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-piggy-bank"></i> Caixa
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="DropdownMenuCaixa">
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-chart-line"></i> Fluxo de Caixa
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-cash-register"></i> Operar
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="DropdownMenuManutencao" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-tools"></i> Manutenção
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="DropdownMenuManutencao">
+                            @if (User.IsInRole("Supervisor"))
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="UsuarioManager" asp-action="Index">
+                                        <i class="fas fa-users"></i> Usuários
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="PerfilManager" asp-action="Index">
+                                        <i class="fas fa-user-shield"></i> Perfis
+                                    </a>
+                                </li>
+                            }
+
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="UsuarioManager" asp-action="AlterarSenha">
+                                    <i class="fas fa-key"></i> Alterar de Senha
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
+                            <i class="fas fa-info-circle"></i> Sobre
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">
+                            <i class="fas fa-envelope"></i> Contato
+                        </a>
+                    </li>
+                </ul>
+
+                <p class="row text-white" style="text-align:right;">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var usuarioApp = await UserManager.FindByNameAsync(UserManager.GetUserName(User));
+                        var listaPerfils = RoleManager.Roles.ToList();
+                        var perfilApp = "";
+
+                        foreach (var perfil in listaPerfils)
+                        {
+                            if (await UserManager.IsInRoleAsync(usuarioApp, perfil.Name))
+                            {
+                                perfilApp = perfil.Name;
+                            }
+                        }
+
+                        <div class="box">
+                            <div id="foto-usuario-menu">
+                                @if (usuarioApp.FotoUsuario != null || usuarioApp.FotoUsuario == "")
+                                {
+                                    <img src="~/images/usuarios/@usuarioApp.FotoUsuario" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/usuarios/default.png" height="40" width="40" asp-append-version="true" alt="Imagem do usuário." class="rounded-circle" />
+                                }
+                            </div>
+                            <div class="text-white" id="dados-usuario">
+                                <div id="email-usuario">@usuarioApp.Email</div>
+                                <div id="tipo-usuario">@perfilApp</div>
+                            </div>
+                            <div id="logoff-usuario">
+                                <a asp-controller="UsuarioManager" asp-action="Logoff">
+                                    <i class="fas fa-sign-out-alt"></i> Logoff
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioManager" asp-action="Acessar">
+                            Login
+                        </a>
+                    }
+                </p>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-1">
+                <div class="row">
+
+                </div>
+            </div>
+            <div class="col-10">
+                @RenderBody()
+
+                <hr />
+                <footer>
+                    <p>&copy; 2021 - Alpha Market PDV - Versão 1.0 / Desenvolvidor por <a href="https://www.linkedin.com/in/rafael-de-oliveira-silva-531767a1/">Rafael Silva</a></p>
+                </footer>
+            </div>
+            <div class="col-1">
+                <div class="row">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <environment include="Development">
+        <script src="~/js/popper.js"></script>
+        <script src="~/js/jquery.slim.min.js"></script>
+        <script src="~/js/bootstrap.js"></script>
+        <script src="~/js/sweetalert.min.js"></script>
+        <script src="~/js/site.js"></script>
+    </environment>
+
+    <environment exclude="Development">
+        <script src="~/js/popper.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js">
+        </script>
+        <script src="~/js/jquery.slim.min.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+        </script>
+        <script src="~/js/bootstrap.min.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js">
+        </script>
+        <script src="~/js/sweetalert.min.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
+        </script>
+        <script src="~/js/site.js"></script>
+    </environment>
+
+    @RenderSection("ScriptPage", required: false)
+</body>
+</html>

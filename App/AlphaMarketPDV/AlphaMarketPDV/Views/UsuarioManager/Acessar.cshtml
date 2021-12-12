@@ -1,0 +1,95 @@
+﻿@model AlphaMarketPDV.Models.ViewModels.AcessarViewModel
+
+@section Styles {
+    <environment include="Development">
+        <link rel="stylesheet" href="~/css/signin_aux.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/signin_aux.css"
+              asp-fallback-href="~/css/signin_aux.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute" />
+    </environment>
+}
+
+@{
+    Layout = "_LayoutLogin";
+    ViewData["Title"] = "Autenticação";
+}
+
+<main class="form-signin">
+    <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+
+        <img class="mb-4" src="~/images/app/Logo_Transp.png" alt="" width="72" height="57">
+        <h1 class="h3 mb-3 fw-normal">Alpha Market PDV</h1>
+
+        <div class="form-floating">
+            <input asp-for="Email" class="form-control" id="floatingInput" placeholder="name@example.com" type="email" />
+            <label for="floatingInput">@Html.DisplayNameFor(m => m.Email)</label>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating">
+            <input asp-for="Senha" class="form-control" id="floatingPassword" placeholder="Password" type="password" />
+            <label for="floatingPassword">@Html.DisplayNameFor(m => m.Senha)</label>
+            <span asp-validation-for="Senha" class="text-danger"></span>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label asp-for="LembrarDeMim">
+                <input asp-for="LembrarDeMim" />
+                @Html.DisplayNameFor(m => m.LembrarDeMim)
+            </label>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="w-100 btn btn-lg btn-dark" title="Acesssar com um usuário já cadastrado">
+                <img src="~/images/app/73221.png" /> Acessar
+            </button>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <p>
+                <a asp-action="Create" asp-route-returnurl="@ViewData["ReturnUrl"]" class="w-100 btn btn-lg btn-dark" title="Registrar novo usuário">
+                    <img src="~/images/app/49576.png" /> Registrar
+                </a>
+            </p>
+        </div>
+
+    </form>
+    @{
+        if (Model.ExternalLogins.Count > 0)
+        {
+            <form method="post" asp-action="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl">
+                <div>
+                    @foreach (var provider in Model.ExternalLogins)
+                    {
+                        switch (@provider.DisplayName)
+                        {
+                            case ("Google"):
+                                {
+                                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                                                   
+                                    <button type="submit" class="w-100 btn btn-lg btn-dark" name="provider" value="@provider.Name" title="Registrar usando sua conta @provider.DisplayName">
+                                        <img src="~/images/app/2993685.png" /> Entrar com @provider.DisplayName
+                                    </button>
+
+                                    break;
+                                }
+                        }
+                    }
+                </div>
+            </form>
+        }
+    }
+    <hr />
+    <p class="mt-5 mb-3 text-muted">&copy; Rafael de Oliveira Silva - 2021</p>
+</main>
+
+@section ScriptPage {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

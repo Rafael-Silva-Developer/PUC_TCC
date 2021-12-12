@@ -1,0 +1,44 @@
+﻿@model AlphaMarketPDV.Models.ViewModels.AlterarSenhaViewModel;
+
+@{
+    ViewData["Title"] = "Alteração de senha";
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <div asp-validation-summary="All" class="text-danger">
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="NovaSenha" class="col-form-label"></label>
+                </strong>
+                <input asp-for="NovaSenha" class="form-control" />
+                <span asp-validation-for="NovaSenha" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="ConfirmarNovaSenha" class="col-form-label"></label>
+                </strong>
+                <input asp-for="ConfirmarNovaSenha" class="form-control" />
+                <span asp-validation-for="ConfirmarNovaSenha" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <input type="submit" value="Alterar" class="btn btn-dark" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

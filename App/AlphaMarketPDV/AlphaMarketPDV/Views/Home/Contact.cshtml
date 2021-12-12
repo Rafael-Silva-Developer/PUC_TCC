@@ -1,0 +1,131 @@
+﻿@model AlphaMarketPDV.Models.ViewModels.ContatoViewModel
+
+@{
+    ViewData["Title"] = "Contatos";
+}
+
+<div class="card-header text-white bg-dark text-center h1">
+    @ViewData["Title"]
+</div>
+
+<hr />
+<address>
+    <strong><abbr title="Phone">Telefone:</abbr></strong> +5521 99144-3446 <br />
+    <strong>Suporte:</strong> <a href="mailto:rafaeldeoliveira88@gmail.com">rafaeldeoliveira88@gmail.com</a><br />
+    <strong>Rede Sociais:</strong> <br />
+    <ul>
+        <li><a href="https://www.linkedin.com/in/rafael-de-oliveira-silva-531767a1/">Linkedin</a></li>
+        <li><a href="https://github.com/Rafael-de-Oliveira-Silva">Github</a></li>
+    </ul>
+</address>
+
+<div class="container">
+    <div class="card-header text-white bg-dark text-center h5">
+        Queremos saber sua opinião!
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form asp-action="Contact" id="form-contato">
+                <div class="row">
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Nome" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Nome" class="form-control" />
+                        <span asp-validation-for="Nome" class="text-danger"></span>
+                    </div>
+
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Sobrenome" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Sobrenome" class="form-control" />
+                        <span asp-validation-for="Sobrenome" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-control-plaintext">
+                    <strong>
+                        <label asp-for="Email" class="col-form-label"></label>
+                    </strong>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-control-plaintext">
+                    <strong>
+                        <label asp-for="Mensagem" class="col-form-label"></label>
+                    </strong>
+                    <textarea asp-for="Mensagem" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Mensagem" class="text-danger"></span>
+                </div>
+
+                <div class="form-control-plaintext">
+                    <input type="submit" value="Enviar" class="btn btn-dark" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section ScriptPage{
+    @{
+        if (ViewBag.Mensagem != null)
+        {
+            switch (ViewBag.Tipo)
+            {
+                case 0:
+                    {
+                        <script type="text/javascript">
+                            @if(ViewBag.Mensagem != null)
+                            {
+                                <text>
+                                $(document).ready(function()
+                                {
+                                    swal({
+                                        title: "Mensagem",
+                                        text: "@ViewBag.Mensagem",
+                                        type: "success"
+                                    });
+
+                                    with (document) {
+                                        getElementById("Nome").value = "";
+                                        getElementById("Sobrenome").value = "";
+                                        getElementById("Email").value = "";
+                                        getElementById("Mensagem").value = "";
+                                    }                                   
+                                });
+                                </text>                             
+                            }                                                      
+                        </script>
+
+                        break;
+                    }
+
+                case 1:
+                    {
+                        <script type="text/javascript">
+                            @if(ViewBag.Mensagem != null)
+                            {
+                                <text>
+                                $(document).ready(function()
+                                {
+                                    swal({
+                                        title: "Mensagem",
+                                        text: "@ViewBag.Mensagem",                                      
+                                        type: "error"
+                                    });
+                                });
+                                </text>
+                            }
+                        </script>
+
+                        break;
+                    }
+            }
+        }
+    }
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

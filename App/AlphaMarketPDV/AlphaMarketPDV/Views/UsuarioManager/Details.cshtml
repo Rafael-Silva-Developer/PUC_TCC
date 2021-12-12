@@ -1,0 +1,78 @@
+﻿@model AlphaMarketPDV.Models.ViewModels.VisualizarUsuarioViewModel;
+
+@{
+    ViewData["Title"] = "Visualizar Usuário";
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div>
+    <div class="row">
+        <dl class="dl-horizontal col-8">
+            <dt>
+                Nome
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Usuario.Nome)
+            </dd>
+
+            <dt>
+                Email
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Usuario.Email)
+            </dd>
+
+            <dt>
+                Perfil
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Perfil.Name)
+            </dd>
+
+            <dt>
+                Status
+            </dt>
+            <dd>
+                @if (Model.Usuario.Ativo == true)
+                {
+                    <span>Ativo</span>
+                }
+                else
+                {
+                    <span>Inativo</span>
+                }
+            </dd>
+
+            <dt>
+                Loja
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.LojaUsuario.Descricao)
+            </dd>
+        </dl>
+        <div class="col-4">
+            @if (@Model.Usuario.FotoUsuario != null || @Model.Usuario.FotoUsuario == "")
+            {
+                <figure>
+                    <img src="~/images/usuarios/@Model.Usuario.FotoUsuario" height="300" width="300" asp-append-version="true" alt="Foto do usuário" class="border" />
+                </figure>
+            }
+        </div>
+    </div>
+</div>
+
+<div>
+    <br />
+    <a asp-action="Edit" asp-route-id="@Model.Usuario.Id" class="btn btn-dark">
+        <i class="fas fa-edit"></i> Editar
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-undo"></i> Voltar
+    </a>
+</div>
+
+

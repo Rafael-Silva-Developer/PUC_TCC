@@ -1,0 +1,217 @@
+﻿@inject Microsoft.AspNetCore.Identity.UserManager<AlphaMarketPDV.Models.UsuarioApp> UserManager
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="container">
+    @if (User.IsInRole("Supervisor"))
+    {
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
+                    <span>
+                        <i class="fas fa-cart-plus fa-2x"></i>
+                    </span>
+                    PDV
+                </a>
+            </div>
+
+            <div class="col py-3 px-lg-5">
+                <a asp-controller="Produtos" asp-action="Index" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar cadastro de produtos.">
+                    <span>
+                        <i class="fas fa-tshirt fa-2x"></i>
+                    </span>
+                    Produtos
+                </a>
+            </div>
+        </div>
+
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar abertura de caixa.">
+                    <span>
+                        <i class="fas fa-store fa-2x"></i>
+                    </span>
+                    Abertura de Caixa
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a asp-controller="Fornecedores" asp-action="Index" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar cadastro de fornecedores.">
+                    <span>
+                        <i class="fas fa-truck-moving fa-2x"></i>
+                    </span>
+                    Fornecedores
+                </a>
+            </div>
+        </div>
+
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar fechamento de caixa.">
+                    <span>
+                        <i class="fas fa-store-slash fa-2x"></i>
+                    </span>
+                    Fechamento de Caixa
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a asp-controller="FormasPagamento" asp-action="Index" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar cadastro de formas de pagamento.">
+                    <span>
+                        <i class="fas fa-money-bill-wave fa-2x"></i>
+                    </span>
+                    Formas de Pagamento
+                </a>
+            </div>
+        </div>
+
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
+                    <span>
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                    </span>
+                    Sangria de Caixa
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acompanhar as vendas realizadas em um período.">
+                    <span>
+                        <i class="fas fa-calculator fa-2x"></i>
+                    </span>
+                    Acompanhamento de Vendas
+                </a>
+            </div>
+        </div>
+
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Consultar o preço de um produto.">
+                    <span>
+                        <i class="fas fa-search-dollar fa-2x"></i>
+                    </span>
+                    Consultar Preço
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Listar estoque de produtos.">
+                    <span>
+                        <i class="fas fa-boxes fa-2x"></i>
+                    </span>
+                    Estoque
+                </a>
+            </div>
+        </div>
+
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a asp-controller="UsuarioManager" asp-action="Index" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acessar cadastros de usuários.">
+                    <span>
+                        <i class="fas fa-users fa-2x"></i>
+                    </span>
+                    Usuários
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a asp-controller="UsuarioManager" asp-action="AlterarSenha" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Alterar senha do usuário logado.">
+                    <span>
+                        <i class="fas fa-key fa-2x"></i>
+                    </span>
+                    Alterar Senha
+                </a>
+            </div>
+        </div>
+    }
+    else if (User.IsInRole("Atendente"))
+    {
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
+                    <span>
+                        <i class="fas fa-cart-plus fa-2x"></i>
+                    </span>
+                    PDV
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar abertura de caixa.">
+                    <span>
+                        <i class="fas fa-store fa-2x"></i>
+                    </span>
+                    Abertura de Caixa
+                </a>
+            </div>
+        </div>
+
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar fechamento de caixa.">
+                    <span>
+                        <i class="fas fa-store-slash fa-2x"></i>
+                    </span>
+                    Fechamento de Caixa
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
+                    <span>
+                        <i class="fas fa-hand-holding-usd fa-2x"></i>
+                    </span>
+                    Sangria de Caixa
+                </a>
+            </div>
+        </div>
+
+        <div class="row mx-lg-n5">
+            <div class="col py-3 px-lg-5">
+                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Consultar o preço de um produto.">
+                    <span>
+                        <i class="fas fa-search-dollar fa-2x"></i>
+                    </span>
+                    Consultar Preço
+                </a>
+            </div>
+            <div class="col py-3 px-lg-5">
+                <a asp-controller="UsuarioManager" asp-action="AlterarSenha" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Alterar senha do usuário logado.">
+                    <span>
+                        <i class="fas fa-key fa-2x"></i>
+                    </span>
+                    Alterar Senha
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="container">
+            <div class="text-center">
+                <span style="color: tomato;">
+                    <i class="fas fa-hand-paper fa-10x"></i>
+                </span>
+                <h1 class="text-danger">Oops!</h1>
+            </div>
+            <div class="text-center">
+                <h2 class="text-danger">
+                    <p>Você precisa está associado a um perfil para ter acesso a todas as funcionalidades!</p>
+                    <p>Entre em contato com o supervisor do sistema!</p>
+                </h2>
+            </div>
+        </div>
+    }
+</div>
+
+@section ScriptPage{
+    @{
+        <script type="text/javascript">
+            function AvisoRecursoNaoImplementado() {
+                swal({
+                    title: "Mensagem",
+                    text: "Este recurso ainda não foi implementado!",
+                    type: "error"
+                })
+            };
+        </script>
+    }
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

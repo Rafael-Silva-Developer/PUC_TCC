@@ -1,0 +1,36 @@
+﻿@model AlphaMarketPDV.Models.Categoria;
+
+@{
+    ViewData["Title"] = "Visualizar Categoria";
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Descricao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Descricao)
+        </dd>
+    </dl>
+</div>
+<div>
+    <br />
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-dark">
+        <i class="fas fa-edit"></i> Editar
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-undo"></i> Voltar
+    </a>
+</div>

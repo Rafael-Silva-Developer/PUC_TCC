@@ -1,0 +1,105 @@
+﻿@media (min-width: 768px) {
+    .dl-horizontal dt {
+        float: left;
+        width: 160px;
+        clear: left;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: Ellipsis;
+        white-space: nowrap;
+    }
+
+    .dl-horizontal dd {
+        margin-left: 180px;
+        height: 16px;      
+    }
+}
+
+.dl-horizontal dd:before,
+.dl-horizontal dd:after {
+    display: table;
+    content: " ";
+}
+
+.dl-horizontal dd:after {
+    clear: both;
+}
+
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
+
+.vertical-nav {
+    min-width: 17rem;
+    width: 17rem;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s;
+}
+
+.page-content {
+    width: calc(100% - 17rem);
+    margin-left: 17rem;
+    transition: all 0.4s;
+}
+
+/* for toggle behavior */
+
+#sidebar.active {
+    margin-left: -17rem;
+}
+
+#content.active {
+    width: 100%;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -17rem;
+    }
+
+        #sidebar.active {
+            margin-left: 0;
+        }
+
+    #content {
+        width: 100%;
+        margin: 0;
+    }
+
+        #content.active {
+            margin-left: 17rem;
+            width: calc(100% - 17rem);
+        }
+}
+
+#number {
+    width: 3em;
+}
+
+.box {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1px 1em;
+}
+
+    .box :first-child {
+        align-self: center;
+    }
+
+    .box#email-usuario {
+        align-self: self-start;
+    }
+
+    .box#tipo-usuario {
+        align-self: self-end;
+    }

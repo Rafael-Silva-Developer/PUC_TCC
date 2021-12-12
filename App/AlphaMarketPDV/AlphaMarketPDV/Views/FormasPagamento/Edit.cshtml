@@ -1,0 +1,53 @@
+﻿@model AlphaMarketPDV.Models.FormaPagamento
+
+@{
+    ViewData["Title"] = "Editar Forma de Pagamento";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Descricao" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Descricao" class="form-control" />
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+            <div class="form-control-plaintext">
+                <div class="checkbox">
+                    <strong>
+                        <label><input asp-for="GeraTroco" /> @Html.DisplayNameFor(model => model.GeraTroco)</label>
+                    </strong>
+                </div>
+            </div>
+            <div class="form-control-plaintext">
+                <div class="checkbox">
+                    <strong>
+                        <label><input asp-for="Ativo" /> @Html.DisplayNameFor(model => model.Ativo)</label>
+                    </strong>
+                </div>
+            </div>
+            <div class="form-control-plaintext">
+                <input type="submit" value="Gravar" class="btn btn-dark" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

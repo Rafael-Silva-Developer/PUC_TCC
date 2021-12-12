@@ -1,0 +1,93 @@
+﻿@model AlphaMarketPDV.Models.Produto;
+
+@{
+    ViewData["Title"] = "Excluir Produto";
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<h3>Tem certeza que deseja excluir este produto ?</h3>
+
+<div>
+    <div class="row">
+        <dl class="dl-horizontal col-8">
+            <dt>
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Codigo)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Codigo)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DescricaoLonga)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DescricaoLonga)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DescricaoCurta)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DescricaoCurta)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.QuantMinima)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.QuantMinima)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ValorVenda)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.ValorVenda)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Observacoes)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Observacoes)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DataHoraCadastro)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.DataHoraCadastro)
+            </dd>
+        </dl>
+        <div class="col-4">
+            @if (@Model.Foto != null || @Model.Foto == "")
+            {
+                <figure>
+                    <img src="~/images/produtos/@Model.Foto" height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />
+                </figure>
+            }
+        </div>
+    </div>
+</div>
+
+<div>
+    <br />
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Excluir" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-undo"></i> Voltar
+        </a>
+    </form>
+</div>
