@@ -17,3 +17,12 @@ $(document).ready(function () {
         }
     });
 });
+
+
+function PostGravarFornecedor() {
+    $.post("/Create", null, CallBack1);
+}
+
+function PostAdicionarContatoFornecedor() {
+    $.post("/AdicionarContato", null, CallBack2);
+}

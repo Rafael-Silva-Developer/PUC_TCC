@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Services;
 using AlphaMarketPDV.Models;
 using AlphaMarketPDV.Services.Exceptions;
+using AlphaMarketPDV.Models.ViewModels.FornecedorView;
 using AlphaMarketPDV.Models.ViewModels;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace AlphaMarketPDV.Controllers
 {
@@ -28,17 +31,30 @@ namespace AlphaMarketPDV.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(bool? reload, FornecedorViewModel modelReload)
         {
-            var viewModel = new FornecedorViewModel { Fornecedor = null, Contatos = null, Endereco = null };
-            return View(viewModel);
+            if (reload == true)
+            {
+                return View(modelReload);
+            }
+            else 
+            {
+                var viewModel = new FornecedorViewModel();
+                return View(viewModel);
+            }
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Fornecedor fornecedor)
+        public async Task<IActionResult> Create(FornecedorViewModel fvm)
         {
-            if (!ModelState.IsValid)
+            
+
+
+
+
+                if (!ModelState.IsValid)
             {
                // var categorias = await _categoriaService.ListarTodosAsync();
                 //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
@@ -53,7 +69,7 @@ namespace AlphaMarketPDV.Controllers
                 //var categorias = await _categoriaService.ListarTodosAsync();
                 //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
                 //var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
-                return View();
+                //return View();
             }
 
             //if (produto.FotoProduto != null)
@@ -67,6 +83,78 @@ namespace AlphaMarketPDV.Controllers
 
             //await _produtoService.InserirAsync(produto);
             return RedirectToAction(nameof(Index));
+        }
+
+        
+
+        [HttpPost]
+        public IActionResult AdicionarContato(FornecedorViewModel model)
+        {
+            int iIdContrato = model.ListaContatos.Count;
+            iIdContrato = ++iIdContrato;
+
+            var oContato = new Contato {
+                Id = iIdContrato,
+                Celular = model.Contato.Celular,
+                Email = model.Contato.Email,
+                Ramal = model.Contato.Ramal,
+                Telefone = model.Contato.Telefone
+            };
+
+            var oFornecedor = new Fornecedor
+            {
+                Id = 0,
+                Ativo = model.Fornecedor.Ativo,
+                TipoEmpresa = model.Fornecedor.TipoEmpresa,
+                Site = model.Fornecedor.Site,
+                EndComplemento = model.Fornecedor.EndComplemento,
+                EnderecoId = 0,
+                EndNumero = model.Fornecedor.EndNumero,
+                InscrEstadual = model.Fornecedor.InscrEstadual,
+                InscrMunicipal = model.Fornecedor.InscrMunicipal,
+                NomeFantasia = model.Fornecedor.NomeFantasia,
+                NomeRepresentante = model.Fornecedor.NomeRepresentante,
+                NumDocumento = model.Fornecedor.NumDocumento,
+                Observacoes = model.Fornecedor.Observacoes,
+                RazaoSocial = model.Fornecedor.RazaoSocial
+            };
+
+            var modelAux = new FornecedorViewModel();
+            modelAux.Fornecedor = oFornecedor;
+            modelAux.Contato = oContato;
+            modelAux.ListaContatos.Add(oContato);
+            /*
+            modelAux.Contato.Celular = string.Empty;
+            modelAux.Contato.Email = string.Empty;
+            modelAux.Contato.Fornecedor = null;
+            modelAux.Contato.FornecedorId = 0;
+            modelAux.Contato.Id = 0;
+            modelAux.Contato.Ramal = 0;
+            modelAux.Contato.Telefone = string.Empty;
+            */
+
+            //var iIdContato = model.Fornecedor.Contatos.Count;
+            //iIdContato = ++iIdContato;
+
+            /*
+            model.Contato.Id = iIdContato;
+            model.Contato.Fornecedor = model.Fornecedor;
+
+            model.Fornecedor.AdicionarContato(model.Contato);
+
+            model.Contato.Celular = string.Empty;
+            model.Contato.Email = string.Empty;
+            model.Contato.Fornecedor = null;
+            model.Contato.FornecedorId = 0;
+            model.Contato.Id = 0;
+            model.Contato.Ramal = 0;
+            model.Contato.Telefone = string.Empty;
+            */
+            //RedirectToRoute(nameof(Create) );
+            return View("Create", modelAux);
+            //return RedirectToAction(nameof(Create), new { @reload=true, @modelReload = modelAux });
+           //return RedirectToAction(nameof(Create), new RouteValueDictionary());
+            //RedirectToRoute(nameof(Create), new { @reload = true, @modelReload = modelAux });
         }
 
         [HttpGet]
@@ -187,11 +275,10 @@ namespace AlphaMarketPDV.Controllers
             }
         }
 
-
-
-
-
-
+        public PartialViewResult AddContatoFornecedor() 
+        {
+            return PartialView();
+        }
 
 
         [HttpGet]

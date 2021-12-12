@@ -10,32 +10,23 @@
     <title>@ViewData["Title"] - AlphaMarketPDV</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.css" />
-        <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" />
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/bootstrap-grid.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/sweetalert.css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap-grid.min.css"
-              asp-fallback-href="~/lib/booststrap/dist/css/bootstrap-grid.min.css"
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" />        
+        <link rel="stylesheet" href="~/css/bootstrap-grid.css" />  
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.css" />       
+        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/css/sweetalert.min.css"
+              asp-fallback-href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"
               asp-fallback-test-class="sr-only"
               asp-fallback-test-property="position"
               asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.css"
-              asp-fallback-href="~/lib/font-awesome/css/all.css"
-              asp-fallback-test-class="sr-only"
-              asp-fallback-test-property="position"
-              asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"
-              asp-fallback-href="~/css/sweetalert.css"
-              asp-fallback-test-class="sr-only"
-              asp-fallback-test-property="position"
-              asp-fallback-test-value="absolute" />
+
     </environment>
     @RenderSection("Styles", required: false)
 </head>
@@ -162,7 +153,7 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item" asp-area="" asp-controller="PerfilManager" asp-action="Index">
-                                        <i class="fas fa-user-shield"></i> Perfils
+                                        <i class="fas fa-user-shield"></i> Perfis
                                     </a>
                                 </li>
                             }
@@ -258,25 +249,27 @@
     </div>
 
     <environment include="Development">
-        <script src="~/lib/popper.js/umd/popper.js"></script>
-        <script src="~/lib/jquery/jquery.slim.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/popper.js"></script>
+        <script src="~/js/jquery.slim.min.js"></script>
+        <script src="~/js/bootstrap.js"></script>
         <script src="~/js/sweetalert.min.js"></script>
+        <script src="~/js/site.js"></script>
     </environment>
 
     <environment exclude="Development">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"
-                asp-fallback-src="~/lib/popper.js/umd/popper.js">
+        <script src="~/js/popper.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js">
         </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
-                asp-fallback-src="~/lib/jquery/jquery.slim.min.js">
+        <script src="~/js/jquery.slim.min.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js">
         </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js">
+        <script src="~/js/bootstrap.min.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js">
         </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"
-                asp-fallback-src="~/js/sweetalert.min.js">
+        <script src="~/js/sweetalert.min.js"
+                asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
         </script>
+        <script src="~/js/site.js"></script>
     </environment>
 
     @RenderSection("ScriptPage", required: false)

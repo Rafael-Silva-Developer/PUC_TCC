@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
 {
@@ -21,6 +17,7 @@ namespace AlphaMarketPDV.Models
         public string Celular { get; set; }
 
         [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         public Fornecedor Fornecedor { get; set; }

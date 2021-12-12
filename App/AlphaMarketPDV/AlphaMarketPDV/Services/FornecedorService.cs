@@ -54,9 +54,9 @@ namespace AlphaMarketPDV.Services
             }
         }
 
-        public async Task AtualizarFornecedorAsync(Fornecedor f)
+        public async Task AtualizarFornecedorAsync(Fornecedor oFornecedor)
         {
-            var existeNaBase = await _context.Fornecedor.AnyAsync(x => x.Id == f.Id);
+            var existeNaBase = await _context.Fornecedor.AnyAsync(x => x.Id == oFornecedor.Id);
 
             if (!existeNaBase)
             {
@@ -65,7 +65,7 @@ namespace AlphaMarketPDV.Services
 
             try
             {
-                _context.Update(f);
+                _context.Update(oFornecedor);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException e)
@@ -74,9 +74,9 @@ namespace AlphaMarketPDV.Services
             }
         }
 
-        public bool RazaoSocialFornecedorJahExistente(Fornecedor f)
+        public bool RazaoSocialFornecedorJahExistente(Fornecedor oFornecedor)
         {
-            var qtd = _context.Fornecedor.Where(x => x.RazaoSocial == f.RazaoSocial).Count();
+            var qtd = _context.Fornecedor.Where(x => x.RazaoSocial == oFornecedor.RazaoSocial).Count();
 
             if (qtd > 0)
             {
@@ -88,10 +88,12 @@ namespace AlphaMarketPDV.Services
             }
         }
 
-        public async Task InserirFornecedorAsync(Fornecedor f)
+        public async Task InserirFornecedorAsync(Fornecedor oFornecedor)
         {
-            _context.Add(f);
+            _context.Add(oFornecedor);
             await _context.SaveChangesAsync();
         }
+
+        
     }
 }
