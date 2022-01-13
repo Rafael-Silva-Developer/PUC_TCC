@@ -12,6 +12,7 @@ using AlphaMarketPDV.Data;
 using AlphaMarketPDV.Services;
 using AlphaMarketPDV.Models;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json.Serialization;
 
 namespace AlphaMarketPDV
 {
@@ -34,7 +35,11 @@ namespace AlphaMarketPDV
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+            services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
             services.AddAuthentication()
                 .AddGoogle(options => 
@@ -56,6 +61,8 @@ namespace AlphaMarketPDV
             services.AddScoped<PerfilManagerService>();
             services.AddScoped<FornecedorService>();
             services.AddScoped<ManutencaoService>();
+            services.AddScoped<EnderecoService>();
+            services.AddScoped<ContatoService>();
 
             services.AddIdentity<UsuarioApp, PerfilApp>(
                 options => options.Stores.MaxLengthForKeys = 128)

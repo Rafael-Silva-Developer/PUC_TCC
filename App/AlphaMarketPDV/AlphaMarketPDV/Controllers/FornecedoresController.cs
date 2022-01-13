@@ -10,6 +10,7 @@ using AlphaMarketPDV.Models.ViewModels;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AlphaMarketPDV.Controllers
 {
@@ -17,10 +18,12 @@ namespace AlphaMarketPDV.Controllers
     public class FornecedoresController : Controller
     {
         private readonly FornecedorService _fornecedorService;
+        private readonly EnderecoService _enderecoService;
 
-        public FornecedoresController(FornecedorService fornecedorService)
+        public FornecedoresController(FornecedorService fornecedorService, EnderecoService enderecoService)
         {
             _fornecedorService = fornecedorService;
+            _enderecoService = enderecoService;
         }
 
         [HttpGet]
@@ -31,38 +34,27 @@ namespace AlphaMarketPDV.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(bool? reload, FornecedorViewModel modelReload)
+        public IActionResult Create()
         {
-            if (reload == true)
-            {
-                return View(modelReload);
-            }
-            else 
-            {
-                var viewModel = new FornecedorViewModel();
-                return View(viewModel);
-            }
+            ViewBag.lstContatos = new List<Contato>();
+
+            var viewModel = new FornecedorViewModel();
+            return View(viewModel);
         }
 
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(FornecedorViewModel fvm)
         {
-            
-
-
-
-
-                if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-               // var categorias = await _categoriaService.ListarTodosAsync();
+                // var categorias = await _categoriaService.ListarTodosAsync();
                 //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
                 //var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
                 return View();
             }
 
-           // if (_produtoService.CodigoProdutoExistente(produto))
+            // if (_produtoService.CodigoProdutoExistente(produto))
             {
                 //TempData["Message"] = "Já existe um produto cadastrado com esse código!";
 
@@ -85,78 +77,6 @@ namespace AlphaMarketPDV.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        
-
-        [HttpPost]
-        public IActionResult AdicionarContato(FornecedorViewModel model)
-        {
-            int iIdContrato = model.ListaContatos.Count;
-            iIdContrato = ++iIdContrato;
-
-            var oContato = new Contato {
-                Id = iIdContrato,
-                Celular = model.Contato.Celular,
-                Email = model.Contato.Email,
-                Ramal = model.Contato.Ramal,
-                Telefone = model.Contato.Telefone
-            };
-
-            var oFornecedor = new Fornecedor
-            {
-                Id = 0,
-                Ativo = model.Fornecedor.Ativo,
-                TipoEmpresa = model.Fornecedor.TipoEmpresa,
-                Site = model.Fornecedor.Site,
-                EndComplemento = model.Fornecedor.EndComplemento,
-                EnderecoId = 0,
-                EndNumero = model.Fornecedor.EndNumero,
-                InscrEstadual = model.Fornecedor.InscrEstadual,
-                InscrMunicipal = model.Fornecedor.InscrMunicipal,
-                NomeFantasia = model.Fornecedor.NomeFantasia,
-                NomeRepresentante = model.Fornecedor.NomeRepresentante,
-                NumDocumento = model.Fornecedor.NumDocumento,
-                Observacoes = model.Fornecedor.Observacoes,
-                RazaoSocial = model.Fornecedor.RazaoSocial
-            };
-
-            var modelAux = new FornecedorViewModel();
-            modelAux.Fornecedor = oFornecedor;
-            modelAux.Contato = oContato;
-            modelAux.ListaContatos.Add(oContato);
-            /*
-            modelAux.Contato.Celular = string.Empty;
-            modelAux.Contato.Email = string.Empty;
-            modelAux.Contato.Fornecedor = null;
-            modelAux.Contato.FornecedorId = 0;
-            modelAux.Contato.Id = 0;
-            modelAux.Contato.Ramal = 0;
-            modelAux.Contato.Telefone = string.Empty;
-            */
-
-            //var iIdContato = model.Fornecedor.Contatos.Count;
-            //iIdContato = ++iIdContato;
-
-            /*
-            model.Contato.Id = iIdContato;
-            model.Contato.Fornecedor = model.Fornecedor;
-
-            model.Fornecedor.AdicionarContato(model.Contato);
-
-            model.Contato.Celular = string.Empty;
-            model.Contato.Email = string.Empty;
-            model.Contato.Fornecedor = null;
-            model.Contato.FornecedorId = 0;
-            model.Contato.Id = 0;
-            model.Contato.Ramal = 0;
-            model.Contato.Telefone = string.Empty;
-            */
-            //RedirectToRoute(nameof(Create) );
-            return View("Create", modelAux);
-            //return RedirectToAction(nameof(Create), new { @reload=true, @modelReload = modelAux });
-           //return RedirectToAction(nameof(Create), new RouteValueDictionary());
-            //RedirectToRoute(nameof(Create), new { @reload = true, @modelReload = modelAux });
-        }
-
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -164,7 +84,7 @@ namespace AlphaMarketPDV.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão do fornecedor!", codigoErro = 404 });
             }
-           
+
             var fornecedor = await _fornecedorService.ListarFornecedorPorIdAsync(id.Value);
             if (fornecedor == null)
             {
@@ -248,7 +168,7 @@ namespace AlphaMarketPDV.Controllers
 
                 //if (produto.Codigo != produtoAux.Codigo)
                 {
-                   // if (_produtoService.CodigoProdutoExistente(produto))
+                    // if (_produtoService.CodigoProdutoExistente(produto))
                     {
                         TempData["Message"] = "Já existe um produto cadastrado com esse código!";
 
@@ -263,7 +183,7 @@ namespace AlphaMarketPDV.Controllers
                 {
                     //string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
                     //_produtoService.ExcluirImagemProduto(produto);
-                   // produto.Foto = nomeFotoProduto;
+                    // produto.Foto = nomeFotoProduto;
                 }
 
                 //await _produtoService.UpdateAsync(produto);
@@ -275,17 +195,138 @@ namespace AlphaMarketPDV.Controllers
             }
         }
 
-        public PartialViewResult AddContatoFornecedor() 
-        {
-            return PartialView();
-        }
-
-
         [HttpGet]
         public IActionResult Error(string message, int codigoErro)
         {
             var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Codigo = codigoErro };
             return View(viewModel);
-        }  
+        }
+
+        /*
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult AdicionarContato(string telefone, int ramal, string celular, string email, int qtdLinhas)
+        {
+            int iIdContrato = qtdLinhas;
+            iIdContrato = ++iIdContrato;
+
+            var oContato = new Contato
+            {
+                Id = iIdContrato,
+                Celular = celular,
+                Email = email,
+                Ramal = ramal,
+                Telefone = telefone,
+                Fornecedor = null,
+                FornecedorId = 0
+            };
+            ViewBag.lstContatos = new List<Contato>();
+            ViewBag.lstContatos.Add(oContato);
+
+            return Json(oContato);
+        }*/
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AdicionarContato(FornecedorViewModel fvm)
+        {
+            var id = fvm.ListaContatos.Count();
+            id = ++id;
+            var objContato = new Contato { 
+                Id = id,
+                Celular = fvm.Contato.Celular,
+                Email = fvm.Contato.Email,
+                Ramal = fvm.Contato.Ramal,
+                Telefone = fvm.Contato.Telefone,
+                Fornecedor = null,
+                FornecedorId = 0
+            };
+
+            fvm.ListaContatos.Add(objContato);
+
+            /*int iIdContrato = qtdLinhas;
+            iIdContrato = ++iIdContrato;
+
+            var oContato = new Contato
+            {
+                Id = iIdContrato,
+                Celular = celular,
+                Email = email,
+                Ramal = ramal,
+                Telefone = telefone,
+                Fornecedor = null,
+                FornecedorId = 0
+            };
+            ViewBag.lstContatos = new List<Contato>();
+            ViewBag.lstContatos.Add(oContato);*/
+
+            return RedirectToAction("Create", fvm);
+        }
+
+
+        public IQueryable<FornecedorViewModel> IncluirContato(FornecedorViewModel model)
+        {
+            ViewBag.lstContatos.Add(model.Contato);
+            return ViewBag.lstContatos;
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> BuscarCep(string cep)
+        {
+            if (cep != null)
+            {
+                var aux = cep.Replace("-", "");
+                aux = aux.Replace(".", "");
+                Endereco oEndereco = await _enderecoService.ListarEnderecoPorCepAsync(aux);
+                if (oEndereco != null)
+                {
+                    var EnderecoAux = new Endereco()
+                    {
+                        Id = oEndereco.Id,
+                        Bairro = oEndereco.Bairro,
+                        Cep = oEndereco.Cep,
+                        Cidade = oEndereco.Cidade,
+                        Lougradouro = oEndereco.Lougradouro,
+                        Uf = oEndereco.Uf
+                    };
+
+                    return Json(EnderecoAux);
+                }
+                else
+                {
+                    var correios = new API_Correios.AtendeClienteClient();
+                    var consulta = correios.consultaCEPAsync(cep.Replace("-", "")).Result;
+
+                    if (consulta != null)
+                    {
+                        var oNewEndereco = new Endereco()
+                        {
+                            Bairro = consulta.@return.bairro,
+                            Cep = consulta.@return.cep,
+                            Cidade = consulta.@return.cidade,
+                            Lougradouro = consulta.@return.end,
+                            Uf = consulta.@return.uf
+                        };
+
+                        await _enderecoService.InserirEnderecoAsync(oNewEndereco);
+                        return Json(oNewEndereco);
+                    }
+                    else
+                    {
+                        return Json(null);
+                    }
+                }
+            }
+            else
+            {
+                return Json(null);
+            }
+        }
+
+
+
+
     }
 }
