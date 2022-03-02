@@ -87,7 +87,7 @@
                     @if (User.IsInRole("Supervisor"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link" asp-area="" asp-controller="Estoque" asp-action="Index">
                                 <i class="fas fa-boxes"></i> Estoque
                             </a>
                         </li>
@@ -106,12 +106,12 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Vendas" asp-action="ProcessarVenda">
                                         <i class="fas fa-cart-plus"></i> Processar Venda
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Produtos" asp-action="ConsultarPreco">
                                         <i class="fas fa-search-dollar"></i> Consultar Preço
                                     </a>
                                 </li>
@@ -132,7 +132,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <a class="dropdown-item" asp-area="" asp-controller="FluxoCaixa" asp-action="Operar">
                                         <i class="fas fa-cash-register"></i> Operar
                                     </a>
                                 </li>

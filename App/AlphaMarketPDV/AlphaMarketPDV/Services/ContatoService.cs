@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Data;
@@ -21,6 +20,11 @@ namespace AlphaMarketPDV.Services
         public async Task<List<Contato>> ListarTodosContatosAsync()
         {
             return await _context.Contato.OrderBy(obj => obj.Id).ToListAsync();
+        }
+
+        public async Task<List<Contato>> ListarTodosContatosFornecedorIdAsync(int idFornecedor) 
+        {
+            return await _context.Contato.Where(c => c.FornecedorId == idFornecedor).ToListAsync();   
         }
 
         public async Task<Contato> ListarContatoPorIdAsync(int id)
@@ -53,6 +57,23 @@ namespace AlphaMarketPDV.Services
             }
         }
 
+        public async Task RemoverContatosFornecedorAsync(int id) 
+        {
+            try 
+            {
+                var lstContatos = await ListarTodosContatosFornecedorIdAsync(id);
+                foreach (var i in lstContatos) 
+                {
+                    _context.Contato.Remove(i);
+                    await _context.SaveChangesAsync();
+                }
+            } 
+            catch (DbUpdateException)
+            {
+                throw new IntegrityException("Não é possível remover os contatos desse fornecedor.");
+            }
+        }
+
         public async Task AtualizarContatoAsync(Contato oContato)
         {
             var existeNaBase = await _context.Contato.AnyAsync(obj => obj.Id == oContato.Id);
@@ -72,12 +93,5 @@ namespace AlphaMarketPDV.Services
                 throw new DbConcurrencyException(e.Message);
             }
         }
-
-
-
-
-
-
-
     }
 }

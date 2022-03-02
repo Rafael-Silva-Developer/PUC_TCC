@@ -19,8 +19,7 @@ namespace AlphaMarketPDV.Controllers
         private readonly UsuarioManagerService _usuarioManagerService;
         private readonly PerfilManagerService _perfilManagerService;
 
-        public UsuarioManagerController(LojaService lojaService,
-                                        UsuarioManagerService usuarioManagerService,
+        public UsuarioManagerController(LojaService lojaService, UsuarioManagerService usuarioManagerService,
                                         PerfilManagerService perfilManagerService)
         {
             _lojaService = lojaService;
@@ -31,14 +30,14 @@ namespace AlphaMarketPDV.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var listaUsuarios = await _usuarioManagerService.ListarTodosUsuariosAsync();        
+            var listaUsuarios = await _usuarioManagerService.GetUsuariosAsync();        
             return View(listaUsuarios);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            var usuario = await _usuarioManagerService.ListarUsuarioPorIdAsync(id);
+            var usuario = await _usuarioManagerService.GetUsuarioPorIdAsync(id);
 
             if (usuario == null)
             {
@@ -46,7 +45,7 @@ namespace AlphaMarketPDV.Controllers
             }
             else
             {
-                var loja = await _lojaService.ListarPorIdAsync(usuario.LojaId);
+                var loja = await _lojaService.GetLojaPorIdAsync(usuario.LojaId);
                 var perfilSupervisor = _perfilManagerService.ListarPerfilSupervisor();
                 var perfilAtendente = _perfilManagerService.ListarPerfilAtendente();
                 var perfilUsuario = await _usuarioManagerService.RetornarPerfilUsuarioAsync(usuario);
@@ -84,7 +83,7 @@ namespace AlphaMarketPDV.Controllers
         [HttpPost]
         public async Task<IActionResult> AlterarSenha(AlterarSenhaViewModel model)
         {
-            var usuario = await _usuarioManagerService.ListarUsuarioPorIdAsync(model.Id);
+            var usuario = await _usuarioManagerService.GetUsuarioPorIdAsync(model.Id);
             if (usuario == null)
             {
                 return RedirectToAction(nameof(Error), new { message = $"Usuário não encontrado para alteração da senha.", codigoErro = 404 });
@@ -97,7 +96,7 @@ namespace AlphaMarketPDV.Controllers
                 }
                 else 
                 {
-                    var appUser = await _usuarioManagerService.ListarUsuarioPorIdAsync(usuario.Id);
+                    var appUser = await _usuarioManagerService.GetUsuarioPorIdAsync(usuario.Id);
                     var result = await _usuarioManagerService.AtualizarSenhaAsync(appUser, model.NovaSenha);
                     if (result.Succeeded)
                     {
@@ -114,7 +113,7 @@ namespace AlphaMarketPDV.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var usuario = await _usuarioManagerService.ListarUsuarioPorIdAsync(id);
+            var usuario = await _usuarioManagerService.GetUsuarioPorIdAsync(id);
 
             if (usuario == null)
             {
@@ -140,7 +139,7 @@ namespace AlphaMarketPDV.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditarUsuarioViewModel model)
         {
-            var usuario = await _usuarioManagerService.ListarUsuarioPorIdAsync(model.Id);
+            var usuario = await _usuarioManagerService.GetUsuarioPorIdAsync(model.Id);
 
             if (usuario == null)
             {

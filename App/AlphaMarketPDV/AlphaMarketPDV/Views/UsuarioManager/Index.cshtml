@@ -86,13 +86,13 @@
                             @{
                                 var perfilSupervisor = _perfilManagerService.ListarPerfilSupervisor();
                                 var perfilAtendente = _perfilManagerService.ListarPerfilAtendente();
-                                if (await _usuarioManagerService.UsuarioEstahNoPerfilAsync(item, perfilSupervisor))
+                                if (await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(item, perfilSupervisor))
                                 {
                                     <span>Supervisor</span>
                                 }
                                 else
                                 {
-                                    if (await _usuarioManagerService.UsuarioEstahNoPerfilAsync(item, perfilAtendente))
+                                    if (await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(item, perfilAtendente))
                                     {
                                         <span>Atendente</span>
                                     }

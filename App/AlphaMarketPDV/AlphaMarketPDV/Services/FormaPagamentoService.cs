@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Data;
@@ -18,7 +17,7 @@ namespace AlphaMarketPDV.Services
             _context = context;
         }
 
-        public async Task<List<FormaPagamento>> ListarTodosAsync()
+        public async Task<List<FormaPagamento>> GetFormasPagamentoAsync()
         {
             return await _context.FormaPagamento.OrderBy(x => x.Descricao).ToListAsync();
         }
@@ -29,12 +28,12 @@ namespace AlphaMarketPDV.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<FormaPagamento> ListarPorIdAsync(int id)
+        public async Task<FormaPagamento> GetFormaPagamentoPorIdAsync(int id)
         {
             return await _context.FormaPagamento.FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
-        public async Task<FormaPagamento> ListarPorIdNoTrackingAsync(int id)
+        public async Task<FormaPagamento> GetFormaPagamentoPorIdNoTrackingAsync(int id)
         {
             return await _context.FormaPagamento.AsNoTracking().FirstOrDefaultAsync(obj => obj.Id == id);
         }
@@ -73,7 +72,7 @@ namespace AlphaMarketPDV.Services
             }
         }
 
-        public bool DescricaoFormaPagamentoExistente(FormaPagamento formaPag)
+        public bool GetDescricaoFormaPagamentoExistente(FormaPagamento formaPag)
         {
             var qtd = _context.FormaPagamento.Where(f => f.Descricao == formaPag.Descricao).Count();
 

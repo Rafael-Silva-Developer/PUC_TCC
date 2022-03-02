@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
@@ -11,7 +9,7 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Id")]
         public int Id { get; set; }
 
-        [Display(Name = "Data/Hora Saída")]
+        [Display(Name = "Data/Hora Informada")]
         public DateTime DataHora { get; set; }
 
         [StringLength(150, MinimumLength = 4, ErrorMessage = "A justificativa dever ter entre 4 e 150 caracteres.")]
@@ -20,7 +18,7 @@ namespace AlphaMarketPDV.Models
         public string Justificativa { get; set; }
 
         [Required(ErrorMessage = "A data/hora de saída é obrigatória!")]
-        [Display(Name = "Data/Hora Informada")]
+        [Display(Name = "Data/Hora Saída")]
         public DateTime DataHoraInformada { get; set; }
 
         [Display(Name = "Valor Total")]
@@ -29,34 +27,37 @@ namespace AlphaMarketPDV.Models
         public UsuarioApp Usuario { get; set; }
 
         [Display(Name = "Usuário")]
-        public int UsuarioId { get; set; }
+        public String UsuarioId { get; set; }
 
         [Display(Name = "Produtos")]
         public ICollection<ItemSaidaEstoque> ItensSaidaEstoque { get; set; } = new List<ItemSaidaEstoque>();
+
+        [StringLength(32)]
+        public string IdentificadorRegistro { get; set; }
 
         public SaidaEstoque() 
         { 
         }
 
         public SaidaEstoque(int id, DateTime dataHora, string justificativa, DateTime dataHoraInformada, 
-                            double valorTotal, UsuarioApp usuario)
+                            double valorTotal, UsuarioApp usuario, string identificadorRegistro)
         {
-            this.Id = id;
-            this.DataHora = dataHora;
-            this.Justificativa = justificativa;
-            this.DataHoraInformada = dataHoraInformada;
-            this.ValorTotal = valorTotal;
-            this.Usuario = usuario;
+            Id = id;
+            DataHora = dataHora;
+            Justificativa = justificativa;
+            DataHoraInformada = dataHoraInformada;
+            ValorTotal = valorTotal;
+            Usuario = usuario;
+            IdentificadorRegistro = identificadorRegistro;
         }
 
-        public void AdicionarItemSaidaEstoque(ItemSaidaEstoque ise) 
+        public override string ToString()
         {
-            ItensSaidaEstoque.Add(ise);
-        }
-
-        public void RemoverItemSaidaEstoque(ItemSaidaEstoque ise) 
-        {
-            ItensSaidaEstoque.Remove(ise);
+            return DataHora.ToString() +                  
+                   Justificativa.ToString() +
+                   DataHoraInformada.ToString() +
+                   ValorTotal.ToString() +                   
+                   UsuarioId.ToString();
         }
     }
 }

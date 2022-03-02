@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AlphaMarketPDV.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
@@ -30,29 +28,35 @@ namespace AlphaMarketPDV.Models
         public UsuarioApp Usuario { get; set; }
 
         [Display(Name = "Usuário")]
-        public int UsuarioId { get; set; }
+        public string UsuarioId { get; set; }
 
+        [StringLength(32)]
+        public string IdentificadorRegistro { get; set; }
         public Caixa() 
         { 
         }
 
-        public Caixa(int id, DateTime dataHora, double valor, TipoCaixa tipoOperacao, UsuarioApp usuario)
+        public Caixa(int id, DateTime dataHora, double valor, 
+            TipoCaixa tipoOperacao, UsuarioApp usuario, string identificadorRegistro)
         {
-            this.Id = id;
-            this.DataHora = dataHora;
-            this.Valor = valor;
-            this.TipoOperacao = tipoOperacao;
-            this.Usuario = usuario;
+            Id = id;
+            DataHora = dataHora;
+            Valor = valor;
+            TipoOperacao = tipoOperacao;
+            Usuario = usuario;
+            IdentificadorRegistro = identificadorRegistro;
         }
 
-        public void AdicionarItemCaixaPagamento(CaixaPagamento cp) 
+        public override string ToString()
         {
-            CaixaPagamentos.Add(cp);
+            return DataHora.ToString() +
+                   Valor.ToString() +
+                   TipoOperacao.ToString() +
+                   UsuarioId.ToString();
         }
 
-        public void RemoverItemCaixaPagamento(CaixaPagamento cp) 
-        {
-            CaixaPagamentos.Remove(cp);
-        }
+
+
+
     }
 }

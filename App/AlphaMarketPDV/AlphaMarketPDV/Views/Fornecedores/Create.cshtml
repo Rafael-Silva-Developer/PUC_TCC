@@ -178,11 +178,13 @@
             <hr />
 
             <div class="form-control-plaintext">
-                <input type="button" value="Gravar" class="btn btn-dark" onclick="gravar_dados()"/>
+                <input type="button" value="Gravar" class="btn btn-dark" onclick="gravar_dados()" />
             </div>
         </form>
     </div>
 </div>
+
+<div class="modal"></div>
 
 @section ScriptPage{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
@@ -222,6 +224,7 @@
 
     <script type="text/javascript">
         var lista_contatos = new Set();
+        $body = $("body");
 
         $(document).ready(function () {
             $('#tab_fornecedores').DataTable(
@@ -276,11 +279,39 @@
             );
         });
 
-        //$("#btnDownlaod").click(function (e) {
-          //  callPostBack(e, this, Url.Action("Create", "FornecedoresController", new {
-            //                     Fornecedor.NomeFantasia = ""
-              //               }), null, SuccessoCallback, ErroCallback);
-       // });
+        $("#Fornecedor_Endereco_Cep").change(function () {
+            var vCep = $("#Fornecedor_Endereco_Cep").val();
+
+            $body.addClass("loading");
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "BuscarCep",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    "cep": vCep
+                },
+                success: function (response) {
+                    $body.removeClass("loading");
+                    $("#Fornecedor_Endereco_Lougradouro").val(response.Lougradouro);
+                    $("#Fornecedor_Endereco_Bairro").val(response.Bairro);
+                    $("#Fornecedor_Endereco_Cidade").val(response.Cidade);
+                    $("#Fornecedor_Endereco_Uf").val(response.Uf);
+                    $("#Fornecedor_EnderecoId").val(response.Id);
+                },
+                error: function () {
+                    $body.removeClass("loading");
+                    swal({
+                        title: "Mensagem",
+                        text: "Erro ao processar busca do CEP!",
+                        type: "error"
+                    });
+                }
+            });
+        });
 
         $("#btnIncluirContato").click(function () {
             var vTelefone = $("#Contato_Telefone").val();
@@ -295,34 +326,6 @@
                 });
             }
             else {
-                $.ajax({
-                    type: "POST",
-                    dataType: "text",
-                    url: "AdicionarContato",
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader("XSRF-TOKEN",
-                            $('input:hidden[name="__RequestVerificationToken"]').val());
-                    },
-                    data: $("#frm_cadastro_fornecedor").serialize(),
-                    /*data: {
-                        "telefone": vTelefone,
-                        "ramal": vRamal,
-                        "celular": vCelular,
-                        "email": vEmail
-                    },*/
-                    success: function (response) {
-                        console.log("ok!");
-                    },
-                    error: function () {
-                        swal({
-                            title: "Error",
-                            text: "Erro ao adicionar contato!",
-                            type: "error"
-                        });
-                    }
-                });
-
-                /*
                 var objContato = new Object();
 
                 objContato.Id = lista_contatos.size + 1;
@@ -340,9 +343,9 @@
                     tr.append("<td>" + item.Ramal + "</td>");
                     tr.append("<td>" + item.Email + "</td>");
                     tr.append("<td><a href='javascript:void(0)' onclick='excluir_contato(" + item.Id + ");' title='Excluir'><span style='color: Tomato;'><i class='fas fa-trash-alt'></i></span></a></td>");
-                }*/
+                }
 
-                //$("#tab_fornecedores").append(tr);
+                $("#tab_fornecedores").append(tr);
                 $("#Contato_Telefone").val('');
                 $("#Contato_Ramal").val('');
                 $("#Contato_Celular").val('');
@@ -350,40 +353,10 @@
             }
         });
 
-        $("#Fornecedor_Endereco_Cep").change(function () {
-            var vCep = $("#Fornecedor_Endereco_Cep").val();
+        function excluir_contato(id) {
+            var i = 0;
 
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: "BuscarCep",
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("XSRF-TOKEN",
-                        $('input:hidden[name="__RequestVerificationToken"]').val());
-                },
-                data: {
-                    "cep": vCep
-                },
-                success: function (response) {
-                    $("#Fornecedor_Endereco_Lougradouro").val(response.Lougradouro);
-                    $("#Fornecedor_Endereco_Bairro").val(response.Bairro);
-                    $("#Fornecedor_Endereco_Cidade").val(response.Cidade);
-                    $("#Fornecedor_Endereco_Uf").val(response.Uf);
-                    $("#Fornecedor_EnderecoId").val(response.Id);
-                },
-                error: function () {
-                    swal({
-                        title: "Mensagem",
-                        text: "Erro ao processar busca do CEP!",
-                        type: "error"
-                    });
-                }
-            });
-        });
-
-        function excluir_contato(id)
-        {
-            for (let elem of lista_contatos) {
+            for(let elem of lista_contatos) {
                 if (elem.Id == id) {
                     lista_contatos.delete(elem);
                     break;
@@ -392,7 +365,9 @@
 
             $('#tab_fornecedores tr:not(:first)').remove();
 
-            for (let item of lista_contatos) {
+            for(let item of lista_contatos) {
+                i = i + 1;
+                item.Id = i;
                 tr = $('<tr/>');
                 tr.append("<td>" + item.Id + "</td>");
                 tr.append("<td>" + item.Celular + "</td>");
@@ -404,29 +379,76 @@
             }
         }
 
-        function gravar_dados()
-        {
-            //var base = $("#frm_cadastro_fornecedor").serializeArray();
-            //base.push({ name: "lst", value: lista_contatos });
+        function gravar_dados() {
+            var array_contatos = [];
+            array_contatos.length = lista_contatos.size-1;
 
+            for (let item of lista_contatos) {
+                array_contatos.push({
+                    id: parseInt(item.Id),
+                    nrseq: parseInt(item.Id),
+                    celular: item.Celular,
+                    telefone: item.Telefone,
+                    ramal: parseInt(item.Ramal),
+                    email: item.Email
+                });
+            }
+
+            var dados_formulario = {
+                Fornecedor: {
+                    Id: 0,
+                    NomeFantasia: $("#Fornecedor_NomeFantasia").val(),
+                    RazaoSocial: $("#Fornecedor_RazaoSocial").val(),
+                    NomeRepresentante: $("#Fornecedor_NomeRepresentante").val(),
+                    EndComplemento: $("#Fornecedor_EndComplemento").val(),
+                    EndNumero: $("#Fornecedor_EndNumero").val(),
+                    Site: $("#Fornecedor_Site").val(),
+                    TipoEmpresa: parseInt($("#Fornecedor_TipoEmpresa").val()),
+                    NumDocumento: $("#Fornecedor_NumDocumento").val(),
+                    InscrEstadual: $("#Fornecedor_InscrEstadual").val(),
+                    InscrMunicipal: $("#Fornecedor_InscrMunicipal").val(),
+                    Observacoes: $("#Fornecedor_Observacoes").val(),
+                    Ativo: $("#Fornecedor_Ativo").val(),
+                    Endereco: null,
+                    EnderecoId: parseInt($("#Fornecedor_EnderecoId").val()),
+                    Contatos: array_contatos
+                },
+                Contato: {
+                    Id: 0,
+                    Telefone: "",
+                    Ramal: 0,
+                    Celular: "",
+                    Email: "",
+                    Fornecedor: null,
+                    FornecedorId: 0
+                },
+                ListaContatos: array_contatos
+            };
 
             $.ajax({
-                cache: false,
-                async: true,
+                contentType: 'application/json',
+                dataType: "json",
                 type: "POST",
                 url: 'Create',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader("XSRF-TOKEN",
-                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                     $('input:hidden[name="__RequestVerificationToken"]').val());
                 },
-
-                data: $("#frm_cadastro_fornecedor").serialize(),
-                dataType: "text",
+                data: JSON.stringify(dados_formulario),
                 success: function (msg) {
-                    console.log(msg);
+                    swal({
+                        title: "Mensagem",
+                        text: "Fornecedor gravado com sucesso.",
+                        type: "success"
+                    });
+                    window.location.href = "@Url.Action("Index","Fornecedores")";
                 },
-                error: function (req, status, error) {
-                    console.log(msg);
+                error: function () {
+                    swal({
+                        title: "Error",
+                        text: "Erro no processamento da requisição de gravação.",
+                        type: "error"
+                    });
                 }
             });
         }

@@ -1,0 +1,148 @@
+﻿@model AlphaMarketPDV.Models.Produto
+
+@{
+    ViewData["Title"] = "Consultar Preço";
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<form class="form-inline">
+    <div class="row">
+        <div class="col-8">
+            <div class="form-control-plaintext">
+                <input asp-for="Codigo" class="form-control form-control-lg" type="text" placeholder="Digite o código do produto...">
+                <span asp-validation-for="Codigo" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-control-plaintext">
+                <a class="btn btn-dark btn-lg" id="btn-pesquisar-preco" title="Pesquisar preço do produto">
+                    <i class="fas fa-search-dollar"></i> Pesquisar
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<br />
+<div class="container" id="result_produto"></div>
+<br />
+
+<div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">
+        <i class="fas fa-undo"></i> Voltar
+    </a>
+</div>
+
+<div class="modal"></div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <environment include="Development">
+        <script src="~/js/jquery-3.5.1.js"></script>
+        <script src="~/js/jquery.dataTables.min.js"></script>
+        <script src="~/js/dataTables.buttons.min.js"></script>
+        <script src="~/js/jszip.min.js"></script>
+        <script src="~/js//pdfmake.min.js"></script>
+        <script src="~/js/vfs_fonts.js"></script>
+        <script src="~/js/buttons.html5.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                asp-fallback-src="~/js/jquery-3.5.1.js">
+        </script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"
+                asp-fallback-src="~/js/jquery.dataTables.min.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"
+                asp-fallback-src="~/js/dataTables.buttons.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"
+                asp-fallback-src="~/js/jszip.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"
+                asp-fallback-src="~/js//pdfmake.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"
+                asp-fallback-src="~/js/vfs_fonts.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"
+                asp-fallback-src="~/js/buttons.html5.min.js">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+        $body = $("body");
+
+        $("#btn-pesquisar-preco").click(function () {
+            var vCodigo = $("#Codigo").val();
+
+            if (vCodigo.trim() == '') {
+                swal({
+                    title: "Error",
+                    text: "É necessário informar o código do produto!",
+                    type: "error"
+                });
+            }
+            else {
+                $body.addClass("loading");
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "BuscarPrecoProduto",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: {
+                        "codigo": vCodigo
+                    },
+                    success: function (response) {
+                        $body.removeClass("loading");
+                        $('#result_produto div:not(:first)').remove();
+                        if (response == null) {
+                            swal({
+                                title: "Falha da pesquisa",
+                                text: "Produto não localizado!",
+                                type: "error"
+                            });
+                        } else
+                        {
+                            var result = "";
+
+                            result += '<div class="row justify-content-center"><div class="col align-self-center"><h1>' + response.DescricaoLonga + '</h1>' +
+                                '<br><h1>' + parseFloat(response.ValorVenda).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); + 
+                                '</h1></div>';
+                            
+                            if (response.Foto == null) {
+                                result += '<div class="row justify-content-center"><div class="col align-self-center"><figure>' +
+                                              '<img src="/images/produtos/default.png" height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />'+
+                                          '</figure>' +
+                                          '</div></div></div>';
+                            } else {
+                                result += '<div class="row justify-content-center"><div class="col align-self-center"><figure>' +
+                                             '<img src="/images/produtos/' + response.Foto + '"' + ' height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />'+
+                                          '</figure>' +
+                                          '</div></div></div>';
+                            }
+                                                         
+                            $("#result_produto").append(result);
+                        }
+                    },
+                    error: function () {
+                        $body.removeClass("loading");
+                        swal({
+                            title: "Falha na pesquisa",
+                            text: "Erro ao processar pesquisa de preço do produto!",
+                            type: "error"
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+}

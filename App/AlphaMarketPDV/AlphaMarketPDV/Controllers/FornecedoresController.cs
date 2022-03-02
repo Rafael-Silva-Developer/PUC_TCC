@@ -14,67 +14,34 @@ using System.Linq;
 
 namespace AlphaMarketPDV.Controllers
 {
+    [Produces("application/json")]
     [Authorize(Roles = "Supervisor")]
     public class FornecedoresController : Controller
     {
         private readonly FornecedorService _fornecedorService;
         private readonly EnderecoService _enderecoService;
+        private readonly ContatoService _contatoService;
 
-        public FornecedoresController(FornecedorService fornecedorService, EnderecoService enderecoService)
+        public FornecedoresController(FornecedorService fornecedorService, EnderecoService enderecoService, 
+                                      ContatoService contatoService)
         {
             _fornecedorService = fornecedorService;
             _enderecoService = enderecoService;
+            _contatoService = contatoService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var fornecedores = await _fornecedorService.ListarTodosFornecedoresAsync();
+            var fornecedores = await _fornecedorService.GetFornecedoresAsync();
             return View(fornecedores);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.lstContatos = new List<Contato>();
-
             var viewModel = new FornecedorViewModel();
             return View(viewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(FornecedorViewModel fvm)
-        {
-            if (!ModelState.IsValid)
-            {
-                // var categorias = await _categoriaService.ListarTodosAsync();
-                //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                //var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
-                return View();
-            }
-
-            // if (_produtoService.CodigoProdutoExistente(produto))
-            {
-                //TempData["Message"] = "Já existe um produto cadastrado com esse código!";
-
-                //var categorias = await _categoriaService.ListarTodosAsync();
-                //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                //var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
-                //return View();
-            }
-
-            //if (produto.FotoProduto != null)
-            {
-                //string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
-                //produto.Foto = nomeFotoProduto;
-            }
-
-            //DateTime data = DateTime.Now;
-            //produto.DataHoraCadastro = data;
-
-            //await _produtoService.InserirAsync(produto);
-            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -85,27 +52,12 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão do fornecedor!", codigoErro = 404 });
             }
 
-            var fornecedor = await _fornecedorService.ListarFornecedorPorIdAsync(id.Value);
+            var fornecedor = await _fornecedorService.GetFornecedorPorIdAsync(id.Value);
             if (fornecedor == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Fornecedor não encontrado para exclusão!", codigoErro = 404 });
             }
             return View(fornecedor);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                await _fornecedorService.RemoverFornecedorAsync(id);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (IntegrityException e)
-            {
-                return RedirectToAction(nameof(Error), new { message = e.Message });
-            }
         }
 
         [HttpGet]
@@ -116,7 +68,7 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização do fornecedor!", codigoErro = 404 });
             }
 
-            var fornecedor = await _fornecedorService.ListarFornecedorPorIdAsync(id.Value);
+            var fornecedor = await _fornecedorService.GetFornecedorPorIdAsync(id.Value);
             if (fornecedor == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Fornecedor não encontrado para visualização!", codigoErro = 404 });
@@ -133,66 +85,16 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para edição do fornecedor!", codigoErro = 404 });
             }
 
-            var fornecedorObj = await _fornecedorService.ListarFornecedorPorIdAsync(id.Value);
+            var fornecedorObj = await _fornecedorService.GetFornecedorPorIdAsync(id.Value);
             if (fornecedorObj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição do fornecedor!", codigoErro = 404 });
             }
 
-            //var categorias = await _categoriaService.ListarTodosAsync();
-            //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-            //var viewModel = new ProdutoViewModel { Produto = obj, Categorias = categorias, UnidadesMedida = unidadesMedida };
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Produto produto)
-        {
-            if (!ModelState.IsValid)
-            {
-                //var categorias = await _categoriaService.ListarTodosAsync();
-                //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                //var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
-                return View();
-            }
-
-            if (id != produto.Id)
-            {
-                return RedirectToAction(nameof(Error), new { message = "O Id informado na requisição não corresponde ao fornecedor selecionado para edição!", codigoErro = 404 });
-            }
-
-            try
-            {
-                //Produto produtoAux = await _produtoService.ListarPorIdNoTrackingAsync(id);
-
-                //if (produto.Codigo != produtoAux.Codigo)
-                {
-                    // if (_produtoService.CodigoProdutoExistente(produto))
-                    {
-                        TempData["Message"] = "Já existe um produto cadastrado com esse código!";
-
-                        //var categorias = await _categoriaService.ListarTodosAsync();
-                        //var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
-                        //var viewModel = new ProdutoViewModel { Produto = produto, Categorias = categorias, UnidadesMedida = unidadesMedida };
-                        return View();
-                    }
-                }
-
-                if (produto.FotoProduto != null)
-                {
-                    //string nomeFotoProduto = _produtoService.UploadImagemProduto(produto);
-                    //_produtoService.ExcluirImagemProduto(produto);
-                    // produto.Foto = nomeFotoProduto;
-                }
-
-                //await _produtoService.UpdateAsync(produto);
-                return RedirectToAction(nameof(Index));
-            }
-            catch (ApplicationException e)
-            {
-                return RedirectToAction(nameof(Error), new { message = e.Message });
-            }
+            var oEndereco = await _enderecoService.ListarEnderecoPorIdAsync(fornecedorObj.EnderecoId);
+            var oContatos = await _contatoService.ListarTodosContatosFornecedorIdAsync(fornecedorObj.Id);
+            var viewModel = new FornecedorViewModel { Fornecedor = fornecedorObj, Contato = null, ListaContatos = oContatos };
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -202,74 +104,145 @@ namespace AlphaMarketPDV.Controllers
             return View(viewModel);
         }
 
-        /*
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult AdicionarContato(string telefone, int ramal, string celular, string email, int qtdLinhas)
+        public async Task<JsonResult> Create([FromBody] FornecedorViewModel fvm)
         {
-            int iIdContrato = qtdLinhas;
-            iIdContrato = ++iIdContrato;
-
-            var oContato = new Contato
+            if ((!ModelState.IsValid) || (fvm == null))
             {
-                Id = iIdContrato,
-                Celular = celular,
-                Email = email,
-                Ramal = ramal,
-                Telefone = telefone,
-                Fornecedor = null,
-                FornecedorId = 0
-            };
-            ViewBag.lstContatos = new List<Contato>();
-            ViewBag.lstContatos.Add(oContato);
+                return null;
+            }
 
-            return Json(oContato);
-        }*/
+            var oFornecedor = new Fornecedor
+            {
+                RazaoSocial = fvm.Fornecedor.RazaoSocial,
+                NomeFantasia = fvm.Fornecedor.NomeFantasia,
+                NomeRepresentante = fvm.Fornecedor.NomeRepresentante,
+                InscrEstadual = fvm.Fornecedor.InscrEstadual,
+                InscrMunicipal = fvm.Fornecedor.InscrMunicipal,
+                EndComplemento = fvm.Fornecedor.EndComplemento,
+                EndNumero = fvm.Fornecedor.EndNumero,
+                NumDocumento = fvm.Fornecedor.NumDocumento,
+                Observacoes = fvm.Fornecedor.Observacoes,
+                Ativo = fvm.Fornecedor.Ativo,
+                TipoEmpresa = fvm.Fornecedor.TipoEmpresa,
+                Site = fvm.Fornecedor.Site
+            };
+
+            var oEndereco = await _enderecoService.ListarEnderecoPorIdAsync(fvm.Fornecedor.EnderecoId);
+            oFornecedor.Endereco = oEndereco;
+            await _fornecedorService.InserirFornecedorAsync(oFornecedor);
+
+            var oFornecedorAux = await _fornecedorService.ListarFornecedorPorRazaoSocialAsync(oFornecedor.RazaoSocial);
+
+            foreach (var contato in fvm.Fornecedor.Contatos)
+            {
+                await _contatoService.InserirContatoAsync(new Contato
+                {
+                    Celular = contato.Celular,
+                    Email = contato.Email,
+                    Ramal = contato.Ramal,
+                    Telefone = contato.Telefone,
+                    Fornecedor = oFornecedorAux,
+                    NrSeq = contato.NrSeq
+                });
+            }
+
+            return Json("OK");
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AdicionarContato(FornecedorViewModel fvm)
+        public async Task<IActionResult> Delete(int id)
         {
-            var id = fvm.ListaContatos.Count();
-            id = ++id;
-            var objContato = new Contato { 
-                Id = id,
-                Celular = fvm.Contato.Celular,
-                Email = fvm.Contato.Email,
-                Ramal = fvm.Contato.Ramal,
-                Telefone = fvm.Contato.Telefone,
-                Fornecedor = null,
-                FornecedorId = 0
-            };
-
-            fvm.ListaContatos.Add(objContato);
-
-            /*int iIdContrato = qtdLinhas;
-            iIdContrato = ++iIdContrato;
-
-            var oContato = new Contato
+            try
             {
-                Id = iIdContrato,
-                Celular = celular,
-                Email = email,
-                Ramal = ramal,
-                Telefone = telefone,
-                Fornecedor = null,
-                FornecedorId = 0
+                await _fornecedorService.RemoverFornecedorAsync(id);
+                await _contatoService.RemoverContatosFornecedorAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> Edit([FromBody] FornecedorViewModel fvm)
+        {           
+            if ((!ModelState.IsValid) || (fvm == null))
+            {
+                return null;
+            }
+
+            var oFornecedor = new Fornecedor
+            {
+                Id = fvm.Fornecedor.Id,
+                RazaoSocial = fvm.Fornecedor.RazaoSocial,
+                NomeFantasia = fvm.Fornecedor.NomeFantasia,
+                NomeRepresentante = fvm.Fornecedor.NomeRepresentante,
+                InscrEstadual = fvm.Fornecedor.InscrEstadual,
+                InscrMunicipal = fvm.Fornecedor.InscrMunicipal,
+                EndComplemento = fvm.Fornecedor.EndComplemento,
+                EndNumero = fvm.Fornecedor.EndNumero,
+                NumDocumento = fvm.Fornecedor.NumDocumento,
+                Observacoes = fvm.Fornecedor.Observacoes,
+                Ativo = fvm.Fornecedor.Ativo,
+                TipoEmpresa = fvm.Fornecedor.TipoEmpresa,
+                Site = fvm.Fornecedor.Site
             };
-            ViewBag.lstContatos = new List<Contato>();
-            ViewBag.lstContatos.Add(oContato);*/
 
-            return RedirectToAction("Create", fvm);
+            var oEndereco = await _enderecoService.ListarEnderecoPorIdAsync(fvm.Fornecedor.EnderecoId);
+            oFornecedor.Endereco = oEndereco;
+            await _fornecedorService.AtualizarFornecedorAsync(oFornecedor);
+
+            //Busco todos os contatos do fornecedor já cadastrados...
+            var lstContatos = await _contatoService.ListarTodosContatosFornecedorIdAsync(oFornecedor.Id);
+         
+            var lstContatosExcluidos = lstContatos.Except(fvm.ListaContatos);
+            if (lstContatosExcluidos.Count() == 1) 
+            {
+                foreach (var item in lstContatosExcluidos) 
+                {
+                    await _contatoService.RemoverContatoAsync(item.Id);
+                }
+            }
+           
+            //Atualização ou inclusão de contatos...
+            foreach (var itemModel in fvm.Fornecedor.Contatos)
+            {
+                if (itemModel != null)
+                {
+                    if (itemModel.Id == 0)
+                    {
+                        await _contatoService.InserirContatoAsync(new Contato
+                        {
+                            NrSeq = itemModel.NrSeq,
+                            Celular = itemModel.Celular,
+                            Email = itemModel.Email,
+                            Ramal = itemModel.Ramal,
+                            Telefone = itemModel.Telefone,
+                            Fornecedor = oFornecedor
+                        });
+                    }
+                    else
+                    {
+                        await _contatoService.AtualizarContatoAsync(new Contato
+                        {
+                            Id = itemModel.Id,
+                            NrSeq = itemModel.NrSeq,
+                            Celular = itemModel.Celular,
+                            Email = itemModel.Email,
+                            Ramal = itemModel.Ramal,
+                            Telefone = itemModel.Telefone,
+                            Fornecedor = oFornecedor
+                        });
+                    }
+                }
+            }
+            return Json("OK");
         }
-
-
-        public IQueryable<FornecedorViewModel> IncluirContato(FornecedorViewModel model)
-        {
-            ViewBag.lstContatos.Add(model.Contato);
-            return ViewBag.lstContatos;
-        }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -324,9 +297,5 @@ namespace AlphaMarketPDV.Controllers
                 return Json(null);
             }
         }
-
-
-
-
     }
 }

@@ -1,1 +1,469 @@
-﻿
+﻿@model AlphaMarketPDV.Models.ViewModels.FornecedorView.FornecedorViewModel;
+@using AlphaMarketPDV.Models.Enums;
+
+@{
+    ViewData["Title"] = "Editar fornecedor";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form name="frm_cadastro_fornecedor" id="frm_cadastro_fornecedor">
+            <input type="hidden" asp-for="Fornecedor.Id" />
+            <input type="hidden" asp-for="Fornecedor.EnderecoId" />
+            <input type="hidden" asp-for="Contato.NrSeq" />
+            <div class="form-control-plaintext">
+                <div class="row">
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.NomeFantasia" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.NomeFantasia" class="form-control" />
+                        <span asp-validation-for="Fornecedor.NomeFantasia" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.RazaoSocial" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.RazaoSocial" class="form-control" />
+                        <span asp-validation-for="Fornecedor.RazaoSocial" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.NomeRepresentante" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.NomeRepresentante" class="form-control" />
+                <span asp-validation-for="Fornecedor.NomeRepresentante" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.Endereco.Cep" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.Endereco.Cep" class="form-control" data-mask="00.000-000" />
+                <span asp-validation-for="Fornecedor.Endereco.Cep" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.Endereco.Lougradouro" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.Endereco.Lougradouro" class="form-control" disabled />
+                <span asp-validation-for="Fornecedor.Endereco.Lougradouro" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <div class="row">
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.Endereco.Bairro" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.Endereco.Bairro" class="form-control" disabled />
+                        <span asp-validation-for="Fornecedor.Endereco.Bairro" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.Endereco.Cidade" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.Endereco.Cidade" class="form-control" disabled />
+                        <span asp-validation-for="Fornecedor.Endereco.Cidade" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.Endereco.Uf" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.Endereco.Uf" class="form-control" disabled />
+                        <span asp-validation-for="Fornecedor.Endereco.Uf" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <div class="row">
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.EndComplemento" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.EndComplemento" class="form-control" />
+                        <span asp-validation-for="Fornecedor.EndComplemento" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.EndNumero" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.EndNumero" class="form-control" />
+                        <span asp-validation-for="Fornecedor.EndNumero" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.Site" class="col-form-label"></label>
+                </strong>
+                <input asp-for="Fornecedor.Site" class="form-control" />
+                <span asp-validation-for="Fornecedor.Site" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <div class="row">
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.TipoEmpresa" class="col-form-label"></label>
+                        </strong>
+                        <select asp-for="Fornecedor.TipoEmpresa" asp-items="@Html.GetEnumSelectList<TipoPessoa>()" class="form-control">
+                            <option value="">--Selecione--</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.NumDocumento" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.NumDocumento" class="form-control" />
+                        <span asp-validation-for="Fornecedor.NumDocumento" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <div class="row">
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.InscrEstadual" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.InscrEstadual" class="form-control" />
+                        <span asp-validation-for="Fornecedor.InscrEstadual" class="text-danger"></span>
+                    </div>
+                    <div class="col">
+                        <strong>
+                            <label asp-for="Fornecedor.InscrMunicipal" class="col-form-label"></label>
+                        </strong>
+                        <input asp-for="Fornecedor.InscrMunicipal" class="form-control" />
+                        <span asp-validation-for="Fornecedor.InscrMunicipal" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Fornecedor.Observacoes" class="col-form-label"></label>
+                </strong>
+                <textarea asp-for="Fornecedor.Observacoes" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Fornecedor.Observacoes" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <div class="checkbox">
+                    <strong>
+                        <label><input asp-for="Fornecedor.Ativo" /> @Html.DisplayNameFor(model => model.Fornecedor.Ativo)</label>
+                    </strong>
+                </div>
+            </div>
+
+            <partial name="~/Views/Fornecedores/_AddContatoFornecedor.cshtml" />
+            <hr />
+            <partial name="~/Views/Fornecedores/_IndexContatoFornecedor.cshtml" />
+            <hr />
+
+            <div class="form-control-plaintext">
+                <input type="button" value="Gravar" class="btn btn-dark" onclick="gravar_dados()" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal"></div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <environment include="Development">
+        <script src="~/js/jquery-3.5.1.js"></script>
+        <script src="~/js/jquery.dataTables.min.js"></script>
+        <script src="~/js/dataTables.buttons.min.js"></script>
+        <script src="~/js/jszip.min.js"></script>
+        <script src="~/js//pdfmake.min.js"></script>
+        <script src="~/js/vfs_fonts.js"></script>
+        <script src="~/js/buttons.html5.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                asp-fallback-src="~/js/jquery-3.5.1.js">
+        </script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"
+                asp-fallback-src="~/js/jquery.dataTables.min.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"
+                asp-fallback-src="~/js/dataTables.buttons.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"
+                asp-fallback-src="~/js/jszip.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"
+                asp-fallback-src="~/js//pdfmake.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"
+                asp-fallback-src="~/js/vfs_fonts.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"
+                asp-fallback-src="~/js/buttons.html5.min.js">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+        var lista_contatos = new Set();
+        $body = $("body");
+
+        @foreach (var item in Model.ListaContatos)
+        {
+            @:var objContato = new Object();
+            @:objContato.Id = "@item.Id";
+            @:objContato.NrSeq = "@item.NrSeq";
+            @:objContato.Telefone = "@item.Telefone";
+            @:objContato.Ramal = "@item.Ramal";
+            @:objContato.Celular = "@item.Celular";
+            @:objContato.Email = "@item.Email";
+            @:lista_contatos.add(objContato);
+        }
+
+        $(document).ready(function () {
+            $('#tab_fornecedores').DataTable(
+                {
+                    "order": [[1, "asc"]],
+                    columnDefs: [
+                        { targets: 0, className: 'dt-center' },
+                        { targets: 1, className: 'dt-justify' },
+                        { targets: 2, className: 'dt-center' },
+                        { targets: 3, className: 'dt-center' }
+                    ],
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Exibindo de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "Último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        },
+                        "select": {
+                            "rows": {
+                                "_": "Selecionado %d linhas",
+                                "0": "Nenhuma linha selecionada",
+                                "1": "Selecionado 1 linha"
+                            }
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "copyTitle": "Cópia bem sucedida",
+                            "copySuccess": {
+                                "1": "Uma linha copiada com sucesso",
+                                "_": "%d linhas copiadas com sucesso"
+                            }
+                        }
+                    },
+                    dom: 'Blfrtip'
+                }
+            );
+        });
+
+        $("#Fornecedor_Endereco_Cep").change(function () {
+            var vCep = $("#Fornecedor_Endereco_Cep").val();
+            $body.addClass("loading");
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "BuscarCep",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {
+                    "cep": vCep
+                },
+                success: function (response) {
+                    $body.removeClass("loading");
+                    $("#Fornecedor_Endereco_Lougradouro").val(response.Lougradouro);
+                    $("#Fornecedor_Endereco_Bairro").val(response.Bairro);
+                    $("#Fornecedor_Endereco_Cidade").val(response.Cidade);
+                    $("#Fornecedor_Endereco_Uf").val(response.Uf);
+                    $("#Fornecedor_EnderecoId").val(response.Id);
+                },
+                error: function () {
+                    $body.removeClass("loading");
+                    swal({
+                        title: "Mensagem",
+                        text: "Erro ao processar busca do CEP!",
+                        type: "error"
+                    });
+                }
+            });
+        });
+
+        $("#btnIncluirContato").click(function () {
+            var vTelefone = $("#Contato_Telefone").val();
+            var vRamal = $("#Contato_Ramal").val();
+            var vCelular = $("#Contato_Celular").val();
+            var vEmail = $("#Contato_Email").val();
+            if ((vTelefone.trim() == '') && (vRamal.trim() == '') && (vCelular.trim() == '')) {
+                swal({
+                    title: "Error",
+                    text: "É necessário o preenchimento dos dados de contato!",
+                    type: "error"
+                });
+            }
+            else {
+                var objContato = new Object();
+
+                objContato.Id = 0;
+                objContato.NrSeq = lista_contatos.size + 1;
+                objContato.Telefone = vTelefone;
+                objContato.Ramal = vRamal;
+                objContato.Celular = vCelular;
+                objContato.Email = vEmail;
+                lista_contatos.add(objContato);
+
+                for (let item of lista_contatos) {
+                    tr = $('<tr/>');
+                    tr.append("<td>" + item.NrSeq + "</td>");
+                    tr.append("<td>" + item.Celular + "</td>");
+                    tr.append("<td>" + item.Telefone + "</td>");
+                    tr.append("<td>" + item.Ramal + "</td>");
+                    tr.append("<td><a href=mailto:" + item.Email + ">" + item.Email + "</a></td>");
+                    tr.append("<td><a href='javascript:void(0)' onclick='excluir_contato(" + item.NrSeq + ");' title='Excluir'><span style='color: Tomato;'><i class='fas fa-trash-alt'></i></span></a></td>");
+                }
+
+                $("#tab_fornecedores").append(tr);
+                $("#Contato_Telefone").val('');
+                $("#Contato_Ramal").val('');
+                $("#Contato_Celular").val('');
+                $("#Contato_Email").val('');
+            }
+        });
+
+        function excluir_contato(id) {
+            var i = 0;
+
+            for (let elem of lista_contatos) {
+                if (elem.NrSeq == id) {
+                    lista_contatos.delete(elem);
+                    break;
+                }
+            }
+
+            $('#tab_fornecedores tr:not(:first)').remove();
+
+            for(let item of lista_contatos) {
+                tr = $('<tr/>');
+                tr.append("<td>" + item.NrSeq + "</td>");
+                tr.append("<td>" + item.Celular + "</td>");
+                tr.append("<td>" + item.Telefone + "</td>");
+                tr.append("<td>" + item.Ramal + "</td>");
+                tr.append("<td><a href=mailto:" + item.Email + ">" + item.Email + "</a></td>");
+                tr.append("<td><a href='javascript:void(0)' onclick='excluir_contato(" + item.NrSeq + ");' title='Excluir'><span style='color: Tomato;'><i class='fas fa-trash-alt'></i></span></a></td>");
+                $("#tab_fornecedores").append(tr);
+            }
+        }
+
+        function gravar_dados() {
+            var array_contatos = [];           
+            array_contatos.length = lista_contatos.size-1;
+
+            for (let item of lista_contatos) {
+                array_contatos.push({
+                    id: parseInt(item.Id),
+                    nrseq: parseInt(item.NrSeq),
+                    celular: item.Celular,
+                    telefone: item.Telefone,
+                    ramal: parseInt(item.Ramal),
+                    email: item.Email
+                });
+            }
+
+            var dados_formulario = {
+                Fornecedor: {
+                    Id: parseInt($("#Fornecedor_Id").val()),
+                    NomeFantasia: $("#Fornecedor_NomeFantasia").val(),
+                    RazaoSocial: $("#Fornecedor_RazaoSocial").val(),
+                    NomeRepresentante: $("#Fornecedor_NomeRepresentante").val(),
+                    EndComplemento: $("#Fornecedor_EndComplemento").val(),
+                    EndNumero: $("#Fornecedor_EndNumero").val(),
+                    Site: $("#Fornecedor_Site").val(),
+                    TipoEmpresa: parseInt($("#Fornecedor_TipoEmpresa").val()),
+                    NumDocumento: $("#Fornecedor_NumDocumento").val(),
+                    InscrEstadual: $("#Fornecedor_InscrEstadual").val(),
+                    InscrMunicipal: $("#Fornecedor_InscrMunicipal").val(),
+                    Observacoes: $("#Fornecedor_Observacoes").val(),
+                    Ativo: $("#Fornecedor_Ativo").val(),
+                    Endereco: null,
+                    EnderecoId: parseInt($("#Fornecedor_EnderecoId").val()),
+                    Contatos: array_contatos
+                },
+                Contato: {
+                    Id: 0,
+                    NrSeq: 0,
+                    Telefone: "",
+                    Ramal: 0,
+                    Celular: "",
+                    Email: "",
+                    Fornecedor: null,
+                    FornecedorId: 0
+                },
+                ListaContatos: array_contatos
+            };
+
+            $.ajax({
+                contentType: 'application/json',
+                dataType: "json",
+                type: "POST",
+                url: 'Edit',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                     $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: JSON.stringify(dados_formulario),
+                success: function (msg) {
+                    swal({
+                        title: "Mensagem",
+                        text: "Fornecedor gravado com sucesso.",
+                        type: "success"
+                    });
+                    window.location.href = "@Url.Action("Index","Fornecedores")";
+                },
+                error: function () {
+                    swal({
+                        title: "Error",
+                        text: "Erro no processamento da requisição de gravação.",
+                        type: "error"
+                    });
+                }
+            });
+        }
+    </script>
+}

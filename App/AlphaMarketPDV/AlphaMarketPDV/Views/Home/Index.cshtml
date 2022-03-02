@@ -9,14 +9,13 @@
     {
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
+                <a asp-controller="Vendas" asp-action="ProcessarVenda" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
                     <span>
                         <i class="fas fa-cart-plus fa-2x"></i>
                     </span>
                     PDV
                 </a>
             </div>
-
             <div class="col py-3 px-lg-5">
                 <a asp-controller="Produtos" asp-action="Index" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar cadastro de produtos.">
                     <span>
@@ -29,7 +28,7 @@
 
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar abertura de caixa.">
+                <a onclick="VerificarCaixaAberto()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar abertura de caixa.">
                     <span>
                         <i class="fas fa-store fa-2x"></i>
                     </span>
@@ -48,7 +47,7 @@
 
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar fechamento de caixa.">
+                <a onclick="VerificarCaixaFechado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar fechamento de caixa.">
                     <span>
                         <i class="fas fa-store-slash fa-2x"></i>
                     </span>
@@ -67,7 +66,7 @@
 
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
+                <a asp-controller="FluxoCaixa" asp-action="Sangria" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
                     <span>
                         <i class="fas fa-hand-holding-usd fa-2x"></i>
                     </span>
@@ -86,7 +85,7 @@
 
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Consultar o preço de um produto.">
+                <a asp-controller="Produtos" asp-action="ConsultarPreco" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Consultar o preço de um produto.">
                     <span>
                         <i class="fas fa-search-dollar fa-2x"></i>
                     </span>
@@ -94,7 +93,7 @@
                 </a>
             </div>
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Listar estoque de produtos.">
+                <a asp-controller="Estoque" asp-action="Index" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Listar estoque de produtos.">
                     <span>
                         <i class="fas fa-boxes fa-2x"></i>
                     </span>
@@ -126,7 +125,7 @@
     {
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
+                <a asp-controller="Vendas" asp-action="ProcessarVenda" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
                     <span>
                         <i class="fas fa-cart-plus fa-2x"></i>
                     </span>
@@ -134,7 +133,7 @@
                 </a>
             </div>
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar abertura de caixa.">
+                <a onclick="VerificarCaixaAberto()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar abertura de caixa.">
                     <span>
                         <i class="fas fa-store fa-2x"></i>
                     </span>
@@ -145,7 +144,7 @@
 
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar fechamento de caixa.">
+                <a onclick="VerificarCaixaFechado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar fechamento de caixa.">
                     <span>
                         <i class="fas fa-store-slash fa-2x"></i>
                     </span>
@@ -153,7 +152,7 @@
                 </a>
             </div>
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
+                <a asp-controller="FluxoCaixa" asp-action="Sangria" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
                     <span>
                         <i class="fas fa-hand-holding-usd fa-2x"></i>
                     </span>
@@ -164,7 +163,7 @@
 
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Consultar o preço de um produto.">
+                <a asp-controller="Produtos" asp-action="ConsultarPreco" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Consultar o preço de um produto.">
                     <span>
                         <i class="fas fa-search-dollar fa-2x"></i>
                     </span>
@@ -200,18 +199,132 @@
     }
 </div>
 
-@section ScriptPage{
-    @{
-        <script type="text/javascript">
-            function AvisoRecursoNaoImplementado() {
-                swal({
-                    title: "Mensagem",
-                    text: "Este recurso ainda não foi implementado!",
-                    type: "error"
-                })
-            };
-        </script>
-    }
+<div class="modal"></div>
 
+@section ScriptPage{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <environment include="Development">
+        <script src="~/js/jquery-3.5.1.js"></script>        
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                asp-fallback-src="~/js/jquery-3.5.1.js">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+        $body = $("body");
+
+        function AvisoRecursoNaoImplementado() {
+            swal({
+                title: "Mensagem",
+                text: "Este recurso ainda não foi implementado!",
+                type: "error"
+            })
+        };
+
+        function VerificarCaixaAberto()
+        {            
+            $body.addClass("loading");
+
+            $.ajax({
+                contentType: 'application/json',
+                dataType: "json",
+                type: "POST",
+                url: 'Home/VerificarCaixaAberto',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {},
+                success: function (response) {
+                    $body.removeClass("loading");
+
+                    if (response == null)
+                    {
+                        swal({
+                            title: "Erro",
+                            text: "Erro verificar abertura de caixa.",
+                            type: "error"
+                        });
+                    }
+                    else
+                    {
+                        if (response == false) {
+                            window.location.href = "@Url.Action("Abertura", "FluxoCaixa")";
+                        }
+                        else {
+                            swal({
+                                title: "Caixa Aberto",
+                                text: "O caixa já se encontra aberto.",
+                                type: "error"
+                            });
+                        }
+                    }
+                },
+                error: function () {
+                    $body.removeClass("loading");
+
+                    swal({
+                        title: "Erro no processamento",
+                        text: "Erro verificar abertura de caixa.",
+                        type: "error"
+                    });
+                }
+            });
+        };
+
+        function VerificarCaixaFechado()
+        {           
+            $body.addClass("loading");
+
+            $.ajax({
+                contentType: 'application/json',
+                dataType: "json",
+                type: "POST",
+                url: 'Home/VerificarCaixaFechado',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {},
+                success: function (response) {
+                    $body.removeClass("loading");
+
+                    if (response == null)
+                    {
+                        swal({
+                            title: "Erro",
+                            text: "Erro verificar fechamento de caixa.",
+                            type: "error"
+                        });
+                    }
+                    else
+                    {
+                        if (response == false) {
+                            window.location.href = "@Url.Action("Fechamento", "FluxoCaixa")";
+                        }
+                        else {
+                            swal({
+                                title: "Caixa Fechado",
+                                text: "O caixa já se encontra fechado.",
+                                type: "error"
+                            });
+                        }
+                    }
+                },
+                error: function () {
+                    $body.removeClass("loading");
+
+                    swal({
+                        title: "Erro no processamento",
+                        text: "Erro verificar fechamento de caixa.",
+                        type: "error"
+                    });
+                }
+            });
+        };
+
+    </script>
 }

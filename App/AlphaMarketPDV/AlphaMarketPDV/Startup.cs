@@ -38,6 +38,12 @@ namespace AlphaMarketPDV
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                /*.AddJsonOptions(options => 
+                {
+                    options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                    options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                });*/
 
             services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
@@ -63,6 +69,9 @@ namespace AlphaMarketPDV
             services.AddScoped<ManutencaoService>();
             services.AddScoped<EnderecoService>();
             services.AddScoped<ContatoService>();
+            services.AddScoped<EstoqueService>();
+            services.AddScoped<VendasService>();
+            services.AddScoped<FluxoCaixaService>();
 
             services.AddIdentity<UsuarioApp, PerfilApp>(
                 options => options.Stores.MaxLengthForKeys = 128)

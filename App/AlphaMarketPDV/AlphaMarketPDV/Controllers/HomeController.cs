@@ -1,23 +1,25 @@
-﻿using AlphaMarketPDV.Models.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Services;
+using AlphaMarketPDV.Models.ViewModels;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
+    [Produces("application/json")]
     [Authorize]
     public class HomeController : Controller
     {
         private readonly ManutencaoService _manutencaoService;
+        private readonly FluxoCaixaService _fluxoCaixaService;
 
-        public HomeController(ManutencaoService manutencaoService)
+        public HomeController(ManutencaoService manutencaoService, FluxoCaixaService fluxoCaixaService)
         {
-            _manutencaoService = manutencaoService;        
+            _manutencaoService = manutencaoService;
+            _fluxoCaixaService = fluxoCaixaService;
         }
 
         [HttpGet]
@@ -90,5 +92,30 @@ namespace AlphaMarketPDV.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> VerificarCaixaAberto()
+        {           
+            var resp = await _fluxoCaixaService.VerificarCaixaAbertoAsync();
+            return Json(resp);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> VerificarCaixaFechado()
+        {
+            var resp = await _fluxoCaixaService.VerificarCaixaFechadoAsync();
+            return Json(resp);
+        }
+
+
+
+
+
+
+
+
+
     }
 }

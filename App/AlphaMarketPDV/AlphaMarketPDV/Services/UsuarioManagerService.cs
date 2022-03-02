@@ -9,6 +9,7 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace AlphaMarketPDV.Services
 {
@@ -18,44 +19,40 @@ namespace AlphaMarketPDV.Services
         private readonly UserManager<UsuarioApp> _userManager;
         private readonly SignInManager<UsuarioApp> _signInManager;
         private readonly PerfilManagerService _perfilManagerService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UsuarioManagerService(IHostingEnvironment appEnvironment,
-                                     UserManager<UsuarioApp> userManager,
-                                     SignInManager<UsuarioApp> signInManager,
-                                     PerfilManagerService perfilManagerService)
+        public UsuarioManagerService(IHostingEnvironment appEnvironment, UserManager<UsuarioApp> userManager,
+                                     SignInManager<UsuarioApp> signInManager, PerfilManagerService perfilManagerService,
+                                     IHttpContextAccessor httpContextAccessor)
         {
             _appEnvironment = appEnvironment;
             _userManager = userManager;
             _signInManager = signInManager;
             _perfilManagerService = perfilManagerService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task<List<UsuarioApp>> ListarTodosUsuariosAsync()
+        public async Task<List<UsuarioApp>> GetUsuariosAsync()
         {
             return await _userManager.Users.Cast<UsuarioApp>().ToListAsync();
         }
 
-        public List<UsuarioApp> ListarTodosUsuarios()
-        {
-            return _userManager.Users.ToList();
-        }
-
-        public async Task<UsuarioApp> ListarUsuarioPorIdAsync(string Id)
+        public async Task<UsuarioApp> GetUsuarioPorIdAsync(string Id)
         {
             return await _userManager.FindByIdAsync(Id);
         }
 
-        public async Task<List<System.Security.Claims.Claim>> ListarAtributosUsuariosAsync(UsuarioApp usuario)
+        public async Task<List<System.Security.Claims.Claim>> GetAtributosUsuarioAsync(UsuarioApp usuario)
         {
             return (List<System.Security.Claims.Claim>)await _userManager.GetClaimsAsync(usuario);
         }
 
-        public async Task<List<string>> ListarPerfilsUsuarioAsync(UsuarioApp usuario)
+        public async Task<List<string>> GetPerfilsUsuarioAsync(UsuarioApp usuario)
         {
             return (List<string>)await _userManager.GetRolesAsync(usuario);
         }
 
-        public async Task<bool> UsuarioEstahNoPerfilAsync(UsuarioApp usuario, PerfilApp perfil)
+        public async Task<bool> GetUsuarioEstahNoPerfilAsync(UsuarioApp usuario, PerfilApp perfil)
         {
             return await _userManager.IsInRoleAsync(usuario, perfil.Name);
         }
@@ -67,7 +64,7 @@ namespace AlphaMarketPDV.Services
 
         public async Task<bool> UsuarioCadastradoLocalmente(UsuarioApp usuario) 
         {
-            var usuarioAux = await ListarUsuarioPorIdAsync(usuario.Id);
+            var usuarioAux = await GetUsuarioPorIdAsync(usuario.Id);
             return (usuarioAux.CadastroLocal);
         }
 
@@ -124,13 +121,13 @@ namespace AlphaMarketPDV.Services
             var perfilSupervisor = _perfilManagerService.ListarPerfilSupervisor();
             var perfilAtendente = _perfilManagerService.ListarPerfilAtendente();
 
-            if (await UsuarioEstahNoPerfilAsync(usuarioApp, perfilSupervisor))
+            if (await GetUsuarioEstahNoPerfilAsync(usuarioApp, perfilSupervisor))
             {
                 return perfilSupervisor;
             }
             else
             {
-                if (await UsuarioEstahNoPerfilAsync(usuarioApp, perfilAtendente))
+                if (await GetUsuarioEstahNoPerfilAsync(usuarioApp, perfilAtendente))
                 {
                     return perfilAtendente;
                 }
@@ -195,6 +192,11 @@ namespace AlphaMarketPDV.Services
         {
             string resetToken = await _userManager.GeneratePasswordResetTokenAsync(usuario);
             return await _userManager.ResetPasswordAsync(usuario, resetToken, senha);
+        }
+
+        public async Task<UsuarioApp> GetUsuarioLogadoAynsc() 
+        {            
+            return await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
         }
     }
 }

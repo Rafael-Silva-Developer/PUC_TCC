@@ -22,7 +22,7 @@ namespace AlphaMarketPDV.Services
             this._appEnvironment = appEnvironment;
         }
 
-        public async Task<List<Produto>> ListarTodosAsync()
+        public async Task<List<Produto>> GetProdutosAsync()
         {
             return await _context.Produto.OrderBy(x => x.DescricaoLonga).ToListAsync();
         }
@@ -34,12 +34,17 @@ namespace AlphaMarketPDV.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Produto> ListarPorIdAsync(int id) 
+        public async Task<Produto> GetProdutoPorIdAsync(int id) 
         {
             return await _context.Produto.Include(obj => obj.Categoria).Include(obj => obj.UnidadeMedida).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
-        public async Task<Produto> ListarPorIdNoTrackingAsync(int id)
+        public async Task<Produto> GetProdutoPorCodigoAsync(string codigo) 
+        {
+            return await _context.Produto.FirstOrDefaultAsync(p => p.Codigo == codigo);    
+        }
+
+        public async Task<Produto> GetProdutoPorIdNoTrackingAsync(int id)
         {
             return await _context.Produto.AsNoTracking().Include(obj => obj.Categoria).Include(obj => obj.UnidadeMedida).FirstOrDefaultAsync(obj => obj.Id == id);
         }
@@ -103,7 +108,7 @@ namespace AlphaMarketPDV.Services
             }
         }
 
-        public bool CodigoProdutoExistente(Produto produto) 
+        public bool GetVerificarCodigoExistente(Produto produto) 
         {
             var qtd = _context.Produto.Where(p => p.Codigo == produto.Codigo).Count();
 

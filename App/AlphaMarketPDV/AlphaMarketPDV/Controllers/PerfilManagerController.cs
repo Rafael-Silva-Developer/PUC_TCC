@@ -50,11 +50,11 @@ namespace AlphaMarketPDV.Controllers
                 NomePerfil = objPerfil.Name
             };
 
-            var listaUsuarios = await _usuarioManagerService.ListarTodosUsuariosAsync();
+            var listaUsuarios = await _usuarioManagerService.GetUsuariosAsync();
 
             foreach (var usuario in listaUsuarios)
             {
-                if (await _usuarioManagerService.UsuarioEstahNoPerfilAsync(usuario, objPerfil))
+                if (await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(usuario, objPerfil))
                 {
                     model.ListaUsuarios.Add(usuario.Nome + " || " + usuario.UserName);
                 }
@@ -102,7 +102,7 @@ namespace AlphaMarketPDV.Controllers
 
             ViewBag.NomePerfil = perfil.Name;
             var model = new List<UsuarioPerfilViewModel>();
-            var listaUsuarios = await _usuarioManagerService.ListarTodosUsuariosAsync();
+            var listaUsuarios = await _usuarioManagerService.GetUsuariosAsync();
             var perfilSupervisor = _perfilManagerService.ListarPerfilSupervisor();
             var perfilAtendente = _perfilManagerService.ListarPerfilAtendente();
 
@@ -110,7 +110,7 @@ namespace AlphaMarketPDV.Controllers
             {
                 if (perfilSupervisor.Id == perfil.Id) 
                 {
-                    if (await _usuarioManagerService.UsuarioEstahNoPerfilAsync(user, perfilSupervisor))                    
+                    if (await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(user, perfilSupervisor))                    
                     {
                         var usuarioNoPerfil = new UsuarioPerfilViewModel
                         {
@@ -122,7 +122,7 @@ namespace AlphaMarketPDV.Controllers
                     }
                     else 
                     {
-                        if (!await _usuarioManagerService.UsuarioEstahNoPerfilAsync(user, perfilAtendente)) 
+                        if (!await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(user, perfilAtendente)) 
                         {
                             var usuarioNoPerfil = new UsuarioPerfilViewModel
                             {
@@ -137,7 +137,7 @@ namespace AlphaMarketPDV.Controllers
 
                 if (perfilAtendente.Id == perfil.Id)
                 {
-                    if (await _usuarioManagerService.UsuarioEstahNoPerfilAsync(user, perfilAtendente))
+                    if (await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(user, perfilAtendente))
                     {
                         var usuarioNoPerfil = new UsuarioPerfilViewModel
                         {
@@ -149,7 +149,7 @@ namespace AlphaMarketPDV.Controllers
                     }
                     else
                     {
-                        if (!await _usuarioManagerService.UsuarioEstahNoPerfilAsync(user, perfilSupervisor))
+                        if (!await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(user, perfilSupervisor))
                         {
                             var usuarioNoPerfil = new UsuarioPerfilViewModel
                             {
@@ -176,14 +176,14 @@ namespace AlphaMarketPDV.Controllers
 
             for (int i = 0; i < model.Count; i++)
             {
-                var user = await _usuarioManagerService.ListarUsuarioPorIdAsync(model[i].UsuarioId); 
+                var user = await _usuarioManagerService.GetUsuarioPorIdAsync(model[i].UsuarioId); 
                 IdentityResult result = null;
 
-                if (model[i].IsSelected && !(await _usuarioManagerService.UsuarioEstahNoPerfilAsync(user, perfil)))            
+                if (model[i].IsSelected && !(await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(user, perfil)))            
                 {
                     result = await _usuarioManagerService.AdicionarUsuarioNoPerfilAsync(user, perfil);
                 }
-                else if (!model[i].IsSelected && await _usuarioManagerService.UsuarioEstahNoPerfilAsync(user, perfil))
+                else if (!model[i].IsSelected && await _usuarioManagerService.GetUsuarioEstahNoPerfilAsync(user, perfil))
                 {
                     result = await _usuarioManagerService.RemoverUsuarioDoPerfilAsync(user, perfil);
                 }
