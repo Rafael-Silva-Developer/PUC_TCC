@@ -386,83 +386,110 @@
         }
 
         function GravarVenda() {
-            var array_produtos = [];
-            array_produtos.length = lst_produtos_entrada.size-1;
+            var array_itens_venda = [];
+            var array_itens_forma_pag = [];
 
-            for (let item of lst_produtos_entrada) {
-                array_produtos.push({
-                    Id: 0,
-                    NrSeq: parseInt(item.NrSeq),
-                    Qtd: parseFloat(item.Quantidade),
-                    ValorUnitario: 0,
-                    ValorItem: parseFloat(item.SubTotal.replace('.', '').replace(',','.')),
-                    EntradaEstoque: null,
-                    EntradaEstoqueId: 0,
-                    Produto: null,
-                    ProdutoId: parseInt(item.IdProduto)
+            if (mTotalRestante > 0) {
+                swal({
+                    title: "Venda Falha",
+                    text: "Ainda há saldo a ser quitado.",
+                    type: "error"
                 });
-            };
+            }
+            else
+            if (lst_itens_venda.size == 0) {
+                    swal({
+                    title: "Venda Falha",
+                    text: "Nenhum item adicionado.",
+                    type: "error"
+                    });
+            }
+            else {
+                array_itens_venda.length = lst_itens_venda.size - 1;
+                for (let item of lst_itens_venda) {
+                    array_itens_venda.push({
+                        Id: 0,
+                        NrSeq: parseInt(item.NrSeq),
+                        ValorUnitario: parseFloat(item.ValorUnitario.replace('.', '').replace(',', '.')),
+                        Qtd: parseFloat(item.Qtd),
+                        ValorItem: parseFloat(item.ValorItem.replace('.', '').replace(',', '.')),
+                        Cancelado: item.Cancelado,
+                        Produto: null,
+                        ProdutoId: parseInt(item.ProdutoId),
+                        Venda: null,
+                        VendaId: 0
+                    });
+                };
 
-            var dados_formulario = {
-                EntradaEstoque: {
-                    Id: 0,
-                    DataHora: $("#EntradaEstoque_DataHoraInformada").val(),
-                    ValorTotal: parseFloat(mTotal),
-                    Observacao: $("#EntradaEstoque_Observacao").val(),
-                    DataHoraInformada: $("#EntradaEstoque_DataHoraInformada").val(),
-                    Fornecedor: null,
-                    FornecedorId: parseInt($("#EntradaEstoque_FornecedorId").val()),
-                    Usuario: null,
-                    UsuarioId: 0,
-                    ItensEntradaEstoque: array_produtos,
-                    IdentificadorRegistro: null
-                },
-                Produto: null,
-                ValorCusto: 0,
-                Quantidade: 0,
-                SubTotal: 0,
-                TotalEntrada: 0,
-                ListaFornecedores: null
-            };
+                array_itens_forma_pag.length = lst_forma_pag.size - 1;
+                for (let fpag of lst_forma_pag) {
+                    array_itens_forma_pag.push({
+                        Id: 0,
+                        NrSeq: parseInt(fpag.NrSeq),
+                        ValorPago: parseFloat(fpag.ValorPago.replace('.', '').replace(',', '.')),
+                        ValorTroco: 0,
+                        Caixa: null,
+                        CaixaId: 0,
+                        FormaPagamento: null,
+                        FormaPagamentoId: parseInt(fpag.FormaPagamentoId)
+                    });
+                };
 
-            $body.addClass("loading");
-            $.ajax({
-                contentType: 'application/json',
-                dataType: "json",
-                type: "POST",
-                url: 'Entrada',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("XSRF-TOKEN",
-                     $('input:hidden[name="__RequestVerificationToken"]').val());
-                },
-                data: JSON.stringify(dados_formulario),
-                success: function (msg) {
-                    $body.removeClass("loading");
-                    if (msg == 'OK') {
+                var dados_formulario = {
+                    Produto: null,
+                    Quantidade: 0,
+                    SubTotal: 0,
+                    TotalVenda: mTotalVenda,
+                    Desconto: mTotalDesconto,
+                    TotalPagar: mTotalPagar,
+                    ListaFormasPagamento: null,
+                    ItensVenda: array_itens_venda,
+                    ItemPagamento: array_itens_forma_pag,
+                    ListaFornecedores: null,
+                    FormaPagamentoId: 0,
+                    ValorFormaPag: 0,
+                    ValorRestante: mValorRestante
+                };
+
+                $body.addClass("loading");
+                $.ajax({
+                    contentType: 'application/json',
+                    dataType: "json",
+                    type: "POST",
+                    url: 'ProcessarVenda',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                         $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: JSON.stringify(dados_formulario),
+                    success: function (msg) {
+                        $body.removeClass("loading");
+                        if (msg == 'OK') {
+                            swal({
+                                title: "Venda Processada",
+                                text: "Venda realizada com sucesso.",
+                                type: "success"
+                            });
+                            window.location.href = "@Url.Action("ProcessarVenda", "Vendas")";
+                        }
+                        else {
+                            swal({
+                                title: "Venda Falha",
+                                text: "Erro no processamento da venda.",
+                                type: "error"
+                            });
+                        }
+                    },
+                    error: function () {
+                        $body.removeClass("loading");
                         swal({
-                            title: "Entrada",
-                            text: "Entrada gravada com sucesso.",
-                            type: "success"
-                        });
-                        window.location.href = "@Url.Action("Index","Estoque")";
-                    }
-                    else {
-                        swal({
-                            title: "Entrada",
-                            text: "Erro no processamento da requisição de gravação.",
+                            title: "Venda Falha",
+                            text: "Erro no processamento da requisição de venda.",
                             type: "error"
                         });
                     }
-                },
-                error: function () {
-                    $body.removeClass("loading");
-                    swal({
-                        title: "Entrada",
-                        text: "Erro no processamento da requisição de gravação.",
-                        type: "error"
-                    });
-                }
-            });
+                });
+            }
         }
 
         $(document).ready(function () {
@@ -575,7 +602,71 @@
         });
 
         $("#Quantidade").change(function () {
-            CalcularSubTotal();
+            var vIdProduto = $("#Produto_Id").val();
+            var vQuantidade = $("#Quantidade").val();
+
+            if (vIdProduto.trim() == '') {
+                swal({
+                    title: "Error",
+                    text: "É necessário selecionar um produto!",
+                    type: "error"
+                });
+                $("#Quantidade").val("0");
+            } else {
+                $body.addClass("loading");
+                $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "ObterSaldoDisponivel",
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN",
+                                $('input:hidden[name="__RequestVerificationToken"]').val());
+                            },
+                        data: {
+                            "idProduto": vIdProduto
+                        },
+                        success: function (response) {
+                            $body.removeClass("loading");
+                            if (response == null) {
+                                swal({
+                                    title: "Falha",
+                                    text: "Falha ao tentar obter saldo disponivel!",
+                                    type: "error"
+                                });
+                                $("#Quantidade").val("0");
+                            }
+                            else {
+                                if (response == 0) {
+                                    swal({
+                                        title: "Estoque zerado",
+                                        text: "O produto não possui saldo em estoque!",
+                                        type: "error"
+                                    });
+                                    $("#Quantidade").val("0");
+                                } else {
+                                    if (response < parseFloat(vQuantidade.replace('.', '').replace(',', '.'))) {
+                                        swal({
+                                            title: "Saldo insuficiente",
+                                            text: "O produto não possui saldo suficiente em estoque!",
+                                            type: "error"
+                                        });
+                                        $("#Quantidade").val("0");
+                                    };
+                                };
+                            };
+                        },
+                        error: function () {
+                            $body.removeClass("loading");
+                            swal({
+                                title: "Error",
+                                text: "Falha ao tentar obter saldo disponivel!",
+                                type: "error"
+                            });
+                        }
+                });
+
+                CalcularSubTotal();
+            }
         });
 
         $("#Btn_Pesquisar_Produto").click(function () {
@@ -710,7 +801,7 @@
             }
             else
             {
-                if (parseFloat(vValorFormaPag.replace('.', '').replace(',', '.')) > mValorRestante)
+                if (parseFloat(vValorFormaPag.replace('.', '').replace(',', '.')) > Math.round(mValorRestante * 100) / 100 )
                 {
                     swal({
                         title: "Error",
@@ -743,10 +834,16 @@
 
                     $("#Tab_Forma_Pag_Adicionado").append(tr);
                     mValorRestante = mValorRestante - parseFloat(vValorFormaPag.replace('.', '').replace(',', '.'));
+
+                    if (mValorRestante < 0)
+                    {
+                        mValorRestante = 0;
+                    }
+
                     $("#ValorRestante").val(mValorRestante.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
 
                     LimparCamposPagamento();
-                }               
+                }
             }
         });
 

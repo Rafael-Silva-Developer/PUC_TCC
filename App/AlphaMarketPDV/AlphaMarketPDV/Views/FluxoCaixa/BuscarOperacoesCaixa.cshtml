@@ -1,0 +1,187 @@
+﻿@model IEnumerable<AlphaMarketPDV.Models.Caixa>;
+
+@{
+    ViewData["Title"] = "Busca de Operações Realizadas";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form class="navbar-form navbar-left" role="search">
+            <div class="form-control-plaintext">
+                <strong>
+                    <label for="dataIni">Data Inicio</label>
+                </strong>
+                <div class="col-lg-6">
+                    <input type="date" class="form-control" name="dataIni" value=@ViewData["DataIni"] />
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label for="dataFim">Data Fim</label>
+                </strong>
+                <div class="col-lg-6">
+                    <input type="date" class="form-control" name="dataFim" value=@ViewData["DataFim"] />
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <button type="submit" class="btn btn-dark">Pesquisar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h5 class="panel-heading">
+            Total de Vendas = R$ @Model.Sum(obj => obj.Valor).ToString("F2") /
+            Total de Descontos = R$ @Model.Sum(obj => obj.Valor).ToString("F2") /
+            Total de Pago = R$ @Model.Sum(obj => obj.Valor).ToString("F2")
+        </h5>
+    </div>
+
+    <hr />
+
+    <div class="panel-body">
+        <table id="Tab_Mestre" class="table table-striped table-hover table-row-border compact">
+            <thead>
+                <tr class="success">
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DataHora)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Valor)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TipoOperacao)
+                    </th>
+                    <th>
+                        Usuário
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DataHora)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Valor)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoOperacao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Usuario.Nome)
+                        </td>                       
+                        <td>
+                            <a href='javascript:void(0)' onclick='DetalharCaixa("@Html.DisplayFor(modelItem => item.Id)");' title='Detalhar as formas de pagamento...'><span style='color: cadetblue;'><i class='fas fa-search-plus'></i></span></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="myModal" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="true" data-backdrop="static"></div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <environment include="Development">
+        <script src="~/js/jquery-3.5.1.js"></script>
+        <script src="~/js/jquery.dataTables.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                asp-fallback-src="~/js/jquery-3.5.1.js">
+        </script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"
+                asp-fallback-src="~/js/jquery.dataTables.min.js">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#Tab_Mestre').DataTable(
+                {
+                    "order": [[1, "asc"]],
+                    columnDefs: [
+                        { targets: 0, className: 'dt-center' },
+                        { targets: 1, className: 'dt-center' },
+                        { targets: 2, className: 'dt-center' },
+                        { targets: 3, className: 'dt-center' },
+                        { targets: 4, className: 'dt-center' },
+                        { targets: 5, className: 'dt-center' }
+                    ],
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Exibindo de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "Último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        },
+                        "select": {
+                            "rows": {
+                                "_": "Selecionado %d linhas",
+                                "0": "Nenhuma linha selecionada",
+                                "1": "Selecionado 1 linha"
+                            }
+                        }
+                    },
+                    dom: 'St'
+                }
+            );
+        });
+
+        function DetalharCaixa(id) {
+            $("#myModal").load("ObterDetalheCaixa?idCaixa=" + id, function () {
+                $('#myModal').modal('show');
+                $(".modal-backdrop").remove();
+            });
+        }
+
+    </script>
+}

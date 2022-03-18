@@ -3,14 +3,16 @@ using System;
 using AlphaMarketPDV.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AlphaMarketPDV.Migrations
 {
     [DbContext(typeof(AlphaMarketPDVContext))]
-    partial class AlphaMarketPDVContextModelSnapshot : ModelSnapshot
+    [Migration("20220304161858_Identificador")]
+    partial class Identificador
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -535,8 +537,6 @@ namespace AlphaMarketPDV.Migrations
                     b.Property<int>("CaixaId");
 
                     b.Property<DateTime>("DataHora");
-
-                    b.Property<DateTime>("DataVenda");
 
                     b.Property<string>("IdentificadorRegistro")
                         .HasMaxLength(32);

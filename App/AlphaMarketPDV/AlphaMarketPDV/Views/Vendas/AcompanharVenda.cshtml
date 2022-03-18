@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Acompanhamento de Vendas";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<form class="form-horizontal" asp-action="BuscaVendasRealizadas">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-control-plaintext">
+                <strong>
+                    <label for="minDate" class="col-lg-3 control-label">Data Inicio</label>
+                </strong>
+                <div class="col-lg-6">
+                    <input type="date" name="dataIni" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label for="maxDate" class="col-lg-3 control-label">Data Final</label>
+                </strong>
+                <div class="col-lg-6">
+                    <input type="date" name="dataFim" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-control-plaintext">
+        <input type="submit" value="Pesquisar" class="btn btn-dark" />
+    </div>
+</form>
+

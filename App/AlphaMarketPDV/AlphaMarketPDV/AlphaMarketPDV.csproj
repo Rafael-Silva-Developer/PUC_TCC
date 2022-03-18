@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chart.js" Version="2.9.3" />
     <PackageReference Include="jquery.mask" Version="1.14.16" />
     <PackageReference Include="jQuery.Validation.Globalize" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.1.7" />

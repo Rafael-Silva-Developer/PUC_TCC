@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
 {
@@ -12,19 +8,24 @@ namespace AlphaMarketPDV.Models
         public int Id { get; private set; }
 
         [Display(Name = "NRSEQ")]
-        public int NrSeq { get; private set; }
+        public int NrSeq { get; set; }
 
         [Display(Name = "Valor Unitário")]
-        public double ValorUnitario { get; private set; }
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
+        public double ValorUnitario { get; set; }
 
         [Display(Name = "Quantidade")]
-        public double Qtd { get; private set; }
+        [DisplayFormat(DataFormatString = "{0:F3}")]
+        public double Qtd { get; set; }
 
         [Display(Name = "Sub-Total")]
-        public double ValorItem { get; private set; }
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
+        public double ValorItem { get; set; }
 
         [Display(Name = "Cancelado")]
-        public bool Cancelado { get; private set; }
+        public bool Cancelado { get; set; }
 
         public Produto Produto { get; set; }
 
@@ -43,30 +44,14 @@ namespace AlphaMarketPDV.Models
         public ItemVenda(int id, int nrSeq, double valorUnitario, double qtd, double valorItem, 
                          bool cancelado, Produto produto, Venda venda)
         {
-            this.Id = id;
-            this.NrSeq = nrSeq;
-            this.ValorUnitario = valorUnitario;
-            this.Qtd = qtd;
-            this.ValorItem = valorItem;
-            this.Cancelado = cancelado;
-            this.Produto = produto;
-            this.Venda = venda;
-        }
-
-        public void AumentarSaldo()
-        {
-           // Produto.AdicionarQtdEstoque(Qtd);
-        }
-
-        public void DiminuirSaldo()
-        {
-            //Produto.RetirarQtdEstoque(Qtd);
-        }
-
-        public void CalcularSubTotal() 
-        {
-            ValorItem = (Qtd * ValorUnitario);
-        }
-
+            Id = id;
+            NrSeq = nrSeq;
+            ValorUnitario = valorUnitario;
+            Qtd = qtd;
+            ValorItem = valorItem;
+            Cancelado = cancelado;
+            Produto = produto;
+            Venda = venda;
+        }    
     }
 }

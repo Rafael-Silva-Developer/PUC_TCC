@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Data;
 using AlphaMarketPDV.Models;
-using AlphaMarketPDV.Services.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using AlphaMarketPDV.Models.Enums;
+using System;
+using System.Collections.Generic;
 
 namespace AlphaMarketPDV.Services
 {
@@ -75,7 +75,30 @@ namespace AlphaMarketPDV.Services
             return await _context.Caixa.FirstOrDefaultAsync(obj => obj.IdentificadorRegistro == id);
         }
 
+        public async Task<List<Caixa>> GetOperacaoesCaixaPorPeriodoAsync(DateTime? dataIni, DateTime? dataFim)
+        {
+            var result = from obj in _context.Caixa select obj;
 
+            if (dataIni.HasValue)
+            {
+                result = result.Where(x => x.DataHora >= dataIni.Value);
+            };
+
+            if (dataFim.HasValue)
+            {
+                result = result.Where(x => x.DataHora <= dataFim.Value);
+            };
+
+            return await result
+                .Include(x => x.Usuario)
+                .OrderBy(x => x.DataHora)
+                .ToListAsync();
+        }
+
+        public async Task<List<CaixaPagamento>> GetItensCaixaPorIdCaixaAsync(int idCaixa)
+        {         
+            return await _context.CaixaPagamento.Include(obj => obj.FormaPagamento).Where(obj => obj.CaixaId == idCaixa).ToListAsync();         
+        }
 
     }
 }

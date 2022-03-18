@@ -42,6 +42,18 @@ namespace AlphaMarketPDV.Services
             return await _context.Estoque.FirstOrDefaultAsync(obj => obj.ProdutoId == idProduto && obj.LojaId == 1);
         }
 
+        public async Task<double> GetSaldoEstoqueAsync(int idProduto) 
+        { 
+            try
+            {
+                return await _context.Estoque.Where(e => e.ProdutoId == idProduto).Select(c => c.Saldo).SumAsync();
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         public async Task InserirEntradaAsync(EntradaEstoque obj)
         {
             _context.Add(obj);
@@ -136,7 +148,7 @@ namespace AlphaMarketPDV.Services
                             ProdutoId = idProduto
                         };
 
-                        if (objProduto.QuantMinima >= qtd)
+                        if (objProduto.QuantMinima <= qtd)
                         {
                             newEstoqueProduto.Status = StatusEstoque.NORMAL;
                         }
@@ -150,5 +162,8 @@ namespace AlphaMarketPDV.Services
                 }
             }
         }
+    
+    
+    
     }
 }

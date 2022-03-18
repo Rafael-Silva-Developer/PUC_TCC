@@ -7,7 +7,7 @@ namespace AlphaMarketPDV.Models
 {
     public class Caixa
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "A data de operação é obrigatória!")]
@@ -16,6 +16,8 @@ namespace AlphaMarketPDV.Models
 
         [Required(ErrorMessage = "O valor da operação é obrigatório!")]
         [Display(Name = "Valor")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
         public double Valor { get; set; }
 
         [Required(ErrorMessage = "O tipo de operação é obrigatório!")]
@@ -32,6 +34,7 @@ namespace AlphaMarketPDV.Models
 
         [StringLength(32)]
         public string IdentificadorRegistro { get; set; }
+
         public Caixa() 
         { 
         }

@@ -11,6 +11,7 @@ namespace AlphaMarketPDV.Models
         public int NrSeq { get; set; }
 
         [Display(Name = "Quantidade")]
+        [DisplayFormat(DataFormatString = "{0:F3}")]
         public double Qtd { get; set; }
 
         [Display(Name = "Valor Unitário")]

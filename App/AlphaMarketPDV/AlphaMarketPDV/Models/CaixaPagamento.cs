@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
 {
     public class CaixaPagamento
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; set; }
 
-        [Display(Name = "NrSeq")]
+        [Display(Name = "#")]
         public int NrSeq { get; set; }
 
         [Display(Name = "Valor Pago")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
         public double ValorPago { get; set; }
 
         [Display(Name = "Valor Troco")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
         public double ValoTroco { get; set; }
 
         public Caixa Caixa { get; set; }
@@ -37,12 +37,12 @@ namespace AlphaMarketPDV.Models
         public CaixaPagamento(int id, int nrSeq, double valorPago, double valoTroco, 
                               Caixa caixa, FormaPagamento formaPagamento)
         {
-            this.Id = id;
-            this.NrSeq = nrSeq;
-            this.ValorPago = valorPago;
-            this.ValoTroco = valoTroco;
-            this.Caixa = caixa;
-            this.FormaPagamento = formaPagamento;
+            Id = id;
+            NrSeq = nrSeq;
+            ValorPago = valorPago;
+            ValoTroco = valoTroco;
+            Caixa = caixa;
+            FormaPagamento = formaPagamento;
         }
     }
 }

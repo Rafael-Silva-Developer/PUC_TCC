@@ -9,7 +9,7 @@
     {
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a asp-controller="Vendas" asp-action="ProcessarVenda" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
+                <a onclick="VerificarPDV()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
                     <span>
                         <i class="fas fa-cart-plus fa-2x"></i>
                     </span>
@@ -66,7 +66,7 @@
 
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a asp-controller="FluxoCaixa" asp-action="Sangria" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
+                <a onclick="VerificarSangria()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
                     <span>
                         <i class="fas fa-hand-holding-usd fa-2x"></i>
                     </span>
@@ -74,7 +74,7 @@
                 </a>
             </div>
             <div class="col py-3 px-lg-5">
-                <a onclick="AvisoRecursoNaoImplementado()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acompanhar as vendas realizadas em um período.">
+                <a asp-controller="Vendas" asp-action="AcompanharVenda" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acompanhar as vendas realizadas em um determinado período (Planilha).">
                     <span>
                         <i class="fas fa-calculator fa-2x"></i>
                     </span>
@@ -125,7 +125,7 @@
     {
         <div class="row mx-lg-n5">
             <div class="col py-3 px-lg-5">
-                <a asp-controller="Vendas" asp-action="ProcessarVenda" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
+                <a onclick="VerificarPDV()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Acesssar ponto de venda.">
                     <span>
                         <i class="fas fa-cart-plus fa-2x"></i>
                     </span>
@@ -152,7 +152,7 @@
                 </a>
             </div>
             <div class="col py-3 px-lg-5">
-                <a asp-controller="FluxoCaixa" asp-action="Sangria" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
+                <a onclick="VerificarSangria()" class="btn btn-dark btn-lg btn-block" style="height: 65px; width: 400px;" title="Realizar sangria de caixa.">
                     <span>
                         <i class="fas fa-hand-holding-usd fa-2x"></i>
                     </span>
@@ -224,8 +224,111 @@
             })
         };
 
+
+        function VerificarSangria()
+        {
+            $body.addClass("loading");
+
+            $.ajax({
+                contentType: 'application/json',
+                dataType: "json",
+                type: "POST",
+                url: 'Home/VerificarCaixaAberto',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {},
+                success: function (response) {
+                    $body.removeClass("loading");
+
+                    if (response == null)
+                    {
+                        swal({
+                            title: "Erro",
+                            text: "Erro ao verificar status do caixa.",
+                            type: "error"
+                        });
+                    }
+                    else
+                    {
+                        if (response == false) {
+                            swal({
+                                title: "Caixa Fechado",
+                                text: "É necessário abrir o caixa para realizar uma sangria.",
+                                type: "error"
+                            });
+                        }
+                        else {
+                            window.location.href = "@Url.Action("Sangria", "FluxoCaixa")";
+                        }
+                    }
+                },
+                error: function () {
+                    $body.removeClass("loading");
+
+                    swal({
+                        title: "Erro no processamento",
+                        text: "Erro verificar sangria.",
+                        type: "error"
+                    });
+                }
+            });
+        };
+
+        function VerificarPDV()
+        {
+            $body.addClass("loading");
+
+            $.ajax({
+                contentType: 'application/json',
+                dataType: "json",
+                type: "POST",
+                url: 'Home/VerificarCaixaAberto',
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("XSRF-TOKEN",
+                        $('input:hidden[name="__RequestVerificationToken"]').val());
+                },
+                data: {},
+                success: function (response) {
+                    $body.removeClass("loading");
+
+                    if (response == null)
+                    {
+                        swal({
+                            title: "Erro",
+                            text: "Erro ao verificar status do caixa.",
+                            type: "error"
+                        });
+                    }
+                    else
+                    {
+                        if (response == false) {
+                            swal({
+                                title: "Caixa Fechado",
+                                text: "É necessário abrir o caixa para realizar uma venda.",
+                                type: "error"
+                            });
+                        }
+                        else {
+                            window.location.href = "@Url.Action("ProcessarVenda", "Vendas")";
+                        }
+                    }
+                },
+                error: function () {
+                    $body.removeClass("loading");
+
+                    swal({
+                        title: "Erro no processamento",
+                        text: "Erro verificar pdv.",
+                        type: "error"
+                    });
+                }
+            });
+        };
+
         function VerificarCaixaAberto()
-        {            
+        {
             $body.addClass("loading");
 
             $.ajax({
@@ -276,7 +379,7 @@
         };
 
         function VerificarCaixaFechado()
-        {           
+        {
             $body.addClass("loading");
 
             $.ajax({
