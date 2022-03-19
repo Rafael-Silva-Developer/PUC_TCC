@@ -265,25 +265,33 @@ namespace AlphaMarketPDV.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GraficoTotalVenda([FromBody] FiltroRelatorioView fvm)
         {
-            var dtIni = fvm.DataInicio;
-            var dtFim = fvm.DataFinal;
+            DateTime dtIni;
+            DateTime dtFim;
 
-            if (fvm.DataInicio == null)
+            if (fvm == null)
             {
-                dtIni = new DateTime(DateTime.Now.Year, dtIni.Month, 1, 0, 0, 0);
-            }
-            else
-            {
-                dtIni = new DateTime(dtIni.Year, dtIni.Month, dtIni.Day, 0, 0, 0);
-            }
-
-            if (fvm.DataFinal == null)
-            {
+                dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
                 dtFim = DateTime.Now;
             }
             else
             {
-                dtFim = new DateTime(dtFim.Year, dtFim.Month, dtFim.Day, 23, 59, 59);
+                if (fvm.DataInicio == null)
+                {
+                    dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+                }
+                else
+                {
+                    dtIni = new DateTime(fvm.DataInicio.Year, fvm.DataInicio.Month, fvm.DataInicio.Day, 0, 0, 0);
+                }
+
+                if (fvm.DataFinal == null)
+                {
+                    dtFim = DateTime.Now;
+                }
+                else
+                {
+                    dtFim = new DateTime(fvm.DataFinal.Year, fvm.DataFinal.Month, fvm.DataFinal.Day, 23, 59, 59);
+                }
             }
 
             var dados = _vendasService.GetGraficoVendasPorPeriodo(dtIni, dtFim);
@@ -302,25 +310,33 @@ namespace AlphaMarketPDV.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GraficoProdutoMaisVendido([FromBody] FiltroRelatorioView fvm)
         {
-            var dtIni = fvm.DataInicio;
-            var dtFim = fvm.DataFinal;
+            DateTime dtIni;
+            DateTime dtFim;
 
-            if (fvm.DataInicio == null)
+            if (fvm == null)
             {
-                dtIni = new DateTime(DateTime.Now.Year, dtIni.Month, 1, 0, 0, 0);
-            }
-            else
-            {
-                dtIni = new DateTime(dtIni.Year, dtIni.Month, dtIni.Day, 0, 0, 0);
-            }
-
-            if (fvm.DataFinal == null)
-            {
+                dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
                 dtFim = DateTime.Now;
             }
             else
             {
-                dtFim = new DateTime(dtFim.Year, dtFim.Month, dtFim.Day, 23, 59, 59);
+                if (fvm.DataInicio == null)
+                {
+                    dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+                }
+                else
+                {
+                    dtIni = new DateTime(fvm.DataInicio.Year, fvm.DataInicio.Month, fvm.DataInicio.Day, 0, 0, 0);
+                }
+
+                if (fvm.DataFinal == null)
+                {
+                    dtFim = DateTime.Now;
+                }
+                else
+                {
+                    dtFim = new DateTime(fvm.DataFinal.Year, fvm.DataFinal.Month, fvm.DataFinal.Day, 23, 59, 59);
+                }
             }
 
             var dados = _vendasService.GetGraficoTop5ProdutosVendidos(dtIni, dtFim);
@@ -339,25 +355,33 @@ namespace AlphaMarketPDV.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GraficoQuantidadeVendasUsuarios([FromBody] FiltroRelatorioView fvm)
         {
-            var dtIni = fvm.DataInicio;
-            var dtFim = fvm.DataFinal;
+            DateTime dtIni;
+            DateTime dtFim;
 
-            if (fvm.DataInicio == null)
+            if (fvm == null)
             {
-                dtIni = new DateTime(DateTime.Now.Year, dtIni.Month, 1, 0, 0, 0);
-            }
-            else
-            {
-                dtIni = new DateTime(dtIni.Year, dtIni.Month, dtIni.Day, 0, 0, 0);
-            }
-
-            if (fvm.DataFinal == null)
-            {
+                dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
                 dtFim = DateTime.Now;
             }
             else
             {
-                dtFim = new DateTime(dtFim.Year, dtFim.Month, dtFim.Day, 23, 59, 59);
+                if (fvm.DataInicio == null)
+                {
+                    dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+                }
+                else
+                {
+                    dtIni = new DateTime(fvm.DataInicio.Year, fvm.DataInicio.Month, fvm.DataInicio.Day, 0, 0, 0);
+                }
+
+                if (fvm.DataFinal == null)
+                {
+                    dtFim = DateTime.Now;
+                }
+                else
+                {
+                    dtFim = new DateTime(fvm.DataFinal.Year, fvm.DataFinal.Month, fvm.DataFinal.Day, 23, 59, 59);
+                }
             }
 
             var dados = _vendasService.GetGraficoQuantidadeVendasUsuarios(dtIni, dtFim);
@@ -376,25 +400,33 @@ namespace AlphaMarketPDV.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GraficoCategoriasMaisVendida([FromBody] FiltroRelatorioView fvm)
         {
-            var dtIni = fvm.DataInicio;
-            var dtFim = fvm.DataFinal;
+            DateTime dtIni;
+            DateTime dtFim;
 
-            if (fvm.DataInicio == null)
+            if (fvm == null)
             {
-                dtIni = new DateTime(DateTime.Now.Year, dtIni.Month, 1, 0, 0, 0);
-            }
-            else
-            {
-                dtIni = new DateTime(dtIni.Year, dtIni.Month, dtIni.Day, 0, 0, 0);
-            }
-
-            if (fvm.DataFinal == null)
-            {
+                dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
                 dtFim = DateTime.Now;
             }
             else
             {
-                dtFim = new DateTime(dtFim.Year, dtFim.Month, dtFim.Day, 23, 59, 59);
+                if (fvm.DataInicio == null)
+                {
+                    dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+                }
+                else
+                {
+                    dtIni = new DateTime(fvm.DataInicio.Year, fvm.DataInicio.Month, fvm.DataInicio.Day, 0, 0, 0);
+                }
+
+                if (fvm.DataFinal == null)
+                {
+                    dtFim = DateTime.Now;
+                }
+                else
+                {
+                    dtFim = new DateTime(fvm.DataFinal.Year, fvm.DataFinal.Month, fvm.DataFinal.Day, 23, 59, 59);
+                }
             }
 
             var dados = _vendasService.GetGraficoTop5ProdutosVendidosPorCategoria(dtIni, dtFim);
@@ -413,25 +445,33 @@ namespace AlphaMarketPDV.Controllers
         [ValidateAntiForgeryToken]
         public JsonResult GraficoTotalPorFormaPag([FromBody] FiltroRelatorioView fvm)
         {
-            var dtIni = fvm.DataInicio;
-            var dtFim = fvm.DataFinal;
+            DateTime dtIni;
+            DateTime dtFim;
 
-            if (fvm.DataInicio == null)
+            if (fvm == null)
             {
-                dtIni = new DateTime(DateTime.Now.Year, dtIni.Month, 1, 0, 0, 0);
-            }
-            else
-            {
-                dtIni = new DateTime(dtIni.Year, dtIni.Month, dtIni.Day, 0, 0, 0);
-            }
-
-            if (fvm.DataFinal == null)
-            {
+                dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
                 dtFim = DateTime.Now;
             }
             else
             {
-                dtFim = new DateTime(dtFim.Year, dtFim.Month, dtFim.Day, 23, 59, 59);
+                if (fvm.DataInicio == null)
+                {
+                    dtIni = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1, 0, 0, 0);
+                }
+                else
+                {
+                    dtIni = new DateTime(fvm.DataInicio.Year, fvm.DataInicio.Month, fvm.DataInicio.Day, 0, 0, 0);
+                }
+
+                if (fvm.DataFinal == null)
+                {
+                    dtFim = DateTime.Now;
+                }
+                else
+                {
+                    dtFim = new DateTime(fvm.DataFinal.Year, fvm.DataFinal.Month, fvm.DataFinal.Day, 23, 59, 59);
+                }
             }
 
             var dados = _vendasService.GetGraficoPorFormaPag(dtIni, dtFim);
