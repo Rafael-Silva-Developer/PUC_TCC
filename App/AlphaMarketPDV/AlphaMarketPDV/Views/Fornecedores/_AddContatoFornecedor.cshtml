@@ -1,4 +1,4 @@
-﻿@model AlphaMarketPDV.Models.Contato;
+﻿@model AlphaMarketPDV.Models.ViewModels.FornecedorView.FornecedorViewModel;
 
 <form asp-action="">
     <div class="form-control-plaintext">
@@ -11,49 +11,45 @@
                     <div class="col">
                         <div class="form-control-plaintext">
                             <strong>
-                                <label asp-for="Telefone" class="col-form-label"></label>
+                                <label asp-for="Contato.Telefone" class="col-form-label"></label>
                             </strong>
-                            <input asp-for="Telefone" class="form-control" />
-                            <span asp-validation-for="Telefone" class="text-danger"></span>
+                            <input asp-for="Contato.Telefone" class="form-control" data-mask="(00) 0000-0000" />
+                            <span asp-validation-for="Contato.Telefone" class="text-danger"></span>
                         </div>
                     </div>
 
                     <div class="col">
                         <div class="form-control-plaintext">
                             <strong>
-                                <label asp-for="Ramal" class="col-form-label"></label>
+                                <label asp-for="Contato.Ramal" class="col-form-label"></label>
                             </strong>
-                            <input asp-for="Ramal" class="form-control" />
-                            <span asp-validation-for="Ramal" class="text-danger"></span>
+                            <input asp-for="Contato.Ramal" class="form-control" data-mask="000" />
+                            <span asp-validation-for="Contato.Ramal" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-control-plaintext">
                     <strong>
-                        <label asp-for="Celular" class="col-form-label"></label>
+                        <label asp-for="Contato.Celular" class="col-form-label"></label>
                     </strong>
-                    <input asp-for="Celular" class="form-control" />
-                    <span asp-validation-for="Celular" class="text-danger"></span>
+                    <input asp-for="Contato.Celular" class="form-control" data-mask="(00) 00000-0000" />
+                    <span asp-validation-for="Contato.Celular" class="text-danger"></span>
                 </div>
 
                 <div class="form-control-plaintext">
                     <strong>
-                        <label asp-for="Email" class="col-form-label"></label>
+                        <label asp-for="Contato.Email" class="col-form-label"></label>
                     </strong>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <input asp-for="Contato.Email" class="form-control" />
+                    <span asp-validation-for="Contato.Email" class="text-danger"></span>
                 </div>
 
                 <div class="form-control-plaintext">
-                    <input type="submit"
-                           value="Incluir contato"
-                           class="btn btn-dark"
-                           asp-action="AdicionarContato"
-                           asp-controller="Fornecedores"
-                           asp-route-FornecedorViewModel="@Model" />
-
-                </div>   
+                    <a class="btn btn-dark" id="btnIncluirContato">
+                        <i class="fas fa-plus-circle"></i> Incluir contato
+                    </a>            
+                </div>
             </div>
         </div>
     </div>

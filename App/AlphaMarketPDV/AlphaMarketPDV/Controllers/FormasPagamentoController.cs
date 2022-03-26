@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Services;
 using AlphaMarketPDV.Models;
@@ -22,12 +20,14 @@ namespace AlphaMarketPDV.Controllers
             this._formaPagamentoService = formaPagamentoService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var list = await _formaPagamentoService.ListarTodosAsync();
+            var list = await _formaPagamentoService.GetFormasPagamentoAsync();
             return View(list);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -42,7 +42,7 @@ namespace AlphaMarketPDV.Controllers
                 return View(obj);
             }
 
-            if (_formaPagamentoService.DescricaoFormaPagamentoExistente(obj)) 
+            if (_formaPagamentoService.GetDescricaoFormaPagamentoExistente(obj)) 
             {
                 TempData["Message"] = "Já existe uma forma de pagamento cadastrada com essa descrição!";
                 return View(obj);
@@ -59,7 +59,7 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão da forma de pagamento!" });
             }
 
-            var obj = await _formaPagamentoService.ListarPorIdAsync(id.Value);
+            var obj = await _formaPagamentoService.GetFormaPagamentoPorIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado para exclusão da forma de pagamento!" });
@@ -90,7 +90,7 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização da forma de pagamento!" });
             }
 
-            var obj = await _formaPagamentoService.ListarPorIdAsync(id.Value);
+            var obj = await _formaPagamentoService.GetFormaPagamentoPorIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado para visualização da forma de pagamento!" });
@@ -106,7 +106,7 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para edição da forma de pagamento!" });
             }
 
-            var obj = await _formaPagamentoService.ListarPorIdAsync(id.Value);
+            var obj = await _formaPagamentoService.GetFormaPagamentoPorIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição da forma de pagamento!" });
@@ -131,10 +131,10 @@ namespace AlphaMarketPDV.Controllers
 
             try
             {
-                FormaPagamento formaPag = await _formaPagamentoService.ListarPorIdNoTrackingAsync(id);
+                FormaPagamento formaPag = await _formaPagamentoService.GetFormaPagamentoPorIdNoTrackingAsync(id);
                 if (obj.Descricao.ToUpper() != formaPag.Descricao.ToUpper()) 
                 {
-                    if (_formaPagamentoService.DescricaoFormaPagamentoExistente(obj))
+                    if (_formaPagamentoService.GetDescricaoFormaPagamentoExistente(obj))
                     {
                         TempData["Message"] = "Já existe uma forma de pagamento cadastrada com essa descrição!";
                         return View(obj);

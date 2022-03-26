@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
@@ -15,6 +13,8 @@ namespace AlphaMarketPDV.Models
         public DateTime DataHora { get; set; }
 
         [Display(Name = "Valor Total")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
         public double ValorTotal { get; set; }
 
         [StringLength(100, ErrorMessage = "A observação dever ter no máximo 100 caracteres.")]
@@ -33,35 +33,40 @@ namespace AlphaMarketPDV.Models
         public UsuarioApp Usuario { get; set; }
 
         [Display(Name = "Usuário")]
-        public int UsuarioId { get; set; }
+        public String UsuarioId { get; set; }
 
         [Display(Name = "Produtos")]
         public ICollection<ItemEntradaEstoque> ItensEntradaEstoque { get; set; } = new List<ItemEntradaEstoque>();
+
+        [StringLength(32)]
+        public string IdentificadorRegistro { get; set; }
 
         public EntradaEstoque() 
         { 
         }
 
         public EntradaEstoque(int id, DateTime dataHora, double valorTotal, string observacao, 
-                              DateTime dataHoraInformada, Fornecedor fornecedor, UsuarioApp usuario)
+                              DateTime dataHoraInformada, Fornecedor fornecedor, UsuarioApp usuario,
+                              string identificadorRegistro)
         {
-            this.Id = id;
-            this.DataHora = dataHora;
-            this.ValorTotal = valorTotal;
-            this.Observacao = observacao;
-            this.DataHoraInformada = dataHoraInformada;
-            this.Fornecedor = fornecedor;
-            this.Usuario = usuario;
+            Id = id;
+            DataHora = dataHora;
+            ValorTotal = valorTotal;
+            Observacao = observacao;
+            DataHoraInformada = dataHoraInformada;
+            Fornecedor = fornecedor;
+            Usuario = usuario;
+            IdentificadorRegistro = identificadorRegistro;
         }
 
-        public void AdicionarItemEntradaEstoque(ItemEntradaEstoque iee) 
+        public override string ToString()
         {
-            ItensEntradaEstoque.Add(iee);
-        }
-
-        public void RemoverItemEntradaEstoque(ItemEntradaEstoque iee) 
-        {
-            ItensEntradaEstoque.Remove(iee);
+            return DataHora.ToString() +
+                   ValorTotal.ToString() +
+                   Observacao.ToString() +
+                   DataHoraInformada.ToString() +
+                   FornecedorId.ToString() +
+                   UsuarioId.ToString();                   
         }
     }
 }

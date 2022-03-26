@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AlphaMarketPDV.Controllers
 {
+    [Produces("application/json")]
     [Authorize(Roles = "Supervisor")]
     public class ProdutosController : Controller
     {
@@ -25,12 +26,14 @@ namespace AlphaMarketPDV.Controllers
             this._unidadeMedidaService = unidadeMedidaService;           
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var list = await _produtoService.ListarTodosAsync();
+            var list = await _produtoService.GetProdutosAsync();
             return View(list);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var categorias = await _categoriaService.ListarTodosAsync();
@@ -51,7 +54,7 @@ namespace AlphaMarketPDV.Controllers
                 return View(viewModel);
             }
 
-            if (_produtoService.CodigoProdutoExistente(produto)) 
+            if (_produtoService.GetVerificarCodigoExistente(produto)) 
             {
                 TempData["Message"] = "Já existe um produto cadastrado com esse código!";
 
@@ -74,6 +77,7 @@ namespace AlphaMarketPDV.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpGet]
         public async Task<IActionResult> Delete(int? id) 
         {
             if (id == null) 
@@ -81,7 +85,7 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para exclusão do produto!", codigoErro = 404 });
             }
 
-            var obj = await _produtoService.ListarPorIdAsync(id.Value);
+            var obj = await _produtoService.GetProdutoPorIdAsync(id.Value);
             if (obj == null) 
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado para exclusão do produto!", codigoErro = 404 });
@@ -105,6 +109,7 @@ namespace AlphaMarketPDV.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Details(int? id) 
         {
             if (id == null)
@@ -112,7 +117,7 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para visualização do produto!", codigoErro = 404 });
             }
 
-            var obj = await _produtoService.ListarPorIdAsync(id.Value);
+            var obj = await _produtoService.GetProdutoPorIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado para visualização do produto!", codigoErro = 404 });
@@ -121,6 +126,7 @@ namespace AlphaMarketPDV.Controllers
             return View(obj);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id) 
         {
             if (id == null)
@@ -128,7 +134,7 @@ namespace AlphaMarketPDV.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id não informado para edição do produto!", codigoErro = 404 });
             }
 
-            var obj = await _produtoService.ListarPorIdAsync(id.Value);
+            var obj = await _produtoService.GetProdutoPorIdAsync(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id não encontrado para edição do produto!", codigoErro = 404 });
@@ -138,6 +144,12 @@ namespace AlphaMarketPDV.Controllers
             var unidadesMedida = await _unidadeMedidaService.ListarTodosAsync();
             var viewModel = new ProdutoViewModel { Produto = obj, Categorias = categorias, UnidadesMedida = unidadesMedida };
             return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ConsultarPreco() 
+        {
+            return View();
         }
 
         [HttpPost]
@@ -159,11 +171,11 @@ namespace AlphaMarketPDV.Controllers
 
             try
             {
-                Produto produtoAux = await _produtoService.ListarPorIdNoTrackingAsync(id);
+                Produto produtoAux = await _produtoService.GetProdutoPorIdNoTrackingAsync(id);
 
                 if (produto.Codigo != produtoAux.Codigo)
                 {
-                    if (_produtoService.CodigoProdutoExistente(produto)) 
+                    if (_produtoService.GetVerificarCodigoExistente(produto)) 
                     {
                         TempData["Message"] = "Já existe um produto cadastrado com esse código!";
 
@@ -195,6 +207,29 @@ namespace AlphaMarketPDV.Controllers
         {
             var viewModel = new ErrorViewModel { Message = message, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Codigo = codigoErro };
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<JsonResult> BuscarPrecoProduto(string codigo)
+        {
+            if (codigo != null)
+            {
+                Produto p = await _produtoService.GetProdutoPorCodigoAsync(codigo);
+
+                if (p != null)
+                {
+                    return Json(p);
+                }
+                else 
+                {
+                    return Json(null);
+                }                              
+            }
+            else
+            {
+                return Json(null);
+            }
         }
     }
 }

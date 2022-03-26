@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AlphaMarketPDV.Models.Enums;
+﻿using AlphaMarketPDV.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
@@ -15,6 +11,7 @@ namespace AlphaMarketPDV.Models
         public Loja Loja { get; set; }
 
         [Display(Name = "Saldo")]
+        [DisplayFormat(DataFormatString = "{0:F3}")]
         public double Saldo { get; set; }
 
         [Display(Name = "Status")]

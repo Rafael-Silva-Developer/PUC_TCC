@@ -1,0 +1,737 @@
+﻿@{
+    ViewData["Title"] = "Acompanhamento de Vendas por Gráficos";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<form class="form-horizontal">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-control-plaintext">
+                <strong>
+                    <label for="minDate" class="col-lg-3 control-label">Data Inicio</label>
+                </strong>
+                <div class="col-lg-6">
+                    <input type="date" name="dataIni" id="dataIni" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label for="maxDate" class="col-lg-3 control-label">Data Final</label>
+                </strong>
+                <div class="col-lg-6">
+                    <input type="date" name="dataFim" id="dataFim" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <strong>Gráficos disponíveis:</strong>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcoesGrafico" id="opcoesGrafico" value="1" checked>
+                <label class="form-check-label" for="exampleRadios1">Por Total de Venda</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcoesGrafico" id="opcoesGrafico" value="2">
+                <label class="form-check-label" for="exampleRadios1">Produtos mais vendidos (Top 5)</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcoesGrafico" id="opcoesGrafico" value="3">
+                <label class="form-check-label" for="exampleRadios1">Por Usuário</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcoesGrafico" id="opcoesGrafico" value="4">
+                <label class="form-check-label" for="exampleRadios1">Por Categoria (Top 5)</label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="opcoesGrafico" id="opcoesGrafico" value="5">
+                <label class="form-check-label" for="exampleRadios1">Por Forma de Pagamento</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-control-plaintext">
+        <input type="button" value="Pesquisar" class="btn btn-dark" onclick="PesquisarDados()" />
+    </div>
+</form>
+
+<div Style="font-family: Corbel; font-size: small ;text-align:center " class="row">
+    <div>
+        <div style="width:100%;height:100%" id="painel_grafico">
+            <canvas id="mChart1" style="padding: 0;margin: auto;display: block; "> </canvas>
+        </div>
+    </div>
+</div>
+<div Style="font-family: Corbel; font-size: small ;text-align:center; " class="row">
+    <div>
+    </div>
+    <div>
+    </div>
+</div>
+
+<div class="modal"></div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <environment include="Development">
+        <script src="~/js/jquery-3.5.1.js"></script>
+        <script src="~/js/Chart.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                asp-fallback-src="~/js/jquery-3.5.1.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"
+                asp-fallback-src="~/js/Chart.min.js">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+
+        $body = $("body");
+
+        function FormatarDoisDigitos(numero) {
+            if (numero <= 9)
+                return "0" + numero;
+            else
+                return numero;
+        };
+
+        function LimparCanvas() {
+            $('#painel_grafico iframe').remove();
+            document.getElementById("mChart1").remove();
+            painel = $("#painel_grafico");
+            painel.append("<canvas id='mChart1' style='padding: 0; margin: auto; display: block; '> </canvas>");
+            $("#painel_grafico").append(painel);
+        }
+
+        function PesquisarDados() {
+            var vOpcao = $('input:radio[name="opcoesGrafico"]:checked').val();
+            var vDataInicio = $('#dataIni').val();
+            var vDataFinal = $('#dataFim').val();
+
+            if ((vDataInicio == '') || (vDataInicio == 'undefined')) {
+                vDataInicio = null;
+            }
+
+            if ((vDataFinal == '') || (vDataFinal == 'undefined')) {
+                vDataFinal = null;
+            }
+
+            var dados_formulario = {
+                DataInicio: vDataInicio,
+                DataFinal: vDataFinal
+            };
+
+            switch (vOpcao) {
+                case "1":
+                    {
+                        LimparCanvas();
+                        $body.addClass("loading");
+                        $.ajax({
+                            contentType: 'application/json',
+                            dataType: "json",
+                            type: "POST",
+                            url: 'GraficoTotalVenda',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("XSRF-TOKEN",
+                                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                            },
+                            data: JSON.stringify(dados_formulario),
+                            success: function (msg) {
+                                $body.removeClass("loading");
+                                if (msg != null) {
+                                    var aData = JSON.parse(msg);
+                                    var array_labels = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        let dataAtual = new Date(aData[i].DataVenda);
+                                        let dataAtualFormatada = (FormatarDoisDigitos(dataAtual.getDate().toString()) + "/" + (FormatarDoisDigitos(dataAtual.getMonth() + 1).toString()) + "/" + dataAtual.getFullYear());
+                                        array_labels.push(dataAtualFormatada);
+                                    };
+
+                                    var array_dados = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_dados.push(aData[i].TotalVenda);
+                                    };
+
+                                    var aLabels = array_labels;
+                                    var aDatasets1 = array_dados;
+                                    var dataT = {
+                                        labels: aLabels,
+                                        datasets: [{
+                                            label: "Total de Vendas",
+                                            data: aDatasets1,
+                                            fill: false,
+                                            backgroundColor: [
+                                                "rgba(54, 162, 235, 0.2)",
+                                                "rgba(255, 99, 132, 0.2)",
+                                                "rgba(255, 159, 64, 0.2)",
+                                                "rgba(255, 205, 86, 0.2)",
+                                                "rgba(75, 192, 192, 0.2)",
+                                                "rgba(153, 102, 255, 0.2)",
+                                                "rgba(201, 203, 207, 0.2)"
+                                            ],
+                                            borderColor: [
+                                                "rgb(54, 162, 235)",
+                                                "rgb(255, 99, 132)",
+                                                "rgb(255, 159, 64)",
+                                                "rgb(255, 205, 86)",
+                                                "rgb(75, 192, 192)",
+                                                "rgb(153, 102, 255)",
+                                                "rgb(201, 203, 207)"
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    };
+                                    var ctx = $("#mChart1");
+                                    new Chart(ctx, {
+                                        type: 'bar',
+                                        data: dataT,
+                                        options: {
+                                            responsive: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Total de Vendas por Período'
+                                            },
+                                            legend: {
+                                                position: 'bottom'
+                                            },
+                                            scales: {
+                                                xAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    }
+                                                }],
+                                                yAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    },
+                                                    ticks: {
+                                                        stepSize: 50,
+                                                        beginAtZero: true
+                                                    }
+                                                }]
+                                            },
+                                        }
+                                    });
+                                }
+                                else {
+                                    swal({
+                                        title: "Falha na pesquisa",
+                                        text: "Erro no processamento da pesquisa.",
+                                        type: "error"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                $body.removeClass("loading");
+                                swal({
+                                    title: "Erro no processamento",
+                                    text: "Erro no processamento da requisição.",
+                                    type: "error"
+                                });
+                            }
+                        });
+                        break;
+                    }
+                case "2":
+                    {
+                        LimparCanvas();
+                        $body.addClass("loading");
+                        $.ajax({
+                            contentType: 'application/json',
+                            dataType: "json",
+                            type: "POST",
+                            url: 'GraficoProdutoMaisVendido',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("XSRF-TOKEN",
+                                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                            },
+                            data: JSON.stringify(dados_formulario),
+                            success: function (msg) {
+                                $body.removeClass("loading");
+                                if (msg != null) {
+                                    var aData = JSON.parse(msg);
+                                    var array_labels = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_labels.push(aData[i].Produto);
+                                    };
+
+                                    var array_dados = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_dados.push(aData[i].Quantidade);
+                                    };
+
+                                    var aLabels = array_labels;
+                                    var aDatasets1 = array_dados;
+                                    var dataT = {
+                                        labels: aLabels,
+                                        datasets: [{
+                                            label: "Quantidade",
+                                            data: aDatasets1,
+                                            fill: false,
+                                            backgroundColor: [
+                                                "rgba(54, 162, 235, 0.2)",
+                                                "rgba(255, 99, 132, 0.2)",
+                                                "rgba(255, 159, 64, 0.2)",
+                                                "rgba(255, 205, 86, 0.2)",
+                                                "rgba(75, 192, 192, 0.2)",
+                                                "rgba(153, 102, 255, 0.2)",
+                                                "rgba(201, 203, 207, 0.2)"
+                                            ],
+                                            borderColor: [
+                                                "rgb(54, 162, 235)",
+                                                "rgb(255, 99, 132)",
+                                                "rgb(255, 159, 64)",
+                                                "rgb(255, 205, 86)",
+                                                "rgb(75, 192, 192)",
+                                                "rgb(153, 102, 255)",
+                                                "rgb(201, 203, 207)"
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    };
+                                    var ctx = $("#mChart1");
+                                    new Chart(ctx, {
+                                        type: 'bar',
+                                        data: dataT,
+                                        options: {
+                                            responsive: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Top 5 dos produtos mais vendidos'
+                                            },
+                                            legend: {
+                                                position: 'bottom'
+                                            },
+                                            scales: {
+                                                xAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    }
+                                                }],
+                                                yAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    },
+                                                    ticks: {
+                                                        stepSize: 50,
+                                                        beginAtZero: true
+                                                    }
+                                                }]
+                                            },
+                                        }
+                                    });
+                                }
+                                else {
+                                    swal({
+                                        title: "Falha na pesquisa",
+                                        text: "Erro no processamento da pesquisa.",
+                                        type: "error"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                $body.removeClass("loading");
+                                swal({
+                                    title: "Erro no processamento",
+                                    text: "Erro no processamento da requisição.",
+                                    type: "error"
+                                });
+                            }
+                        });
+                        break;
+                    }
+                case "3":
+                    {
+                        LimparCanvas();
+                        $body.addClass("loading");
+                        $.ajax({
+                            contentType: 'application/json',
+                            dataType: "json",
+                            type: "POST",
+                            url: 'GraficoQuantidadeVendasUsuarios',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("XSRF-TOKEN",
+                                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                            },
+                            data: JSON.stringify(dados_formulario),
+                            success: function (msg) {
+                                $body.removeClass("loading");
+                                if (msg != null) {
+                                    var aData = JSON.parse(msg);
+                                    var array_labels = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_labels.push(aData[i].Usuario);
+                                    };
+
+                                    var array_dados = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_dados.push(aData[i].Quantidade);
+                                    };
+
+                                    var aLabels = array_labels;
+                                    var aDatasets1 = array_dados;
+                                    var dataT = {
+                                        labels: aLabels,
+                                        datasets: [{
+                                            label: "Quantidade",
+                                            data: aDatasets1,
+                                            fill: false,
+                                            backgroundColor: [
+                                                "rgba(54, 162, 235, 0.2)",
+                                                "rgba(255, 99, 132, 0.2)",
+                                                "rgba(255, 159, 64, 0.2)",
+                                                "rgba(255, 205, 86, 0.2)",
+                                                "rgba(75, 192, 192, 0.2)",
+                                                "rgba(153, 102, 255, 0.2)",
+                                                "rgba(201, 203, 207, 0.2)"
+                                            ],
+                                            borderColor: [
+                                                "rgb(54, 162, 235)",
+                                                "rgb(255, 99, 132)",
+                                                "rgb(255, 159, 64)",
+                                                "rgb(255, 205, 86)",
+                                                "rgb(75, 192, 192)",
+                                                "rgb(153, 102, 255)",
+                                                "rgb(201, 203, 207)"
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    };
+                                    var ctx = $("#mChart1");
+                                    new Chart(ctx, {
+                                        type: 'bar',
+                                        data: dataT,
+                                        options: {
+                                            responsive: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Quantidade de vendas realizadas por usuário no período'
+                                            },
+                                            legend: {
+                                                position: 'bottom'
+                                            },
+                                            scales: {
+                                                xAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    }
+                                                }],
+                                                yAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    },
+                                                    ticks: {
+                                                        stepSize: 50,
+                                                        beginAtZero: true
+                                                    }
+                                                }]
+                                            },
+                                        }
+                                    });
+                                }
+                                else {
+                                    swal({
+                                        title: "Falha na pesquisa",
+                                        text: "Erro no processamento da pesquisa.",
+                                        type: "error"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                $body.removeClass("loading");
+                                swal({
+                                    title: "Erro no processamento",
+                                    text: "Erro no processamento da requisição.",
+                                    type: "error"
+                                });
+                            }
+                        });
+                        break;
+                    }
+                case "4":
+                    {
+                        LimparCanvas();
+                        $body.addClass("loading");
+                        $.ajax({
+                            contentType: 'application/json',
+                            dataType: "json",
+                            type: "POST",
+                            url: 'GraficoCategoriasMaisVendida',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("XSRF-TOKEN",
+                                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                            },
+                            data: JSON.stringify(dados_formulario),
+                            success: function (msg) {
+                                $body.removeClass("loading");
+                                if (msg != null) {
+                                    var aData = JSON.parse(msg);
+                                    var array_labels = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_labels.push(aData[i].Categoria);
+                                    };
+
+                                    var array_dados = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_dados.push(aData[i].Quantidade);
+                                    };
+
+                                    var aLabels = array_labels;
+                                    var aDatasets1 = array_dados;
+                                    var dataT = {
+                                        labels: aLabels,
+                                        datasets: [{
+                                            label: "Quantidade",
+                                            data: aDatasets1,
+                                            fill: false,
+                                            backgroundColor: [
+                                                "rgba(54, 162, 235, 0.2)",
+                                                "rgba(255, 99, 132, 0.2)",
+                                                "rgba(255, 159, 64, 0.2)",
+                                                "rgba(255, 205, 86, 0.2)",
+                                                "rgba(75, 192, 192, 0.2)",
+                                                "rgba(153, 102, 255, 0.2)",
+                                                "rgba(201, 203, 207, 0.2)"
+                                            ],
+                                            borderColor: [
+                                                "rgb(54, 162, 235)",
+                                                "rgb(255, 99, 132)",
+                                                "rgb(255, 159, 64)",
+                                                "rgb(255, 205, 86)",
+                                                "rgb(75, 192, 192)",
+                                                "rgb(153, 102, 255)",
+                                                "rgb(201, 203, 207)"
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    };
+                                    var ctx = $("#mChart1");
+                                    new Chart(ctx, {
+                                        type: 'bar',
+                                        data: dataT,
+                                        options: {
+                                            responsive: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Top 5 das categorias mais vendidas no período'
+                                            },
+                                            legend: {
+                                                position: 'bottom'
+                                            },
+                                            scales: {
+                                                xAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    }
+                                                }],
+                                                yAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    },
+                                                    ticks: {
+                                                        stepSize: 50,
+                                                        beginAtZero: true
+                                                    }
+                                                }]
+                                            },
+                                        }
+                                    });
+                                }
+                                else {
+                                    swal({
+                                        title: "Falha na pesquisa",
+                                        text: "Erro no processamento da pesquisa.",
+                                        type: "error"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                $body.removeClass("loading");
+                                swal({
+                                    title: "Erro no processamento",
+                                    text: "Erro no processamento da requisição.",
+                                    type: "error"
+                                });
+                            }
+                        });
+                        break;
+                    }
+                case "5":
+                    {
+                        LimparCanvas();
+                        $body.addClass("loading");
+                        $.ajax({
+                            contentType: 'application/json',
+                            dataType: "json",
+                            type: "POST",
+                            url: 'GraficoTotalPorFormaPag',
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("XSRF-TOKEN",
+                                    $('input:hidden[name="__RequestVerificationToken"]').val());
+                            },
+                            data: JSON.stringify(dados_formulario),
+                            success: function (msg) {
+                                $body.removeClass("loading");
+                                if (msg != null) {
+                                    var aData = JSON.parse(msg);
+                                    var array_labels = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_labels.push(aData[i].FormaPag);
+                                    };
+
+                                    var array_dados = [];
+                                    for (var i = 0; i < aData.length; i++) {
+                                        array_dados.push(aData[i].Total);
+                                    };
+
+                                    var aLabels = array_labels;
+                                    var aDatasets1 = array_dados;
+                                    var dataT = {
+                                        labels: aLabels,
+                                        datasets: [{
+                                            label: "Total",
+                                            data: aDatasets1,
+                                            fill: false,
+                                            backgroundColor: [
+                                                "rgba(54, 162, 235, 0.2)",
+                                                "rgba(255, 99, 132, 0.2)",
+                                                "rgba(255, 159, 64, 0.2)",
+                                                "rgba(255, 205, 86, 0.2)",
+                                                "rgba(75, 192, 192, 0.2)",
+                                                "rgba(153, 102, 255, 0.2)",
+                                                "rgba(201, 203, 207, 0.2)"
+                                            ],
+                                            borderColor: [
+                                                "rgb(54, 162, 235)",
+                                                "rgb(255, 99, 132)",
+                                                "rgb(255, 159, 64)",
+                                                "rgb(255, 205, 86)",
+                                                "rgb(75, 192, 192)",
+                                                "rgb(153, 102, 255)",
+                                                "rgb(201, 203, 207)"
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    };
+                                    var ctx = $("#mChart1");
+                                    new Chart(ctx, {
+                                        type: 'bar',
+                                        data: dataT,
+                                        options: {
+                                            responsive: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Total por forma de pagamento no período.'
+                                            },
+                                            legend: {
+                                                position: 'bottom'
+                                            },
+                                            scales: {
+                                                xAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    }
+                                                }],
+                                                yAxes: [{
+                                                    gridLines: {
+                                                        display: false
+                                                    },
+                                                    display: true,
+                                                    scaleLabel: {
+                                                        display: false,
+                                                        labelString: ''
+                                                    },
+                                                    ticks: {
+                                                        stepSize: 50,
+                                                        beginAtZero: true
+                                                    }
+                                                }]
+                                            },
+                                        }
+                                    });
+                                }
+                                else {
+                                    swal({
+                                        title: "Falha na pesquisa",
+                                        text: "Erro no processamento da pesquisa.",
+                                        type: "error"
+                                    });
+                                }
+                            },
+                            error: function () {
+                                $body.removeClass("loading");
+                                swal({
+                                    title: "Erro no processamento",
+                                    text: "Erro no processamento da requisição.",
+                                    type: "error"
+                                });
+                            }
+                        });
+                        break;
+                    }
+            }
+        }
+    </script>
+}

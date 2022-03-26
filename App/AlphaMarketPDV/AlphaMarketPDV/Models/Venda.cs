@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AlphaMarketPDV.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,18 +7,30 @@ namespace AlphaMarketPDV.Models
 {
     public class Venda
     {
-        [Display(Name = "Id")]
+        [Display(Name = "#")]
         public int Id { get; private set; }
 
         [Display(Name = "Data/Hora Venda")]
-        public DateTime DataHora { get; private set; }
+        public DateTime DataHora { get; set; }
+
+        [Display(Name = "Data Venda")]
+        public DateTime DataVenda { get; set; }
 
         [Display(Name = "Valor Total")]
-        public double ValorTotal { get; private set; }
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
+        public double ValorTotal { get; set; }
 
         [Display(Name = "Valor Desconto")]
-        public double ValorDesconto { get; private set; }
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
+        public double ValorDesconto { get; set; }
 
+        [Display(Name = "Valor a Pagar")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
+        public double TotalPagar { get; set; }
+        
         [Display(Name = "Status")]
         public StatusVenda Status { get; set; }
 
@@ -29,6 +39,9 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Caixa")]
         public int CaixaId { get; set; }
 
+        [StringLength(32)]
+        public string IdentificadorRegistro { get; set; }
+
         [Display(Name = "Itens")]
         public ICollection<ItemVenda> ItensVenda { get; set; } = new List<ItemVenda>();
 
@@ -36,30 +49,30 @@ namespace AlphaMarketPDV.Models
         { 
         }
 
-        public Venda(int id, DateTime dataHora, double valorTotal, double valorDesconto, 
-                     StatusVenda status, Caixa caixa)
+        public Venda(int id, DateTime dataHora, DateTime dataVenda, double valorTotal, double valorDesconto, double totalPagar,
+                     StatusVenda status, Caixa caixa, string identificadorRegistro)
         {
-            this.Id = id;
-            this.DataHora = dataHora;
-            this.ValorTotal = valorTotal;
-            this.ValorDesconto = valorDesconto;
-            this.Status = status;
-            this.Caixa = caixa;
+            Id = id;
+            DataHora = dataHora;
+            DataVenda = dataVenda;
+            ValorTotal = valorTotal;
+            ValorDesconto = valorDesconto;
+            TotalPagar = totalPagar;
+            Status = status;
+            Caixa = caixa;
+            IdentificadorRegistro = identificadorRegistro;
         }
 
-        public void AdicionarItemVenda(ItemVenda iv) 
+        public override string ToString()
         {
-            ItensVenda.Add(iv);
+            return DataHora.ToString() +
+                   ValorTotal.ToString() +
+                   ValorDesconto.ToString() +
+                   TotalPagar.ToString() +
+                   Status.ToString() +
+                   CaixaId.ToString();
         }
 
-        public void RemoverItemVenda(ItemVenda iv) 
-        {
-            ItensVenda.Remove(iv);
-        }
 
-        public void TotalVenda() 
-        {
-            ValorTotal = ItensVenda.Where(iv => iv.Cancelado != false).Sum(iv => iv.ValorItem);
-        }
     }
 }

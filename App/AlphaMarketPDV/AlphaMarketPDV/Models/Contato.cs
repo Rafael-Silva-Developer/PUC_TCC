@@ -7,6 +7,9 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Id")]
         public int Id { get; set; }
 
+        [Display(Name = "N. Seq")]
+        public int NrSeq { get; set; }
+
         [Display(Name = "Telefone")]
         public string Telefone { get; set; }
 
@@ -29,14 +32,15 @@ namespace AlphaMarketPDV.Models
         { 
         }
 
-        public Contato(int id, string telefone, int ramal, string celular, string email, Fornecedor fornecedor)
+        public Contato(int id, int nrseq, string telefone, int ramal, string celular, string email, Fornecedor fornecedor)
         {
             this.Id = id;
+            this.NrSeq = nrseq;
             this.Telefone = telefone;
             this.Ramal = ramal;
             this.Celular = celular;
             this.Email = email;
-            this.Fornecedor = fornecedor;
+            this.Fornecedor = fornecedor;           
         }
     }
 }

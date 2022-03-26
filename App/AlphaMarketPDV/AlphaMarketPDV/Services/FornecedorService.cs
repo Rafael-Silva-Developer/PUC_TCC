@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Data;
 using AlphaMarketPDV.Models;
 using Microsoft.EntityFrameworkCore;
 using AlphaMarketPDV.Services.Exceptions;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
 
 namespace AlphaMarketPDV.Services
 {
@@ -20,12 +17,12 @@ namespace AlphaMarketPDV.Services
             _context = context;   
         }
 
-        public async Task<List<Fornecedor>> ListarTodosFornecedoresAsync()
+        public async Task<List<Fornecedor>> GetFornecedoresAsync()
         {
             return await _context.Fornecedor.OrderBy(f => f.NomeFantasia).ToListAsync();
         }
 
-        public async Task<Fornecedor> ListarFornecedorPorIdAsync(int id)
+        public async Task<Fornecedor> GetFornecedorPorIdAsync(int id)
         {
             return await _context.Fornecedor.Include(f => f.Endereco).FirstOrDefaultAsync(f => f.Id == id);
         }
@@ -94,6 +91,9 @@ namespace AlphaMarketPDV.Services
             await _context.SaveChangesAsync();
         }
 
-        
+        public async Task<Fornecedor> ListarFornecedorPorRazaoSocialAsync(string razaoSocial)
+        {
+            return await _context.Fornecedor.Include(f => f.Endereco).FirstOrDefaultAsync(f => f.RazaoSocial == razaoSocial);
+        }
     }
 }

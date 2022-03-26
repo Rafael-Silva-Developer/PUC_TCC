@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlphaMarketPDV.Data;
@@ -29,7 +28,7 @@ namespace AlphaMarketPDV.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Loja> ListarPorIdAsync(int id)
+        public async Task<Loja> GetLojaPorIdAsync(int id)
         {
             return await _context.Loja.FirstOrDefaultAsync(loja => loja.Id == id);
         }

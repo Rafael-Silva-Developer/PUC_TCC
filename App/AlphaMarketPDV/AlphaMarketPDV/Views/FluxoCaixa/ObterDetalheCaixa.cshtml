@@ -1,0 +1,60 @@
+﻿@{
+    Layout = null;
+}
+
+@model IEnumerable<AlphaMarketPDV.Models.CaixaPagamento>
+<!-- Inicio do modal de itens do caixa... -->
+<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl">
+    <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+            <h5 class="modal-title">Itens do caixa</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <div>
+                <div class="card-body">
+                    <table id="Tab_Detalhe" class="table table-striped table-hover table-row-border compact">
+                        <thead>
+                            <tr>                              
+                                <th>@Html.DisplayNameFor(model => model.NrSeq)</th>
+                                <th>@Html.DisplayNameFor(model => model.ValorPago)</th>
+                                <th>@Html.DisplayNameFor(model => model.ValoTroco)</th>
+                                <th>@Html.DisplayNameFor(model => model.FormaPagamento.Descricao)</th>                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>                                 
+                                    <td valign="middle">
+                                        @Html.DisplayFor(modelItem => item.NrSeq)
+                                    </td>
+                                    <td valign="middle">
+                                        @Html.DisplayFor(modelItem => item.ValorPago)
+                                    </td>
+                                    <td valign="middle">
+                                        @Html.DisplayFor(modelItem => item.ValoTroco)
+                                    </td>
+                                    <td valign="middle">
+                                        @Html.DisplayFor(modelItem => item.FormaPagamento.Descricao)
+                                    </td>                                   
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fechar</button>
+        </div>
+
+    </div>
+</div>
+<!-- Fim do modal de itens do caixa... -->

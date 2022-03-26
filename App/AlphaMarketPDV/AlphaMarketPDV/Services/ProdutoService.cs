@@ -22,62 +22,38 @@ namespace AlphaMarketPDV.Services
             this._appEnvironment = appEnvironment;
         }
 
-        public async Task<List<Produto>> ListarTodosAsync()
+        public async Task<List<Produto>> GetProdutosAsync()
         {
             return await _context.Produto.OrderBy(x => x.DescricaoLonga).ToListAsync();
         }
 
-        public async Task InserirAsync(Produto obj)
+        public bool GetVerificarCodigoExistente(Produto produto)
         {
-            //obj.Estoque = _context.Estoque.First();
-            _context.Add(obj);
-            await _context.SaveChangesAsync();
+            var qtd = _context.Produto.Where(p => p.Codigo == produto.Codigo).Count();
+
+            if (qtd > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public async Task<Produto> ListarPorIdAsync(int id) 
+        public async Task<Produto> GetProdutoPorIdAsync(int id) 
         {
             return await _context.Produto.Include(obj => obj.Categoria).Include(obj => obj.UnidadeMedida).FirstOrDefaultAsync(obj => obj.Id == id);
         }
 
-        public async Task<Produto> ListarPorIdNoTrackingAsync(int id)
+        public async Task<Produto> GetProdutoPorCodigoAsync(string codigo) 
+        {
+            return await _context.Produto.FirstOrDefaultAsync(p => p.Codigo == codigo);    
+        }
+
+        public async Task<Produto> GetProdutoPorIdNoTrackingAsync(int id)
         {
             return await _context.Produto.AsNoTracking().Include(obj => obj.Categoria).Include(obj => obj.UnidadeMedida).FirstOrDefaultAsync(obj => obj.Id == id);
-        }
-
-        public async Task RemoverAsync(int id) 
-        {
-            try
-            {
-                var obj = await _context.Produto.FindAsync(id);
-                ExcluirImagemProduto(obj);
-                _context.Produto.Remove(obj);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                throw new IntegrityException("Não é possível remover um produto com histórico de operações!");
-            }
-        }
-
-        public async Task UpdateAsync(Produto obj) 
-        {
-            var existeNaBase = await _context.Produto.AnyAsync(x => x.Id == obj.Id);
-
-            if (!existeNaBase)
-            {
-                throw new NotFoundException("Produto não encontrado para atualização!");
-            }
-
-            try
-            {
-                //obj.Estoque = await _context.Estoque.FirstAsync();
-                _context.Update(obj);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException e)
-            {
-                throw new DbConcurrencyException(e.Message);
-            }
         }
 
         public string UploadImagemProduto(Produto produto)
@@ -103,18 +79,47 @@ namespace AlphaMarketPDV.Services
             }
         }
 
-        public bool CodigoProdutoExistente(Produto produto) 
+        public async Task InserirAsync(Produto obj)
         {
-            var qtd = _context.Produto.Where(p => p.Codigo == produto.Codigo).Count();
-
-            if (qtd > 0)
-            {
-                return true;
-            }
-            else 
-            {
-                return false;
-            }     
+            _context.Add(obj);
+            await _context.SaveChangesAsync();
         }
+
+        public async Task RemoverAsync(int id)
+        {
+            try
+            {
+                var obj = await _context.Produto.FindAsync(id);
+                ExcluirImagemProduto(obj);
+                _context.Produto.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                throw new IntegrityException("Não é possível remover um produto com histórico de operações!");
+            }
+        }
+
+        public async Task UpdateAsync(Produto obj)
+        {
+            var existeNaBase = await _context.Produto.AnyAsync(x => x.Id == obj.Id);
+
+            if (!existeNaBase)
+            {
+                throw new NotFoundException("Produto não encontrado para atualização!");
+            }
+
+            try
+            {
+                //obj.Estoque = await _context.Estoque.FirstAsync();
+                _context.Update(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
+        }
+
     }
 }

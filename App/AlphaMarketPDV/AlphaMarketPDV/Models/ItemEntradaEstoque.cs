@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AlphaMarketPDV.Models
 {
@@ -11,16 +7,21 @@ namespace AlphaMarketPDV.Models
         [Display(Name = "Id")]
         public int Id { get; set; }
 
-        [Display(Name = "NRSEQ")]
+        [Display(Name = "#")]
         public int NrSeq { get; set; }
 
         [Display(Name = "Quantidade")]
+        [DisplayFormat(DataFormatString = "{0:F3}")]
         public double Qtd { get; set; }
 
         [Display(Name = "Valor Unitário")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
         public double ValorUnitario { get; set; }
 
         [Display(Name = "Valor Item")]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "R$ {0:F2}")]
         public double ValorItem { get; set; }
 
         public EntradaEstoque EntradaEstoque { get; set; }
@@ -47,10 +48,6 @@ namespace AlphaMarketPDV.Models
             this.ValorItem = valorItem;
             this.EntradaEstoque = entradaEstoque;
             this.Produto = produto;
-        }
-
-       
-
-        
+        }       
     }
 }

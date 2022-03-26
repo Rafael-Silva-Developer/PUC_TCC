@@ -1,0 +1,851 @@
+﻿@model AlphaMarketPDV.Models.ViewModels.Venda.VendaViewModel;
+
+@{
+    ViewData["Title"] = "Processar Venda";
+}
+
+@if (@TempData["Message"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="card-header text-white bg-dark text-center h2">
+    @ViewData["Title"]
+</div>
+<hr />
+
+<div class="row">
+    <div class="col">
+        <form enctype="multipart/form-data" name="nfrm-processar-venda" id="ifrm-processar-venda">
+            <input type="hidden" asp-for="Produto.Id" />
+            <div class="row">
+                <div class="col-8">
+                    <div class="form-control-plaintext">
+                        <strong>
+                            <label asp-for="Produto.Codigo" class="col-form-label"></label>
+                        </strong>
+                        <div class="row">
+                            <div class="col-5">
+                                <input asp-for="Produto.Codigo" class="form-control" />
+                                <span asp-validation-for="Produto.Codigo" class="text-danger"></span>
+                            </div>
+                            <div class="col">
+                                <a class="btn btn-dark" id="Btn_Pesquisar_Produto" title="Buscar um produto pelo código informado...">
+                                    <i class="fas fa-search"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-control-plaintext">
+                        <div class="col-9">
+                            <strong>
+                                <label asp-for="Produto.DescricaoCurta" class="col-form-label">Produto</label>
+                            </strong>
+                            <input asp-for="Produto.DescricaoCurta" class="form-control" disabled />
+                            <span asp-validation-for="Produto.DescricaoCurta" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-control-plaintext">
+                        <div class="col-2">
+                            <strong>
+                                <label asp-for="Quantidade" class="col-form-label"></label>
+                            </strong>
+                            <input asp-for="Quantidade" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Quantidade" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-control-plaintext">
+                        <div class="col-4">
+                            <strong>
+                                <label asp-for="Produto.ValorVenda" class="col-form-label">Valor Unitário</label>
+                            </strong>
+                            <input asp-for="Produto.ValorVenda" class="form-control" disabled />
+                        </div>
+                        <span asp-validation-for="Produto.ValorVenda" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-control-plaintext">
+                        <strong>
+                            <label asp-for="SubTotal" class="col-form-label"></label>
+                        </strong>
+                        <div class="row">
+                            <div class="col-4">
+                                @if (Model.SubTotal == 0)
+                                {
+                                    <input asp-for="SubTotal" class="form-control" disabled value="" />
+                                }
+                                else
+                                {
+                                    <input asp-for="SubTotal" class="form-control" disabled />
+                                }
+                            </div>
+                            <div class="col">
+                                <a class="btn btn-dark" id="Btn_Incluir_Produto" title="Incluir produto...">
+                                    <i class="fas fa-plus-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <span asp-validation-for="SubTotal" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col" id="Imagem_Container">
+                    <figure id="Imagem_Produto">
+                        <img src="~/images/produtos/default.png" height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />
+                    </figure>
+                </div>
+            </div>
+
+            <partial name="~/Views/Vendas/_ItemAdicionado.cshtml" />
+            <hr />
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="TotalVenda" class="col-form-label"></label>
+                </strong>
+                <div class="col-3">
+                    @if (Model.TotalVenda == 0)
+                    {
+                        <input asp-for="TotalVenda" class="form-control" disabled value="" />
+                    }
+                    else
+                    {
+                        <input asp-for="TotalVenda" class="form-control" disabled />
+                    }
+                </div>
+                <span asp-validation-for="TotalVenda" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="Desconto" class="col-form-label"></label>
+                </strong>
+                <div class="col-3">
+                    @if (Model.Desconto == 0)
+                    {
+                        <input asp-for="Desconto" class="form-control" value="" />
+                    }
+                    else
+                    {
+                        <input asp-for="Desconto" class="form-control" />
+                    }
+                </div>
+                <span asp-validation-for="Desconto" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="TotalPagar" class="col-form-label"></label>
+                </strong>
+                <div class="col-3">
+                    @if (Model.TotalPagar == 0)
+                    {
+                        <input asp-for="TotalPagar" class="form-control" disabled value="" />
+                    }
+                    else
+                    {
+                        <input asp-for="TotalPagar" class="form-control" disabled />
+                    }
+                </div>
+                <span asp-validation-for="TotalPagar" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <div class="col-5">
+                    <strong>
+                        <label asp-for="FormaPagamentoId" class="col-form-label"></label>
+                    </strong>
+                    <select asp-for="FormaPagamentoId" asp-items="@(new SelectList(Model.ListaFormasPagamento,"Id","Descricao"))" class="form-control">
+                        <option value="">--Selecione--</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="ValorFormaPag" class="col-form-label"></label>
+                </strong>
+                <div class="row">
+                    <div class="col-3">
+                        @if (Model.ValorFormaPag == 0)
+                        {
+                            <input asp-for="ValorFormaPag" class="form-control" value="" />
+                        }
+                        else
+                        {
+                            <input asp-for="ValorFormaPag" class="form-control" />
+                        }
+                    </div>
+                    <div class="col">
+                        <a class="btn btn-dark" id="Btn-Incluir-Forma-Pag" title="Incluir forma de pagamento...">
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </div>
+                </div>
+                <span asp-validation-for="ValorFormaPag" class="text-danger"></span>
+            </div>
+
+            <div class="form-control-plaintext">
+                <strong>
+                    <label asp-for="ValorRestante" class="col-form-label"></label>
+                </strong>
+                <div class="col-3">
+                    @if (Model.ValorRestante == 0)
+                    {
+                        <input asp-for="ValorRestante" class="form-control" disabled value="" />
+                    }
+                    else
+                    {
+                        <input asp-for="ValorRestante" class="form-control" disabled />
+                    }
+                </div>
+                <span asp-validation-for="ValorRestante" class="text-danger"></span>
+            </div>
+
+            <partial name="~/Views/Vendas/_FormaPagAdicionado.cshtml" />
+            <hr />
+
+            <div class="form-control-plaintext">
+                <input type="button" value="Finalizar Venda" class="btn btn-dark" onclick="GravarVenda()" />
+                <input type="button" value="Cancelar" class="btn btn-dark" onclick="CancelarVenda()" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal"></div>
+
+@section ScriptPage{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <environment include="Development">
+        <script src="~/js/jquery-3.5.1.js"></script>
+        <script src="~/js/jquery.dataTables.min.js"></script>
+        <script src="~/js/dataTables.buttons.min.js"></script>
+        <script src="~/js/jszip.min.js"></script>
+        <script src="~/js//pdfmake.min.js"></script>
+        <script src="~/js/vfs_fonts.js"></script>
+        <script src="~/js/buttons.html5.min.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://code.jquery.com/jquery-3.5.1.js"
+                asp-fallback-src="~/js/jquery-3.5.1.js">
+        </script>
+        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"
+                asp-fallback-src="~/js/jquery.dataTables.min.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"
+                asp-fallback-src="~/js/dataTables.buttons.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"
+                asp-fallback-src="~/js/jszip.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"
+                asp-fallback-src="~/js//pdfmake.min.js">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"
+                asp-fallback-src="~/js/vfs_fonts.js">
+        </script>
+        <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"
+                asp-fallback-src="~/js/buttons.html5.min.js">
+        </script>
+    </environment>
+
+    <script type="text/javascript">
+        var lst_itens_venda = new Set();
+        var lst_forma_pag = new Set();
+        var mTotalVenda = 0;
+        var mTotalDesconto = 0;
+        var mTotalPagar = 0;
+        var mTotalRestante = 0;
+
+        $body = $("body");
+
+        function CalcularSubTotal() {
+            var vQuantidade = parseFloat($("#Quantidade").val().replace(",", "."));
+            var vValorUnitario = parseFloat($("#Produto_ValorVenda").val().replace(",", "."));
+            var vSubTotal = 0;
+
+            if ((vValorUnitario > 0) && (vQuantidade > 0)) {
+                vSubTotal = vQuantidade * vValorUnitario;
+            }
+
+            if (vSubTotal > 0) {
+                $("#SubTotal").val(vSubTotal.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            }
+        }
+
+        function AplicarDesconto()
+        {
+            var vDesconto = parseFloat($("#Desconto").val().replace(",", "."));
+
+            if (vDesconto == 0)
+            {
+                mTotalPagar = mTotalVenda;
+                $("#TotalPagar").val(mTotalPagar.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            }
+            else
+            {
+                mTotalPagar = mTotalVenda - vDesconto;
+                mTotalDesconto = vDesconto;
+                $("#TotalPagar").val(mTotalPagar.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            }
+
+            mValorRestante = mTotalVenda - mTotalDesconto;
+            $("#ValorRestante").val(mValorRestante.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+        }
+
+        function LimparCamposProduto() {
+            $("#Produto_Id").val('');
+            $("#Produto_Codigo").val('');
+            $("#Produto_DescricaoCurta").val('');
+            $("#Produto_ValorVenda").val('');
+            $("#Quantidade").val('');
+            $("#SubTotal").val('');
+            $('#Imagem_Produto').remove();
+            var result = "";
+            result += '<figure id="Imagem_Produto">' +
+                '<img src="/images/produtos/default.png" height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />' +
+                '</figure>';
+            $("#Imagem_Container").append(result);
+        }
+
+        function LimparCamposPagamento() {
+            $("#ValorFormaPag").val('');
+            $("#FormaPagamentoId").val(null);
+        }
+
+        function ExcluirItemVenda(id) {
+            var i = 0;
+
+            for (let elem of lst_itens_venda) {
+                if (elem.NrSeq == id) {
+                    mTotalVenda = mTotalVenda - parseFloat(elem.ValorItem.replace(",", "."));
+                    mTotalPagar = mTotalPagar - parseFloat(elem.ValorItem.replace(",", "."));
+                    mTotalRestante = mTotalPagar - mTotalDesconto;
+                    lst_itens_venda.delete(elem);
+                    break;
+                }
+            }
+
+            $('#Tab_Itens_Adicionado tr:not(:first)').remove();
+
+            for (let item of lst_itens_venda) {
+                i = i + 1;
+                item.NrSeq = i;
+                tr = $('<tr/>');
+                tr.append("<td>" + item.NrSeq + "</td>");
+                tr.append("<td>" + item.Codigo + "</td>");
+                tr.append("<td>" + item.Descricao + "</td>");
+                tr.append("<td>" + item.Qtd.toLocaleString('pt-br', { minimumFractionDigits: 3 }) + "</td>");
+                tr.append("<td>" + item.ValorUnitario.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + "</td>");
+                tr.append("<td>" + item.ValorItem.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + "</td>");
+                tr.append("<td><a href='javascript:void(0)' onclick='ExcluirItemVenda(" + item.NrSeq + ");' title='Excluir item...'><span style='color: Tomato;'><i class='fas fa-trash-alt'></i></span></a></td>");
+                $("#Tab_Itens_Adicionado").append(tr);
+            }
+
+            $("#TotalVenda").val(mTotalVenda.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            $("#TotalPagar").val(mTotalPagar.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            $("#ValorRestante").val(mValorRestante.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+        }
+
+        function ExcluirItemFormaPag(id)
+        {
+            var i = 0;
+
+            for (let elem of lst_forma_pag) {
+                if (elem.NrSeq == id) {
+                    mValorRestante = mValorRestante + parseFloat(elem.ValorPago.replace(",", "."));
+                    lst_forma_pag.delete(elem);
+                    break;
+                }
+            }
+
+            $('#Tab_Forma_Pag_Adicionado tr:not(:first)').remove();
+
+            for (let item of lst_forma_pag) {
+                i = i + 1;
+                item.NrSeq = i;
+                tr = $('<tr/>');
+                tr.append("<td>" + item.NrSeq + "</td>");
+                tr.append("<td>" + item.Descricao + "</td>");
+                tr.append("<td>" + item.ValorPago.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + "</td>");
+                tr.append("<td><a href='javascript:void(0)' onclick='ExcluirItemFormaPag(" + item.NrSeq + ");' title='Excluir forma de pagamento informada...'><span style='color: Tomato;'><i class='fas fa-trash-alt'></i></span></a></td>");
+                $("#Tab_Forma_Pag_Adicionado").append(tr);
+            }
+
+            $("#ValorRestante").val(mValorRestante.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+        }
+
+        function CancelarVenda() {
+            window.location.href = "@Url.Action("Index","Home")";
+        }
+
+        function GravarVenda() {
+            var array_itens_venda = [];
+            var array_itens_forma_pag = [];
+
+            if (mTotalRestante > 0) {
+                swal({
+                    title: "Venda Falha",
+                    text: "Ainda há saldo a ser quitado.",
+                    type: "error"
+                });
+            }
+            else
+            if (lst_itens_venda.size == 0) {
+                    swal({
+                    title: "Venda Falha",
+                    text: "Nenhum item adicionado.",
+                    type: "error"
+                    });
+            }
+            else {
+                array_itens_venda.length = lst_itens_venda.size - 1;
+                for (let item of lst_itens_venda) {
+                    array_itens_venda.push({
+                        Id: 0,
+                        NrSeq: parseInt(item.NrSeq),
+                        ValorUnitario: parseFloat(item.ValorUnitario.replace('.', '').replace(',', '.')),
+                        Qtd: parseFloat(item.Qtd),
+                        ValorItem: parseFloat(item.ValorItem.replace('.', '').replace(',', '.')),
+                        Cancelado: item.Cancelado,
+                        Produto: null,
+                        ProdutoId: parseInt(item.ProdutoId),
+                        Venda: null,
+                        VendaId: 0
+                    });
+                };
+
+                array_itens_forma_pag.length = lst_forma_pag.size - 1;
+                for (let fpag of lst_forma_pag) {
+                    array_itens_forma_pag.push({
+                        Id: 0,
+                        NrSeq: parseInt(fpag.NrSeq),
+                        ValorPago: parseFloat(fpag.ValorPago.replace('.', '').replace(',', '.')),
+                        ValorTroco: 0,
+                        Caixa: null,
+                        CaixaId: 0,
+                        FormaPagamento: null,
+                        FormaPagamentoId: parseInt(fpag.FormaPagamentoId)
+                    });
+                };
+
+                var dados_formulario = {
+                    Produto: null,
+                    Quantidade: 0,
+                    SubTotal: 0,
+                    TotalVenda: mTotalVenda,
+                    Desconto: mTotalDesconto,
+                    TotalPagar: mTotalPagar,
+                    ListaFormasPagamento: null,
+                    ItensVenda: array_itens_venda,
+                    ItemPagamento: array_itens_forma_pag,
+                    ListaFornecedores: null,
+                    FormaPagamentoId: 0,
+                    ValorFormaPag: 0,
+                    ValorRestante: mValorRestante
+                };
+
+                $body.addClass("loading");
+                $.ajax({
+                    contentType: 'application/json',
+                    dataType: "json",
+                    type: "POST",
+                    url: 'ProcessarVenda',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                         $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: JSON.stringify(dados_formulario),
+                    success: function (msg) {
+                        $body.removeClass("loading");
+                        if (msg == 'OK') {
+                            swal({
+                                title: "Venda Processada",
+                                text: "Venda realizada com sucesso.",
+                                type: "success"
+                            });
+                            window.location.href = "@Url.Action("ProcessarVenda", "Vendas")";
+                        }
+                        else {
+                            swal({
+                                title: "Venda Falha",
+                                text: "Erro no processamento da venda.",
+                                type: "error"
+                            });
+                        }
+                    },
+                    error: function () {
+                        $body.removeClass("loading");
+                        swal({
+                            title: "Venda Falha",
+                            text: "Erro no processamento da requisição de venda.",
+                            type: "error"
+                        });
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {
+            $('#Tab_Itens_Adicionado').DataTable(
+                {
+                    "order": [[1, "asc"]],
+                    columnDefs: [
+                        { targets: 0, className: 'dt-center' },
+                        { targets: 1, className: 'dt-center' },
+                        { targets: 2, className: 'dt-justify' },
+                        { targets: 3, className: 'dt-center' },
+                        { targets: 4, className: 'dt-center' },
+                        { targets: 5, className: 'dt-center' },
+                        { targets: 6, className: 'dt-center' }
+                    ],
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Exibindo de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "Último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        },
+                        "select": {
+                            "rows": {
+                                "_": "Selecionado %d linhas",
+                                "0": "Nenhuma linha selecionada",
+                                "1": "Selecionado 1 linha"
+                            }
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "copyTitle": "Cópia bem sucedida",
+                            "copySuccess": {
+                                "1": "Uma linha copiada com sucesso",
+                                "_": "%d linhas copiadas com sucesso"
+                            }
+                        }
+                    },
+                    dom: 'Blfrtip'
+                }
+            );
+
+            $('#Tab_Forma_Pag_Adicionado').DataTable(
+                {
+                    "order": [[1, "asc"]],
+                    columnDefs: [
+                        { targets: 0, className: 'dt-center' },
+                        { targets: 1, className: 'dt-justify' },
+                        { targets: 2, className: 'dt-center' },
+                        { targets: 3, className: 'dt-center' }
+                    ],
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Exibindo de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "Último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
+                        },
+                        "select": {
+                            "rows": {
+                                "_": "Selecionado %d linhas",
+                                "0": "Nenhuma linha selecionada",
+                                "1": "Selecionado 1 linha"
+                            }
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "copyTitle": "Cópia bem sucedida",
+                            "copySuccess": {
+                                "1": "Uma linha copiada com sucesso",
+                                "_": "%d linhas copiadas com sucesso"
+                            }
+                        }
+                    },
+                    dom: 'Blfrtip'
+                }
+            );
+        });
+
+        $("#Desconto").change(function () {
+            AplicarDesconto();
+        });
+
+        $("#Quantidade").change(function () {
+            var vIdProduto = $("#Produto_Id").val();
+            var vQuantidade = $("#Quantidade").val();
+
+            if (vIdProduto.trim() == '') {
+                swal({
+                    title: "Error",
+                    text: "É necessário selecionar um produto!",
+                    type: "error"
+                });
+                $("#Quantidade").val("0");
+            } else {
+                $body.addClass("loading");
+                $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "ObterSaldoDisponivel",
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("XSRF-TOKEN",
+                                $('input:hidden[name="__RequestVerificationToken"]').val());
+                            },
+                        data: {
+                            "idProduto": vIdProduto
+                        },
+                        success: function (response) {
+                            $body.removeClass("loading");
+                            if (response == null) {
+                                swal({
+                                    title: "Falha",
+                                    text: "Falha ao tentar obter saldo disponivel!",
+                                    type: "error"
+                                });
+                                $("#Quantidade").val("0");
+                            }
+                            else {
+                                if (response == 0) {
+                                    swal({
+                                        title: "Estoque zerado",
+                                        text: "O produto não possui saldo em estoque!",
+                                        type: "error"
+                                    });
+                                    $("#Quantidade").val("0");
+                                } else {
+                                    if (response < parseFloat(vQuantidade.replace('.', '').replace(',', '.'))) {
+                                        swal({
+                                            title: "Saldo insuficiente",
+                                            text: "O produto não possui saldo suficiente em estoque!",
+                                            type: "error"
+                                        });
+                                        $("#Quantidade").val("0");
+                                    };
+                                };
+                            };
+                        },
+                        error: function () {
+                            $body.removeClass("loading");
+                            swal({
+                                title: "Error",
+                                text: "Falha ao tentar obter saldo disponivel!",
+                                type: "error"
+                            });
+                        }
+                });
+
+                CalcularSubTotal();
+            }
+        });
+
+        $("#Btn_Pesquisar_Produto").click(function () {
+            var vCodigoProduto = $("#Produto_Codigo").val();
+            if (vCodigoProduto.trim() == '') {
+                swal({
+                    title: "Error",
+                    text: "É necessário informar o código do produto!",
+                    type: "error"
+                });
+            }
+            else {
+                $body.addClass("loading");
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "PesquisarProduto",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: {
+                        "codigo": vCodigoProduto
+                    },
+                    success: function (response) {
+                        $body.removeClass("loading");
+                        if (response == null) {
+                            swal({
+                                title: "Falha",
+                                text: "Nenhum produto localizado!",
+                                type: "error"
+                            });
+                        }
+                        else {
+                            $("#Produto_Id").val(response.Id);
+                            $("#Produto_DescricaoCurta").val(response.DescricaoCurta);
+                            $("#Produto_ValorVenda").val(response.ValorVenda.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+                            $('#Imagem_Produto').remove();
+                            var result = "";
+
+                            if (response.Foto == null) {
+                                result += '<figure id="Imagem_Produto">' +
+                                          '<img src="/images/produtos/default.png" height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />' +
+                                          '</figure>';
+                            }
+                            else {
+                                result += '<figure id="Imagem_Produto">' +
+                                          '<img src="/images/produtos/' + response.Foto + '"' + ' height="300" width="300" asp-append-version="true" alt="Imagem do produto" class="border" />' +
+                                          '</figure>';
+                            }
+                            $("#Imagem_Container").append(result);
+                        }
+                    },
+                    error: function () {
+                        $body.removeClass("loading");
+                        swal({
+                            title: "Error",
+                            text: "Falha ao pesquisar pelo produto!",
+                            type: "error"
+                        });
+                    }
+                });
+            }
+        });
+
+        $("#Btn_Incluir_Produto").click(function () {
+            var vIdProduto = $("#Produto_Id").val();
+            var vCodigo = $("#Produto_Codigo").val();
+            var vDescricao = $("#Produto_DescricaoCurta").val();
+            var vValorUnitario = $("#Produto_ValorVenda").val();
+            var vQuantidade = $("#Quantidade").val();
+            var vSubTotal = $("#SubTotal").val();
+
+            if ((vIdProduto.trim() == '') || (vCodigo.trim() == '') || (vDescricao.trim() == '') || (vQuantidade.trim() == '') || (vSubTotal.trim() == '')) {
+                swal({
+                    title: "Error",
+                    text: "É necessário o preenchimento dos dados do produto!",
+                    type: "error"
+                });
+            }
+            else {
+                var oItemVenda = new Object();
+
+                oItemVenda.Id = 0;
+                oItemVenda.NrSeq = lst_itens_venda.size + 1;
+                oItemVenda.ValorUnitario = vValorUnitario;
+                oItemVenda.Qtd = vQuantidade;
+                oItemVenda.ValorItem = vSubTotal;
+                oItemVenda.Cancelado = false;
+                oItemVenda.Produto = null;
+                oItemVenda.ProdutoId = vIdProduto;
+                oItemVenda.Venda = null;
+                oItemVenda.VendaId = 0;
+                oItemVenda.Codigo = vCodigo;
+                oItemVenda.Descricao = vDescricao;
+
+                mTotalVenda = mTotalVenda + parseFloat(vSubTotal.replace('.', '').replace(',', '.'));
+                mTotalPagar = mTotalPagar + parseFloat(vSubTotal.replace('.', '').replace(',', '.'));
+                lst_itens_venda.add(oItemVenda);
+
+                for (let item of lst_itens_venda) {
+                    tr = $('<tr/>');
+                    tr.append("<td>" + item.NrSeq + "</td>");
+                    tr.append("<td>" + item.Codigo + "</td>");
+                    tr.append("<td>" + item.Descricao + "</td>");
+                    tr.append("<td>" + item.Qtd.toLocaleString('pt-br', { minimumFractionDigits: 3 }) + "</td>");
+                    tr.append("<td>" + item.ValorUnitario.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + "</td>");
+                    tr.append("<td>" + item.ValorItem.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + "</td>");
+                    tr.append("<td><a href='javascript:void(0)' onclick='ExcluirItemVenda(" + item.NrSeq + ");' title='Excluir item...'><span style='color: Tomato;'><i class='fas fa-trash-alt'></i></span></a></td>");
+                }
+
+                $("#Tab_Itens_Adicionado").append(tr);
+                LimparCamposProduto();
+
+                $("#TotalVenda").val(mTotalVenda.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+                $("#TotalPagar").val(mTotalPagar.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+            }
+        });
+
+        $("#Btn-Incluir-Forma-Pag").click(function () {
+            var vTotalPagar = $("#TotalPagar").val();
+            var vValorFormaPag = $("#ValorFormaPag").val();
+            var vIdFormaPagSelecionada = $("#FormaPagamentoId option:selected").val();
+            var vDescricaoFormaPagSelecionada = $("#FormaPagamentoId option:selected").text();
+
+            if ((vTotalPagar.trim() == '') || (vValorFormaPag.trim() == '') || (vIdFormaPagSelecionada.trim() == '')) {
+                swal({
+                    title: "Error",
+                    text: "É necessário o preenchimento dos dados de pagamento!",
+                    type: "error"
+                });
+            }
+            else
+            {
+                if (parseFloat(vValorFormaPag.replace('.', '').replace(',', '.')) > Math.round(mValorRestante * 100) / 100 )
+                {
+                    swal({
+                        title: "Error",
+                        text: "O valor da forma de pagamento não deve ser superior ao valor restante!",
+                        type: "error"
+                    });
+                }
+                else
+                {
+                    var oFormaPag = new Object();
+
+                    oFormaPag.Id = 0;
+                    oFormaPag.NrSeq = lst_forma_pag.size + 1;
+                    oFormaPag.ValorPago = vValorFormaPag;
+                    oFormaPag.ValorTroco = 0;
+                    oFormaPag.Caixa = null;
+                    oFormaPag.CaixaId = 0;
+                    oFormaPag.FormaPagamento = null;
+                    oFormaPag.FormaPagamentoId = vIdFormaPagSelecionada;
+                    oFormaPag.Descricao = vDescricaoFormaPagSelecionada;
+                    lst_forma_pag.add(oFormaPag);
+
+                    for (let item of lst_forma_pag) {
+                        tr = $('<tr/>');
+                        tr.append("<td>" + item.NrSeq + "</td>");
+                        tr.append("<td>" + item.Descricao + "</td>");
+                        tr.append("<td>" + item.ValorPago.toLocaleString('pt-br', { minimumFractionDigits: 2 }) + "</td>");
+                        tr.append("<td><a href='javascript:void(0)' onclick='ExcluirItemFormaPag(" + item.NrSeq + ");' title='Excluir forma de pagamento informada...'><span style='color: Tomato;'><i class='fas fa-trash-alt'></i></span></a></td>");
+                    }
+
+                    $("#Tab_Forma_Pag_Adicionado").append(tr);
+                    mValorRestante = mValorRestante - parseFloat(vValorFormaPag.replace('.', '').replace(',', '.'));
+
+                    if (mValorRestante < 0)
+                    {
+                        mValorRestante = 0;
+                    }
+
+                    $("#ValorRestante").val(mValorRestante.toLocaleString('pt-br', { minimumFractionDigits: 2 }));
+
+                    LimparCamposPagamento();
+                }
+            }
+        });
+
+    </script>
+}

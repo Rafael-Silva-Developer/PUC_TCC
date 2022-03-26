@@ -17,20 +17,20 @@
         <link rel="stylesheet" href="~/css/sweetalert.css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/bootstrap.min.css" />        
-        <link rel="stylesheet" href="~/css/bootstrap-grid.css" />  
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.css" />       
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/bootstrap-grid.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/sweetalert.min.css"
               asp-fallback-href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css"
               asp-fallback-test-class="sr-only"
               asp-fallback-test-property="position"
               asp-fallback-test-value="absolute" />
-
     </environment>
     @RenderSection("Styles", required: false)
 </head>
 <body>
+    @Html.AntiForgeryToken()
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
@@ -86,7 +86,7 @@
                     @if (User.IsInRole("Supervisor"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                            <a class="nav-link" asp-area="" asp-controller="Estoque" asp-action="Index">
                                 <i class="fas fa-boxes"></i> Estoque
                             </a>
                         </li>
@@ -100,17 +100,22 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="DropdownMenuVenda">
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
-                                        <i class="fas fa-calculator"></i> Acompanhar Vendas
+                                    <a class="dropdown-item" asp-area="" asp-controller="Vendas" asp-action="AcompanharVenda">
+                                        <i class="fas fa-calculator"></i> Acompanhar Vendas - Planilha
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Vendas" asp-action="AcompanharVendaPorGraficos">
+                                        <i class="fas fa-chart-line"></i> Acompanhar Vendas - Gráficos
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Vendas" asp-action="ProcessarVenda">
                                         <i class="fas fa-cart-plus"></i> Processar Venda
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Produtos" asp-action="ConsultarPreco">
                                         <i class="fas fa-search-dollar"></i> Consultar Preço
                                     </a>
                                 </li>
@@ -126,12 +131,12 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="DropdownMenuCaixa">
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <a class="dropdown-item" asp-area="" asp-controller="FluxoCaixa" asp-action="AcompanharFluxoCaixa">
                                         <i class="fas fa-chart-line"></i> Fluxo de Caixa
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <a class="dropdown-item" asp-area="" asp-controller="FluxoCaixa" asp-action="Operar">
                                         <i class="fas fa-cash-register"></i> Operar
                                     </a>
                                 </li>
@@ -254,6 +259,7 @@
         <script src="~/js/bootstrap.js"></script>
         <script src="~/js/sweetalert.min.js"></script>
         <script src="~/js/site.js"></script>
+        <script src="~/js/jquery.mask.js"></script>
     </environment>
 
     <environment exclude="Development">
@@ -270,6 +276,7 @@
                 asp-fallback-src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css">
         </script>
         <script src="~/js/site.js"></script>
+        <script src="~/js/jquery.mask.js"></script>
     </environment>
 
     @RenderSection("ScriptPage", required: false)
